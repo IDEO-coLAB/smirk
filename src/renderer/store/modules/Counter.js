@@ -1,3 +1,14 @@
+/*
+
+http://localhost:13420/v1/wallet/owner/retrieve_summary_info
+http://localhost:13420/v1/wallet/owner/node_height
+http://localhost:13420/v1/wallet/owner/retrieve_outputs
+http://localhost:13420/v1/wallet/owner/node_height
+
+*/
+
+import axios from 'axios'
+
 const state = {
   main: 0
 }
