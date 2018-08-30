@@ -40,8 +40,8 @@
   }
 </script>
 
-<style>
-  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+<style >
+  @import "~bulma/css/bulma.css";
 
   * {
     box-sizing: border-box;
@@ -49,7 +49,7 @@
     padding: 0;
   }
 
-  body { font-family: 'Source Sans Pro', sans-serif; }
+  /*body { font-family: 'Source Sans Pro', sans-serif; }*/
 
   #wrapper {
     background:

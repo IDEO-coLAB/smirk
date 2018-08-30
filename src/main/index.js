@@ -17,14 +17,13 @@ let mainWindow
 // Variable to track if the user is closing the app or quitting it
 let willQuitApp = false
 
-
 const WINDOW_URL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
 // Handles the initialization of the application window
 const createWindow = async () => {
-  //Initial window options
+  // Initial window options
   mainWindow = new BrowserWindow({
     title: 'Smirk',
     x: 50,
