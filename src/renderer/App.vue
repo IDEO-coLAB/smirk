@@ -5,11 +5,17 @@
 </template>
 
 <script>
+  import { WALLET_SERVICE_ACTIONS } from './store/modules/WalletService'
+
   export default {
-    name: 'smirk'
+    name: 'smirk',
+    mounted () {
+      console.log(WALLET_SERVICE_ACTIONS)
+      this.$store.dispatch(WALLET_SERVICE_ACTIONS.FETCH_WALLET_SUMMARY)
+    }
   }
 </script>
 
 <style>
-  /* CSS */
+  @import '~@/styles/app.sass'
 </style>
