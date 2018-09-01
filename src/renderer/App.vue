@@ -10,8 +10,8 @@
   export default {
     name: 'smirk',
     mounted () {
-      console.log(WALLET_SERVICE_ACTIONS)
-      this.$store.dispatch(WALLET_SERVICE_ACTIONS.FETCH_WALLET_SUMMARY)
+      this.$store.dispatch(WALLET_SERVICE_ACTIONS.GET_SUMMARY)
+      this.$store.dispatch(WALLET_SERVICE_ACTIONS.GET_TXS)
     }
   }
 </script>
