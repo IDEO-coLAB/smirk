@@ -14,12 +14,25 @@ regular ping: http://localhost:13420/v1/wallet/owner/node_height
 
 */
 
-export const WALLET_SERVICE_MUTATIONS = {
-  SET_CURRENT_TX: 'SET_CURRENT_TX'
+import _ from 'lodash'
+import assert from 'assert'
+
+export const APP_STATE_MUTATIONS = {
+  SET_CURRENT_TX: 'SET_CURRENT_TX',
+  SET_MODAL: 'SET_MODAL'
+}
+
+export const MODAL_TYPES = {
+  RECEIVE: 'RECEIVE',
+  SEND: 'SEND'
 }
 
 const state = {
-  currentTransaction: null
+  currentTransaction: null,
+  modal: {
+    isActive: false,
+    type: null
+  }
 }
 
 const getters = {
@@ -27,9 +40,18 @@ const getters = {
 }
 
 const mutations = {
-  [WALLET_SERVICE_MUTATIONS.SET_CURRENT_TX] (state, data) {
-    console.log('setting the cur tx', data)
+  [APP_STATE_MUTATIONS.SET_CURRENT_TX] (state, data) {
     state.currentTransaction = data
+  },
+  [APP_STATE_MUTATIONS.SET_MODAL] (state, data) {
+    const { isActive, type } = data
+    assert(_.isBoolean(isActive))
+    if (isActive) {
+      assert(_.has(MODAL_TYPES, type))
+    } else {
+      assert(_.isNil(type))
+    }
+    state.modal = { isActive, type }
   }
 }
 

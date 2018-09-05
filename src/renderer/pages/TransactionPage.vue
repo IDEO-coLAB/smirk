@@ -1,12 +1,10 @@
 <template>
   <div>
-
-      <router-link :to="{ path: '/transactions' }">
-        <button>
-          Back to All Transactions
-        </button>
-      </router-link>
-
+    <router-link :to="{ path: '/transactions' }">
+      <button>
+        Back to All Transactions
+      </button>
+    </router-link>
     <hr>
     <h2>Current Transaction</h2>
     {{this.currentTransaction}}
@@ -28,5 +26,3 @@
     }
   }
 </script>
-
-<!-- when entering /transactons route; wipe the stuff -->

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { WALLET_SERVICE_MUTATIONS } from '../store/modules/AppState'
+  import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
     name: 'transaction-tile',
@@ -35,7 +35,7 @@
     },
     methods: {
       openTx (tx) {
-        this.$store.commit(WALLET_SERVICE_MUTATIONS.SET_CURRENT_TX, tx)
+        this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX, tx)
         this.$router.push({ path: '/transaction/:id', params: { id: tx.id } })
       }
     }
