@@ -5,7 +5,7 @@ import Router from 'vue-router'
 import TransactionsPage from '../pages/TransactionsPage'
 import TransactionPage from '../pages/TransactionPage'
 
-import { WALLET_SERVICE_MUTATIONS } from '../store/modules/AppState'
+import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 Vue.use(Router)
 
@@ -22,7 +22,7 @@ export default new Router({
         if (_.isNil($store)) {
           return next()
         }
-        $store.commit(WALLET_SERVICE_MUTATIONS.SET_CURRENT_TX, null)
+        $store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, null)
         next()
       }
     },

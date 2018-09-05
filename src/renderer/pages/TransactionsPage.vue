@@ -4,7 +4,11 @@
     <div>
       {{ spendable | toPrettyNumber }} Spendable T3 Grin
       <br>
-      <button @click="openModal(MODAL_TYPES.RECEIVE)">Receive</button>
+      <button
+        @click="openModal(MODAL_TYPES.RECEIVE)"
+        class="button">
+          Receive
+        </button>
     </div>
 
     <div v-for="tx in transactions">
@@ -33,7 +37,7 @@
         return this.$store.getters.spendable
       },
       transactions () {
-        return this.$store.getters.wallet.transactions
+        return this.$store.getters.wallet.transactions.log
       }
     },
     methods: {

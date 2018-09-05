@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="content">
     <ModalContainer />
     <router-view></router-view>
   </div>
@@ -19,7 +19,7 @@
       // TODO: Handle app state on boot based on the route
       // e.g.: refresh the page when on a specific transaction
       this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_SUMMARY)
-      this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_TXS)
+      this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_TXS_LOG)
     }
   }
 </script>

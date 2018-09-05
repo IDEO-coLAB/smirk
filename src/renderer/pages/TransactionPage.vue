@@ -6,8 +6,12 @@
       </button>
     </router-link>
     <hr>
-    <h2>Current Transaction</h2>
-    {{this.currentTransaction}}
+    <h2>Transaction Id: {{this.transactionId}}</h2>
+    <h3>tx Synopsis</h3>
+    {{this.transactionSummary}}
+    <hr>
+    <h3>tx Outputs</h3>
+    {{this.transactionOutputs}}
   </div>
 </template>
 
@@ -15,8 +19,14 @@
   export default {
     name: 'transaction-page',
     computed: {
-      currentTransaction () {
-        return this.$store.getters.appState.currentTransaction
+      transactionId () {
+        return this.$store.getters.appState.currentTransactionId
+      },
+      transactionSummary () {
+        return this.$store.getters.transactions.log
+      },
+      transactionOutputs () {
+        return this.$store.getters.transactions.outputs
       }
     },
     methods: {
