@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import TransactionsPage from '@/components/TransactionsPage'
+import TransactionsPage from '@/pages/TransactionsPage'
 
 Vue.use(Router)
 

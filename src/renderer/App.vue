@@ -5,13 +5,13 @@
 </template>
 
 <script>
-  import { WALLET_SERVICE_ACTIONS } from './store/modules/WalletService'
+  import { WALLET_DAEMON_ACTIONS } from './store/modules/WalletDaemonService'
 
   export default {
     name: 'smirk',
     mounted () {
-      this.$store.dispatch(WALLET_SERVICE_ACTIONS.GET_SUMMARY)
-      this.$store.dispatch(WALLET_SERVICE_ACTIONS.GET_TXS)
+      this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_SUMMARY)
+      this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_TXS)
     }
   }
 </script>
