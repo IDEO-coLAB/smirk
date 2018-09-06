@@ -19,7 +19,7 @@
 
 <script>
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
-  import { WALLET_DAEMON_ACTIONS } from '../store/modules/WalletDaemonService'
+  import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   export default {
     name: 'transaction-tile',
@@ -36,7 +36,7 @@
     },
     methods: {
       openTx (tx) {
-        this.$store.dispatch(WALLET_DAEMON_ACTIONS.GET_TX_OUTPUTS, tx.id)
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS, tx.id)
         this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, tx.id)
         this.$router.push({ path: '/transaction/:id', params: { id: tx.id } })
       }

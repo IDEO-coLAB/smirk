@@ -23,10 +23,10 @@
         return this.$store.getters.appState.currentTransactionId
       },
       transactionSummary () {
-        return this.$store.getters.transactions.log
+        return this.$store.getters.wallet.transactions
       },
       transactionOutputs () {
-        return this.$store.getters.transactions.outputs
+        return this.$store.getters.wallet.outputs
       }
     },
     methods: {

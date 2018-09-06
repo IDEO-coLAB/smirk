@@ -37,7 +37,7 @@
         return this.$store.getters.spendable
       },
       transactions () {
-        return this.$store.getters.wallet.transactions.log
+        return this.$store.getters.wallet.transactions
       }
     },
     methods: {
