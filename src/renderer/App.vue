@@ -20,7 +20,6 @@
       // e.g.: refresh the page when on a specific transaction
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS)
     }
   }
 </script>

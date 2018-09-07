@@ -36,7 +36,7 @@
     },
     methods: {
       openTx (tx) {
-        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS, tx.id)
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION, tx.id)
         this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, tx.id)
         this.$router.push({ path: '/transaction/:id', params: { id: tx.id } })
       }
