@@ -5,7 +5,7 @@
       {{ spendable | toPrettyNumber }} Spendable T3 Grin
       <br>
       <button
-        @click="openModal(MODAL_TYPES.RECEIVE)"
+        @click="openModal(APP_STATE_MODAL_TYPES.RECEIVE)"
         class="button">
           Receive
         </button>
@@ -20,7 +20,7 @@
 
 <script>
   import TransactionTile from '../components/TransactionTile'
-  import { MODAL_TYPES, APP_STATE_MUTATIONS } from '../store/modules/AppState'
+  import { APP_STATE_MODAL_TYPES, APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
     name: 'transactions-page',
@@ -29,7 +29,7 @@
     },
     data () {
       return {
-        MODAL_TYPES
+        APP_STATE_MODAL_TYPES
       }
     },
     computed: {

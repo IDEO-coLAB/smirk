@@ -1,12 +1,17 @@
 import _ from 'lodash'
 import assert from 'assert'
+import ls from 'local-storage'
+
+export const APP_STATE_LOCAL_STORAGE = {
+  CURRENT_TX_ID: 'CURRENT_TX_ID'
+}
 
 export const APP_STATE_MUTATIONS = {
   SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
   SET_MODAL: 'SET_MODAL'
 }
 
-export const MODAL_TYPES = {
+export const APP_STATE_MODAL_TYPES = {
   RECEIVE: 'RECEIVE',
   SEND: 'SEND'
 }
@@ -26,12 +31,13 @@ const getters = {
 const mutations = {
   [APP_STATE_MUTATIONS.SET_CURRENT_TX_ID] (state, data) {
     state.currentTransactionId = data
+    ls.set(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID, data)
   },
   [APP_STATE_MUTATIONS.SET_MODAL] (state, data) {
     const { isActive, type } = data
     assert(_.isBoolean(isActive))
     if (isActive) {
-      assert(_.has(MODAL_TYPES, type))
+      assert(_.has(APP_STATE_MODAL_TYPES, type))
     } else {
       assert(_.isNil(type))
     }
