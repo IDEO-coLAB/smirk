@@ -8,7 +8,13 @@
         @click="openModal(APP_STATE_MODAL_TYPES.RECEIVE)"
         class="button">
           Receive
+      </button>
+
+      <router-link :to="{ path: '/send' }">
+        <button class="button">
+          Send
         </button>
+      </router-link>
     </div>
 
     <div v-for="tx in transactions">
