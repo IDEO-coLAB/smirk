@@ -12,8 +12,7 @@ export const APP_STATE_MUTATIONS = {
 }
 
 export const APP_STATE_MODAL_TYPES = {
-  RECEIVE: 'RECEIVE',
-  SEND: 'SEND'
+  RECEIVE: 'RECEIVE'
 }
 
 const state = {

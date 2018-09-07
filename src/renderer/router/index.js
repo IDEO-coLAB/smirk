@@ -16,8 +16,7 @@ export default new Router({
       name: 'transactions-page',
       component: TransactionsPage,
       beforeEnter: (to, from, next) => {
-        // App state housekeeping:
-        // clear out the app's currentTransaction when arriving here
+        // Always remove an exsiting currentTransaction when entering this route
         const $store = this.a.app.$store
         if (_.isNil($store)) {
           return next()

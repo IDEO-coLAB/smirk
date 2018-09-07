@@ -2,26 +2,25 @@
   <div class="modal" v-bind:class="{ 'is-active': modal.isActive }">
     <div class="modal-background" @click="closeModal"></div>
     <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
-        <button class="delete" @click="closeModal"></button>
-      </header>
-      <section class="modal-card-body">
-        some content in here :)
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success">Save changes</button>
-        <button class="button">Cancel</button>
-      </footer>
+      <ReceiveModal v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
     </div>
   </div>
 </template>
 
 <script>
-  import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
+  import ReceiveModal from './ReceiveModal'
+  import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
 
   export default {
     name: 'modal-container',
+    components: {
+      ReceiveModal
+    },
+    data () {
+      return {
+        APP_STATE_MODAL_TYPES
+      }
+    },
     computed: {
       modal () {
         return this.$store.getters.appState.modal
