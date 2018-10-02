@@ -1,7 +1,8 @@
 <template>
   <div>
     <router-link :to="{ path: '/transactions' }">
-      <button>
+      <button
+        class="button">
         Back to All Transactions
       </button>
     </router-link>
@@ -12,10 +13,18 @@
     <hr>
     <h3>tx Outputs</h3>
     {{this.transactionOutputs}}
+    <hr>
+    <button
+      @click="cancelTransaction"
+      class="button">
+      Cancel Transaction
+    </button>
   </div>
 </template>
 
 <script>
+  // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
+
   export default {
     name: 'transaction-page',
     computed: {
@@ -30,8 +39,8 @@
       }
     },
     methods: {
-      open (link) {
-        this.$electron.shell.openExternal(link)
+      cancelTransaction () {
+        // this.$store.dispatch(GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION, this.transactionId)
       }
     }
   }

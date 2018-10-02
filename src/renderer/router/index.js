@@ -4,7 +4,6 @@ import Router from 'vue-router'
 
 import TransactionsPage from '../pages/TransactionsPage'
 import TransactionPage from '../pages/TransactionPage'
-import SendPage from '../pages/SendPage'
 
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
@@ -30,11 +29,6 @@ export default new Router({
       path: '/transaction/:id',
       name: 'transaction-page',
       component: TransactionPage
-    },
-    {
-      path: '/send',
-      name: 'send-page',
-      component: SendPage
     },
     {
       path: '*',

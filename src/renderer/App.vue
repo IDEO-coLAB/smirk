@@ -1,7 +1,12 @@
 <template>
-  <div id="app" class="content">
+  <div id="app" class="content app-container">
     <ModalContainer />
-    <router-view></router-view>
+    <div class="app-sidebar">
+      This is the side nav
+    </div>
+    <div class="app-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -22,7 +27,7 @@
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
 
-      // Check if there is an existing tx id in local storage.
+      // Check if there is an existing tx id in local storage
       const curTxId = ls.get(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID)
       if (!_.isNil(curTxId)) {
         // If tx id exists in local storage:
@@ -35,6 +40,6 @@
   }
 </script>
 
-<style>
+<style lang="sass">
   @import '~@/styles/app.sass'
 </style>

@@ -3,18 +3,21 @@
     <div class="modal-background" @click="closeModal"></div>
     <div class="modal-card">
       <ReceiveModal v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
+      <SendModal v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" />
     </div>
   </div>
 </template>
 
 <script>
   import ReceiveModal from './ReceiveModal'
+  import SendModal from './SendModal'
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
 
   export default {
     name: 'modal-container',
     components: {
-      ReceiveModal
+      ReceiveModal,
+      SendModal
     },
     data () {
       return {

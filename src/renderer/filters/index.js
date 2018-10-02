@@ -1,9 +1,11 @@
 import Vue from 'vue'
 
-import toPrettyNumber from './toPrettyNumber'
+import grinBaseNumToPrettyNum from './grinBaseNumToPrettyNum'
+import reverse from './reverse'
 
 const filters = {
-  toPrettyNumber
+  grinBaseNumToPrettyNum,
+  reverse
 }
 
 export default () => {

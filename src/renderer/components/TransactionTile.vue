@@ -1,18 +1,18 @@
 <template>
   <div @click="openTx(transaction)">
     <hr>
+    tx ID: {{this.transaction.id}} |
 
-    {{ this.isReceived ? 'Received' : 'Sent' }} |
+    {{ this.transaction.tx_type }} |
 
-    tx id: {{ this.transaction.tx_slate_id }} |
+    conf on {{ new Date(this.transaction.confirmation_ts).toDateString() }} |
 
-    Confirmed {{ new Date(this.transaction.confirmation_ts).toDateString() }} |
-
+    <!-- TODO: IMPROVE BASED ON ALL STATES -->
     <span v-if="this.isReceived">
-      {{ this.transaction.amount_credited | toPrettyNumber }}
+      amount: {{ this.transaction.amount_credited | grinBaseNumToPrettyNum }}
     </span>
     <span v-else>
-      {{ this.transaction.amount_debited | toPrettyNumber }}
+      amount: {{ this.transaction.amount_debited | grinBaseNumToPrettyNum }}
     </span>
   </div>
 </template>

@@ -2,22 +2,24 @@
   <main>
   <!-- <img id="logo" src="~@/assets/logo.png" alt="electron-vue"> -->
     <div>
-      {{ spendable | toPrettyNumber }} Spendable T3 Grin
+      {{ spendable | grinBaseNumToPrettyNum }} Spendable T3 Grin
       <br>
+      {{$store.getters.wallet.summary}}
+      <hr>
       <button
         @click="openModal(APP_STATE_MODAL_TYPES.RECEIVE)"
         class="button">
-          Receive
+        Receive
       </button>
 
-      <router-link :to="{ path: '/send' }">
-        <button class="button">
-          Send
-        </button>
-      </router-link>
+      <button
+        @click="openModal(APP_STATE_MODAL_TYPES.SEND)"
+        class="button">
+        Send
+      </button>
     </div>
 
-    <div v-for="tx in transactions">
+    <div v-for="tx in reversedTransactions">
       <TransactionTile v-bind:transaction="tx" />
       <!-- <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>. -->
     </div>
@@ -44,6 +46,9 @@
       },
       transactions () {
         return this.$store.getters.wallet.transactions
+      },
+      reversedTransactions () {
+        return this.transactions.slice().reverse()
       }
     },
     methods: {
