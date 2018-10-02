@@ -1,4 +1,28 @@
 @import "~bulma/css/bulma.css"
 
+body, html
+  height: 100%
+
+#app
+  margin-bottom: 0px !important
+
 .app-container
-  color: red !important
+  position: relative
+  height: 100%
+  width: 100%
+
+.app-sidebar
+  position: relative
+  display: inline-block
+  float: left
+  width: 100px
+  height: 100%
+  background-color: yellow
+
+.app-content
+  position: relative
+  display: inline-block
+  height: 100%
+  width: calc(100% - 100px)
+  overflow-y: scroll
+  background-color: red

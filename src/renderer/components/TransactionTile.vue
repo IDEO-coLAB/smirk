@@ -1,5 +1,5 @@
 <template>
-  <div @click="openTx(transaction)">
+  <div @click="openModal">
     <hr>
     tx ID: {{this.transaction.id}} |
 
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
+  import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   export default {
@@ -35,10 +35,13 @@
       }
     },
     methods: {
-      openTx (tx) {
-        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION, tx.id)
-        this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, tx.id)
-        this.$router.push({ path: '/transaction/:id', params: { id: tx.id } })
+      openModal () {
+        const type = APP_STATE_MODAL_TYPES.TRANSACTION
+        const id = this.transaction.id
+
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION, id)
+        this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, id)
+        this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })
       }
     }
   }

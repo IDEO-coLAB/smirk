@@ -4,6 +4,7 @@
     <div class="modal-card">
       <ReceiveModal v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
       <SendModal v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" />
+      <TransactionModal v-if="modal.type === APP_STATE_MODAL_TYPES.TRANSACTION" />
     </div>
   </div>
 </template>
@@ -11,13 +12,15 @@
 <script>
   import ReceiveModal from './ReceiveModal'
   import SendModal from './SendModal'
+  import TransactionModal from './TransactionModal'
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
 
   export default {
     name: 'modal-container',
     components: {
       ReceiveModal,
-      SendModal
+      SendModal,
+      TransactionModal
     },
     data () {
       return {

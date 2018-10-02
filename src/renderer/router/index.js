@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import TransactionsPage from '../pages/TransactionsPage'
-import TransactionPage from '../pages/TransactionPage'
+import DashboardPage from '../pages/DashboardPage'
 
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
@@ -26,13 +26,13 @@ export default new Router({
       }
     },
     {
-      path: '/transaction/:id',
-      name: 'transaction-page',
-      component: TransactionPage
+      path: '/dashboard',
+      name: 'dashboard-page',
+      component: DashboardPage
     },
     {
       path: '*',
-      redirect: '/transactions'
+      redirect: '/dashboard'
     }
   ]
 })
