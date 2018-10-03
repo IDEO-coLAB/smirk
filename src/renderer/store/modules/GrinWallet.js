@@ -10,8 +10,8 @@ import _ from 'lodash'
 import models from '../../models'
 
 const GRIN_HOST = 'http://localhost'
-const GRIN_DAEMON_OWNER_URL = `${GRIN_HOST}:13420/v1/wallet/owner`
-const GRIN_DAEMON_FOREIGN_URL = `${GRIN_HOST}:13415/v1/wallet/foreign`
+const GRIN_OWNER_URL = `${GRIN_HOST}:13420/v1/wallet/owner`
+const GRIN_FOREIGN_URL = `${GRIN_HOST}:13415/v1/wallet/foreign`
 
 export const GRIN_WALLET_MUTATIONS = {
   SET_SUMMARY: 'SET_SUMMARY',
@@ -25,6 +25,7 @@ export const GRIN_WALLET_ACTIONS = {
   GET_TRANSACTIONS: 'GET_TRANSACTIONS',
   ISSUE_SEND_TRANSACTION: 'ISSUE_SEND_TRANSACTION',
   RECEIVE_TRANSACTION: 'RECEIVE_TRANSACTION',
+  CANCEL_TRANSACTION: 'CANCEL_TRANSACTION',
   FINALIZE_TRANSACTION: 'FINALIZE_TRANSACTION'
 }
 
@@ -99,115 +100,65 @@ const mutations = {
   }
 }
 
+const getFormattedAxiosPost = (url, data) => {
+  return {
+    method: 'POST',
+    headers: { 'content-type': 'text/plain' },
+    data,
+    url
+  }
+}
+
+// NOTES ON HANDLING
 // WHEN NO SERVER IS RUNNING => :400 CODE
+// IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
+// IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
+
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    axios.get(`${GRIN_DAEMON_OWNER_URL}/retrieve_summary_info`)
+    axios.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
+        return data
       })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => console.error(error))
   },
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
-    axios.get(`${GRIN_DAEMON_OWNER_URL}/retrieve_txs`)
+    axios.get(`${GRIN_OWNER_URL}/retrieve_txs`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
+        return data
       })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => console.error(error))
   },
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION] ({ commit }, id) {
     // TODO: Add data caching layer
-    axios.get(`${GRIN_DAEMON_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
+    axios.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
       .then((payload) => {
-        //  TODO: fix up
-        // validated_against_node: boolean;
-        // outputs: Output[];
+        // payload = { validated_against_node: boolean, outputs: Output[] }
         const data = payload.data[1]
-
         // exit if there are no outputs for the transaction
         if (_.isEmpty(data)) {
-          return
+          return null
         }
         commit(GRIN_WALLET_MUTATIONS.SET_OUTPUTS, data)
+        return data
       })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => console.error(error))
   },
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain'
-      },
-      data: data,
-      url: `${GRIN_DAEMON_OWNER_URL}/issue_send_tx`
-    }
-    console.log('POSTING to issue_send_tx ', options)
-    // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
-    // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-    return axios(options)
-      .then((payload) => {
-        console.log('SUCCESSFULLY POSTED TO ISSUE_SEND_TX')
-        console.log(JSON.stringify(payload.data))
-        return payload.data
-      })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => {
-        console.error(error)
-        throw new Error(error)
-      })
+    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, data)
+    return axios(post)
+      .then(payload => payload.data)
   },
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain'
-      },
-      data: data,
-      url: `${GRIN_DAEMON_FOREIGN_URL}/receive_tx`
-    }
-    console.log('POSTING to receive_tx ', options)
-    // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
-    // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-    axios(options)
-      .then((payload) => {
-        console.log('SUCCESSFULLY POSTED TO RECEIVE_TX')
-        console.log(JSON.stringify(payload.data))
-        return payload.data
-      })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => {
-        console.error(error)
-        throw new Error(error)
-      })
+    const post = getFormattedAxiosPost(`${GRIN_FOREIGN_URL}/receive_tx`, data)
+    axios(post)
+      .then(payload => payload.data)
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain'
-      },
-      data: data,
-      url: `${GRIN_DAEMON_OWNER_URL}/finalize_tx`
-    }
-    console.log('POSTING to finalize_tx ', options)
-    // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
-    // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-    return axios(options)
-      .then((payload) => {
-        console.log('SUCCESSFULLY POSTED TO FINALIZE_TRANSACTION')
-        console.log(JSON.stringify(payload.data))
-        return payload.data
-      })
-      // TODO: UNIFIED ERROR HANDLING
-      .catch((error) => {
-        console.error(error)
-        throw new Error(error)
-      })
+    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/finalize_tx`, data)
+    axios(post)
+      .then(payload => payload.data)
   }
 }
 

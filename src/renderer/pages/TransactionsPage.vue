@@ -1,6 +1,12 @@
 <template>
   <main>
-    <div v-for="tx in reversedTransactions">
+    <h2>Unconfirmed Txs</h2>
+    <div v-for="tx in unconfirmedTransactions">
+      <TransactionTile v-bind:transaction="tx" />
+    </div>
+
+    <h2>Confirmed Txs</h2>
+    <div v-for="tx in confirmedTransactions">
       <TransactionTile v-bind:transaction="tx" />
     </div>
   </main>
@@ -8,31 +14,22 @@
 
 <script>
   import TransactionTile from '../components/TransactionTile'
-  // import { APP_STATE_MODAL_TYPES, APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
     name: 'transactions-page',
     components: {
       TransactionTile
     },
-    // data () {
-    //   return {
-    //     APP_STATE_MODAL_TYPES
-    //   }
-    // },
     computed: {
       transactions () {
-        return this.$store.getters.wallet.transactions
+        return this.$store.getters.wallet.transactions.slice().reverse()
       },
-      reversedTransactions () {
-        return this.transactions.slice().reverse()
+      unconfirmedTransactions () {
+        return this.transactions.filter(tx => tx.confirmation_ts === null)
+      },
+      confirmedTransactions () {
+        return this.transactions.filter(tx => tx.confirmation_ts)
       }
-    },
-    methods: {
-      // TODO: convert txs to a modal
-      // openModal (type) {
-      //   this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })
-      // }
     }
   }
 </script>

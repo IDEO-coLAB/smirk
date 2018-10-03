@@ -2,11 +2,11 @@
   <div id="app" class="content app-container">
     <ModalContainer />
     <div class="app-sidebar">
-      <!-- TODO: make this into a component -->
-      <router-link to="/dashboard">Dash</router-link>
+      <!-- TODO: make sidebar into a component -->
+      <router-link to="/dashboard">Dashboard</router-link>
       <br>
       <br>
-      <router-link to="/transactions">Txs</router-link>
+      <router-link to="/transactions">Transactions</router-link>
     </div>
     <div class="app-content">
       <router-view></router-view>

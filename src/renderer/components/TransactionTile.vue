@@ -1,23 +1,21 @@
 <template>
   <div @click="openModal">
     <hr>
-    tx ID: {{this.transaction.id}} |
+    {{ this.date }} |
 
-    {{ this.transaction.tx_type }} |
+    <!-- tx ID: {{this.transaction.id}} | -->
 
-    conf on {{ new Date(this.transaction.confirmation_ts).toDateString() }} |
+    type: {{ this.transaction.tx_type }} |
 
-    <!-- TODO: IMPROVE BASED ON ALL STATES -->
-    <span v-if="this.isReceived">
-      amount: {{ this.transaction.amount_credited | grinBaseNumToPrettyNum }}
-    </span>
-    <span v-else>
-      amount: {{ this.transaction.amount_debited | grinBaseNumToPrettyNum }}
-    </span>
+    confirmed: {{ this.transaction.confirmation_ts ? true : false }} |
+
+    amount: {{ amount | grinBaseNumToPrettyNum }}
   </div>
 </template>
 
 <script>
+  import format from 'date-fns/format'
+
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
@@ -30,8 +28,18 @@
       }
     },
     computed: {
-      isReceived () {
-        return this.transaction.tx_type === 'TxReceived'
+      amount () {
+        // debugger
+        return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
+          ? this.transaction.amount_credited
+          : this.transaction.amount_debited
+      },
+      date () {
+        const dateFmt = 'MMM D'
+        const dateStr = !this.transaction.confirmation_ts
+          ? this.transaction.creation_ts
+          : this.transaction.confirmation_ts
+        return format(dateStr, dateFmt)
       }
     },
     methods: {

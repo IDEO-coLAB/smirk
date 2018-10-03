@@ -1,11 +1,12 @@
 <template>
   <div>
+
     <header class="modal-card-head">
       <p class="modal-card-title">Transaction Modal</p>
       <button class="delete" @click="closeModal"></button>
     </header>
-    <section class="modal-card-body">
 
+    <section class="modal-card-body">
       <h2>Transaction Id: {{this.transactionId}}</h2>
       <h3>tx Synopsis</h3>
       {{this.transactionSummary}}
@@ -13,8 +14,8 @@
       <h3>tx Outputs</h3>
       {{this.transactionOutputs}}
       <hr>
-
     </section>
+
     <footer class="modal-card-foot">
       <button
         class="button"
@@ -22,6 +23,7 @@
         Cancel
       </button>
     </footer>
+
   </div>
 </template>
 
