@@ -44,7 +44,7 @@
     },
     methods: {
       openModal () {
-        const type = APP_STATE_MODAL_TYPES.TRANSACTION
+        const type = APP_STATE_MODAL_TYPES.TRANSACTION_ITEM
         const id = this.transaction.id
 
         this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION, id)

@@ -2,7 +2,7 @@
   <div>
 
     <header class="modal-card-head">
-      <p class="modal-card-title">Transaction Modal</p>
+      <p class="modal-card-title">Coinbase Modal</p>
       <button class="delete" @click="closeModal"></button>
     </header>
 
@@ -16,13 +16,7 @@
       <hr>
     </section>
 
-    <footer class="modal-card-foot">
-      <button
-        class="button"
-        @click="closeModal">
-        Cancel
-      </button>
-    </footer>
+    <footer class="modal-card-foot">footer</footer>
 
   </div>
 </template>
@@ -31,7 +25,7 @@
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
-    name: 'transaction-modal',
+    name: 'modal-transaction-item-coinbase',
     computed: {
       modal () {
         return this.$store.getters.appState.modal

@@ -1,10 +1,10 @@
 /*
 TODO:
-regular ping: http://localhost:13420/v1/wallet/owner/node_height
+- Add a heartbeat ping to sync (http://localhost:13420/v1/wallet/owner/node_height)
+- Add data caching layer
 */
 
 import axios from 'axios'
-// import qs from 'qs'
 import _ from 'lodash'
 
 import models from '../../models'
@@ -100,10 +100,10 @@ const mutations = {
   }
 }
 
-const getFormattedAxiosPost = (url, data) => {
+const getFormattedAxiosPost = (url, data = null) => {
   return {
     method: 'POST',
-    headers: { 'content-type': 'text/plain' },
+    headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
     data,
     url
   }
@@ -122,6 +122,10 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
         return data
       })
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.GET_SUMMARY
+        throw error
+      })
   },
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
     axios.get(`${GRIN_OWNER_URL}/retrieve_txs`)
@@ -130,35 +134,63 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
         return data
       })
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.GET_TRANSACTIONS
+        throw error
+      })
   },
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION] ({ commit }, id) {
-    // TODO: Add data caching layer
     axios.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
       .then((payload) => {
-        // payload = { validated_against_node: boolean, outputs: Output[] }
+        // payload.data[0] validated_against_node: boolean
+        // payload.data[1] outputs: Output[]
         const data = payload.data[1]
-        // exit if there are no outputs for the transaction
         if (_.isEmpty(data)) {
           return null
         }
         commit(GRIN_WALLET_MUTATIONS.SET_OUTPUTS, data)
         return data
       })
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION
+        throw error
+      })
   },
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, data)
     return axios(post)
       .then(payload => payload.data)
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION
+        throw error
+      })
   },
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_FOREIGN_URL}/receive_tx`, data)
     axios(post)
       .then(payload => payload.data)
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION
+        throw error
+      })
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/finalize_tx`, data)
     axios(post)
       .then(payload => payload.data)
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION
+        throw error
+      })
+  },
+  [GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION] ({ commit }, data) {
+    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
+    return axios(post)
+      .then(payload => payload.data)
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION
+        throw error
+      })
   }
 }
 

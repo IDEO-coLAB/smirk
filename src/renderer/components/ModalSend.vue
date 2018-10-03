@@ -5,7 +5,7 @@
       <button class="delete" @click="closeModal"></button>
     </header>
 
-    <form v-on:submit.prevent="submitTransaction">
+    <form v-on:submit.prevent="sendTransaction">
       <section class="modal-card-body">
 
         {{ this.transactionTemplate }}
@@ -49,7 +49,7 @@
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
-    name: 'send-modal',
+    name: 'modal-send',
     data () {
       return {
         transactionTemplate: new models.TransactionTemplateToSelf()
@@ -64,11 +64,11 @@
       closeModal () {
         this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: false, type: null })
       },
-      submitTransaction () {
+      sendTransaction () {
         // Use a new object for input formatting
         let formattedTx = Object.assign({}, this.transactionTemplate)
 
-        // NOTE: YOU CANNOT DO DECIMALS!
+        // NOTE: YOU CANNOT DO DECIMALS
         // console.log('formattedTx.amount', formattedTx.amount)
         // console.log('this.transactionTemplate.amount', this.transactionTemplate.amount)
 
@@ -76,13 +76,18 @@
         console.log(prettyNumToGrinBaseNum(this.transactionTemplate.amount))
         formattedTx.amount = prettyNumToGrinBaseNum(this.transactionTemplate.amount)
 
+        // the call below are the self send flow
         this.$store.dispatch(GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION, formattedTx)
           .then((payload) => {
             this.$store.dispatch(GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION, payload)
+            return payload
           })
           .then((payload) => {
             this.$store.dispatch(GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION, payload)
+            return payload
           })
+          // TODO: uniform error handler for the app
+          .catch((error) => console.warn(error))
       }
     }
   }

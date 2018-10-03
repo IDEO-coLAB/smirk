@@ -26,7 +26,7 @@
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
-    name: 'receive-modal',
+    name: 'modal-receive',
     computed: {
       modal () {
         return this.$store.getters.appState.modal

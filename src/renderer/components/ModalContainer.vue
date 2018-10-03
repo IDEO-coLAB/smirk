@@ -2,25 +2,25 @@
   <div class="modal" v-bind:class="{ 'is-active': modal.isActive }">
     <div class="modal-background" @click="closeModal"></div>
     <div class="modal-card">
-      <ReceiveModal v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
-      <SendModal v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" />
-      <TransactionModal v-if="modal.type === APP_STATE_MODAL_TYPES.TRANSACTION" />
+      <ModalReceive v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
+      <ModalSend v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" />
+      <ModalTransactionItem v-if="modal.type === APP_STATE_MODAL_TYPES.TRANSACTION_ITEM" />
     </div>
   </div>
 </template>
 
 <script>
-  import ReceiveModal from './ReceiveModal'
-  import SendModal from './SendModal'
-  import TransactionModal from './TransactionModal'
+  import ModalReceive from './ModalReceive'
+  import ModalSend from './ModalSend'
+  import ModalTransactionItem from './ModalTransactionItem'
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
 
   export default {
     name: 'modal-container',
     components: {
-      ReceiveModal,
-      SendModal,
-      TransactionModal
+      ModalReceive,
+      ModalSend,
+      ModalTransactionItem
     },
     data () {
       return {
