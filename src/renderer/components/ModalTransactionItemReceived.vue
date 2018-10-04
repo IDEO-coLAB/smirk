@@ -2,27 +2,26 @@
   <div>
 
     <header class="modal-card-head">
-      <p class="modal-card-title">Received Modal</p>
+      <p class="modal-card-title">
+        Received {{transaction.amount_credited | grinBaseNumToPrettyNum}}
+      </p>
       <button class="delete" @click="closeModal"></button>
     </header>
 
     <section class="modal-card-body">
-      <h2>Transaction Id: {{this.transactionId}}</h2>
-      <h3>tx Synopsis</h3>
-      {{this.transactionSummary}}
-      <hr>
-      <h3>tx Outputs</h3>
-      {{this.transactionOutputs}}
-      <hr>
+      <p>fees: {{this.transaction.fee | grinBaseNumToPrettyNum}}</p>
+      <p>initiated: {{this.transaction.creation_ts | dateFormatLong}}</p>
+      <p>confirmed: {{this.transaction.confirmation_ts | dateFormatLong}}</p>
     </section>
 
-    <footer class="modal-card-foot">
+    <!-- Can a user cancel TxReceived for any reason? -->
+    <!-- <footer class="modal-card-foot">
       <button
         class="button"
         @click="cancelTransaction">
         Cancel Transaction
       </button>
-    </footer>
+    </footer> -->
 
   </div>
 </template>
@@ -40,11 +39,9 @@
       transactionId () {
         return this.$store.getters.appState.currentTransactionId
       },
-      transactionSummary () {
+      transaction () {
+        console.log('from received item:', this.$store.getters.transactionById(this.transactionId))
         return this.$store.getters.transactionById(this.transactionId)
-      },
-      transactionOutputs () {
-        return this.$store.getters.outputByTransactionId(this.transactionId)
       }
     },
     methods: {

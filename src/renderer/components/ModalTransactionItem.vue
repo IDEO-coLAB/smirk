@@ -1,13 +1,13 @@
 <template>
   <div>
     <ModalTransactionItemReceived
-      v-if="transactionSummary.tx_type.includes(types.TxReceived)" />
+      v-if="transaction.tx_type.includes(types.TxReceived)" />
 
     <ModalTransactionItemSent
-      v-if="transactionSummary.tx_type.includes(types.TxSent)" />
+      v-if="transaction.tx_type.includes(types.TxSent)" />
 
     <ModalTransactionItemCoinbase
-      v-if="transactionSummary.tx_type.includes(types.ConfirmedCoinbase)" />
+      v-if="transaction.tx_type.includes(types.ConfirmedCoinbase)" />
   </div>
 </template>
 
@@ -30,11 +30,9 @@
       }
     },
     computed: {
-      transactionId () {
-        return this.$store.getters.appState.currentTransactionId
-      },
-      transactionSummary () {
-        return this.$store.getters.transactionById(this.transactionId)
+      transaction () {
+        const id = this.$store.getters.appState.currentTransactionId
+        return this.$store.getters.transactionById(id)
       }
     }
   }

@@ -2,10 +2,12 @@ import Vue from 'vue'
 
 import grinBaseNumToPrettyNum from './grinBaseNumToPrettyNum'
 import reverse from './reverse'
+import dateFormatLong from './dateFormatLong'
 
 const filters = {
   grinBaseNumToPrettyNum,
-  reverse
+  reverse,
+  dateFormatLong
 }
 
 export default () => {

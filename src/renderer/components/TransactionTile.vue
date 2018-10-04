@@ -3,8 +3,6 @@
     <hr>
     {{ this.date }} |
 
-    <!-- tx ID: {{this.transaction.id}} | -->
-
     type: {{ this.transaction.tx_type }} |
 
     confirmed: {{ this.transaction.confirmation_ts ? true : false }} |
@@ -29,12 +27,12 @@
     },
     computed: {
       amount () {
-        // debugger
         return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
           ? this.transaction.amount_credited
           : this.transaction.amount_debited
       },
       date () {
+        // TODO: turn this into a short date string format filter
         const dateFmt = 'MMM D'
         const dateStr = !this.transaction.confirmation_ts
           ? this.transaction.creation_ts

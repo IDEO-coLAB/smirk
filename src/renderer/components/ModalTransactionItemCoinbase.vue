@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: DESIGN THE COINBASE TYPE AT SOME POINT -->
 
     <header class="modal-card-head">
       <p class="modal-card-title">Coinbase Modal</p>
