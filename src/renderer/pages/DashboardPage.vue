@@ -4,19 +4,9 @@
     <div>
       {{ spendable | grinBaseNumToPrettyNum }} Spendable T3 Grin
       <br>
-      {{$store.getters.wallet.summary}}
-      <hr>
-      <button
-        @click="openModal(APP_STATE_MODAL_TYPES.RECEIVE)"
-        class="button">
-        Receive
-      </button>
-
-      <button
-        @click="openModal(APP_STATE_MODAL_TYPES.SEND)"
-        class="button">
-        Send
-      </button>
+      <router-link to="/balance">Balance</router-link> |
+      <router-link to="/send">Send</router-link> |
+      <router-link to="/receive">Receive</router-link>
     </div>
   </main>
 </template>

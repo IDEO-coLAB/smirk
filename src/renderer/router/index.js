@@ -1,34 +1,59 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 import Vue from 'vue'
 import Router from 'vue-router'
+import { ipcRenderer } from 'electron'
 
-import TransactionsPage from '../pages/TransactionsPage'
 import DashboardPage from '../pages/DashboardPage'
-
-import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
+import BalancePage from '../pages/BalancePage'
+import ReceivePage from '../pages/ReceivePage'
+import SendPage from '../pages/SendPage'
 
 Vue.use(Router)
+
+const expandWindow = (isExpanding) => {
+  if (isExpanding) {
+    return ipcRenderer.send('resizeWindow', { width: 950, height: 820 })
+  }
+  ipcRenderer.send('resizeWindow', { width: 950, height: 220 })
+}
 
 export default new Router({
   routes: [
     {
-      path: '/transactions',
-      name: 'transactions-page',
-      component: TransactionsPage,
+      path: '/dashboard',
+      name: 'dashboard-page',
+      component: DashboardPage,
       beforeEnter: (to, from, next) => {
-        // Always remove an exsiting currentTransaction when entering this route
-        const $store = this.a.app.$store
-        if (_.isNil($store)) {
-          return next()
-        }
-        $store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, null)
+        expandWindow(false)
         next()
       }
     },
     {
-      path: '/dashboard',
-      name: 'dashboard-page',
-      component: DashboardPage
+      path: '/balance',
+      name: 'balance-page',
+      component: BalancePage,
+      beforeEnter: (to, from, next) => {
+        expandWindow(true)
+        next()
+      }
+    },
+    {
+      path: '/send',
+      name: 'send-page',
+      component: SendPage,
+      beforeEnter: (to, from, next) => {
+        expandWindow(true)
+        next()
+      }
+    },
+    {
+      path: '/receive',
+      name: 'receive-page',
+      component: ReceivePage,
+      beforeEnter: (to, from, next) => {
+        expandWindow(true)
+        next()
+      }
     },
     {
       path: '*',

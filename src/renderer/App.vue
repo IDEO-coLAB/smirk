@@ -1,22 +1,13 @@
 <template>
   <div id="app" class="content app-container">
     <ModalContainer />
-    <div class="app-sidebar">
-      <!-- TODO: make sidebar into a component -->
-      <router-link to="/dashboard">Dashboard</router-link>
-      <br>
-      <br>
-      <router-link to="/transactions">Transactions</router-link>
-    </div>
-    <div class="app-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import ModalContainer from './components/ModalContainer'
-  import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
+  // import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
 
   export default {
     name: 'smirk',
@@ -24,9 +15,10 @@
       ModalContainer
     },
     mounted () {
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
-    }
+      // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
+      // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
+    },
+    methods: {}
   }
 </script>
 

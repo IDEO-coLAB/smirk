@@ -1,25 +1,13 @@
 <template>
   <main>
-    <h2>Unconfirmed Txs</h2>
-    <div v-for="tx in unconfirmedTransactions">
-      <TransactionTile v-bind:transaction="tx" />
-    </div>
-
-    <h2>Confirmed Txs</h2>
-    <div v-for="tx in confirmedTransactions">
-      <TransactionTile v-bind:transaction="tx" />
-    </div>
+    <h2>BALANCE PAGE</h2>
+    <router-link to="/dashboard">Dashboard</router-link> |
   </main>
 </template>
 
 <script>
-  import TransactionTile from '../components/TransactionTile'
-
   export default {
-    name: 'transactions-page',
-    components: {
-      TransactionTile
-    },
+    name: 'balance-page',
     computed: {
       transactions () {
         return this.$store.getters.wallet.transactions.slice().reverse()

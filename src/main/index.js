@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -28,8 +28,8 @@ const createWindow = async () => {
     title: 'Smirk',
     x: 50,
     y: 50,
-    height: 777,
-    width: 1300,
+    height: 220,
+    width: 950,
     useContentSize: true,
     show: false,
     maximizable: false,
@@ -86,6 +86,11 @@ app.on('activate', () => {
 // to ensure that quit happens, not just a window close / minimization
 app.on('before-quit', () => {
   willQuitApp = true
+})
+
+// resize window event passed in from client
+ipcMain.on('resizeWindow', (event, data) => {
+  mainWindow.setSize(data.width, data.height, true)
 })
 
 /**
