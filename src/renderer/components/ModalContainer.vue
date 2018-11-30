@@ -3,7 +3,7 @@
     <div class="modal-background" @click="closeModal"></div>
     <div class="modal-card">
       <ModalReceive v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
-      <ModalSend v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" />
+      <!-- <ModalSend v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" /> -->
       <ModalTransactionItem v-if="modal.type === APP_STATE_MODAL_TYPES.TRANSACTION_ITEM" />
     </div>
   </div>
@@ -11,7 +11,7 @@
 
 <script>
   import ModalReceive from './ModalReceive'
-  import ModalSend from './ModalSend'
+  // import ModalSend from './ModalSend'
   import ModalTransactionItem from './ModalTransactionItem'
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
 
@@ -19,7 +19,7 @@
     name: 'modal-container',
     components: {
       ModalReceive,
-      ModalSend,
+      // ModalSend,
       ModalTransactionItem
     },
     data () {

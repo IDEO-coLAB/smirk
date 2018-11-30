@@ -1,9 +1,7 @@
-<template>
+<!-- <template>
   <div>
-    <header class="modal-card-head">
-      <p class="modal-card-title">SEND Modal</p>
-      <button class="delete" @click="closeModal"></button>
-    </header>
+    <h1>SEND PAGE</h1>
+    <router-link to="/dashboard">Dashboard</router-link>
 
     <form v-on:submit.prevent="sendTransaction">
       <section class="modal-card-body">
@@ -39,6 +37,7 @@
       </footer>
 
     </form>
+
   </div>
 </template>
 
@@ -49,7 +48,7 @@
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
   export default {
-    name: 'modal-send',
+    name: 'send-page',
     data () {
       return {
         transactionTemplate: new models.TransactionTemplateToSelf()
@@ -92,3 +91,4 @@
     }
   }
 </script>
+ -->
