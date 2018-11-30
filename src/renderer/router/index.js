@@ -6,15 +6,16 @@ import { ipcRenderer } from 'electron'
 import DashboardPage from '../pages/DashboardPage'
 import BalancePage from '../pages/BalancePage'
 import ReceivePage from '../pages/ReceivePage'
+import BroadcastPage from '../pages/BroadcastPage'
 import SendPage from '../pages/SendPage'
 
 Vue.use(Router)
 
-const expandWindow = (isExpanding) => {
-  if (isExpanding) {
-    return ipcRenderer.send('resizeWindow', { width: 950, height: 820 })
+const resizeWindow = (expandWindow) => {
+  if (expandWindow) {
+    return ipcRenderer.send('resizeWindow', { width: 950, height: 520 })
   }
-  ipcRenderer.send('resizeWindow', { width: 950, height: 220 })
+  ipcRenderer.send('resizeWindow', { width: 950, height: 520 })
 }
 
 export default new Router({
@@ -24,7 +25,7 @@ export default new Router({
       name: 'dashboard-page',
       component: DashboardPage,
       beforeEnter: (to, from, next) => {
-        expandWindow(false)
+        resizeWindow(false)
         next()
       }
     },
@@ -33,7 +34,7 @@ export default new Router({
       name: 'balance-page',
       component: BalancePage,
       beforeEnter: (to, from, next) => {
-        expandWindow(true)
+        resizeWindow(true)
         next()
       }
     },
@@ -42,7 +43,7 @@ export default new Router({
       name: 'send-page',
       component: SendPage,
       beforeEnter: (to, from, next) => {
-        expandWindow(true)
+        resizeWindow(true)
         next()
       }
     },
@@ -51,7 +52,16 @@ export default new Router({
       name: 'receive-page',
       component: ReceivePage,
       beforeEnter: (to, from, next) => {
-        expandWindow(true)
+        resizeWindow(true)
+        next()
+      }
+    },
+    {
+      path: '/broadcast',
+      name: 'broadcast-page',
+      component: BroadcastPage,
+      beforeEnter: (to, from, next) => {
+        resizeWindow(true)
         next()
       }
     },
