@@ -2,7 +2,7 @@
   <div class="modal" v-bind:class="{ 'is-active': modal.isActive }">
     <div class="modal-background" @click="closeModal"></div>
     <div class="modal-card">
-      <ModalReceive v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" />
+      <!-- <ModalReceive v-if="modal.type === APP_STATE_MODAL_TYPES.RECEIVE" /> -->
       <!-- <ModalSend v-if="modal.type === APP_STATE_MODAL_TYPES.SEND" /> -->
       <ModalTransactionItem v-if="modal.type === APP_STATE_MODAL_TYPES.TRANSACTION_ITEM" />
     </div>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import ModalReceive from './ModalReceive'
+  // import ModalReceive from './ModalReceive'
   // import ModalSend from './ModalSend'
   import ModalTransactionItem from './ModalTransactionItem'
   import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'

@@ -6,15 +6,15 @@
     <h3>Send Method</h3>
     <div class="control">
       <label class="radio">
-        <input type="radio" value="HTTP" v-model="wayOfSending" :checked="wayOfSending===WAYS_TO_SEND.HTTP" />
+        <input type="radio" value="HTTP" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.HTTP" />
         HTTP
       </label>
       <label class="radio">
-        <input type="radio" value="FILE" v-model="wayOfSending" :checked="wayOfSending===WAYS_TO_SEND.FILE" />
+        <input type="radio" value="FILE" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.FILE" />
         FILE
       </label>
       <label class="radio">
-        <input type="radio" value="SERVICE" v-model="wayOfSending" :checked="wayOfSending===WAYS_TO_SEND.SERVICE" />
+        <input type="radio" value="SERVICE" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.SERVICE" />
         SERVICE
       </label>
     </div>
@@ -27,7 +27,7 @@
           v-model="transactionTemplate.amount" />
 
         <br>
-        <div v-if="wayOfSending===WAYS_TO_SEND.HTTP">
+        <div v-if="sendMethod===SEND_METHODS.HTTP">
           DEST:
           <input
             type="text"
@@ -102,7 +102,7 @@
     SEND: 'SEND'
   }
 
-  const WAYS_TO_SEND = {
+  const SEND_METHODS = {
     HTTP: 'HTTP',
     FILE: 'FILE',
     SERVICE: 'SERVICE'
@@ -114,8 +114,8 @@
       return {
         SEND_STEPS: SEND_STEPS,
         currentStep: SEND_STEPS.CONSTRUCT,
-        WAYS_TO_SEND: WAYS_TO_SEND,
-        wayOfSending: WAYS_TO_SEND.FILE,
+        SEND_METHODS: SEND_METHODS,
+        sendMethod: SEND_METHODS.FILE,
         showAdvancedOptions: false,
         transactionTemplate: new models.TransactionTemplateToOther()
       }
@@ -129,7 +129,7 @@
         // Use a new object for input formatting
         // let formattedTx = Object.assign({}, this.transactionTemplate)
 
-        // set the tx.method based on the wayOfSending // http vs file
+        // set the tx.method based on the sendMethod // http vs file
 
         // // Convert tx amount to the Grin base format
         // console.log(prettyNumToGrinBaseNum(this.transactionTemplate.amount))

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <header class="modal-card-head">
       <p class="modal-card-title">Receive Modal</p>
@@ -39,3 +39,4 @@
     }
   }
 </script>
+ -->

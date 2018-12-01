@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
+
   export default {
     name: 'fullscreen-file-upload',
     methods: {
@@ -19,6 +21,9 @@
         const tx = JSON.parse(txString)
         console.log('UNPACKED A TX', tx)
         // TODO: Handle invalid file formats, timing, UX, etc
+
+        // Commit the freshly uploaded tx to the store
+        this.$store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, tx)
 
         // To consider a transaction in the finalized state:
         // 1) length of participant_data must be >=2

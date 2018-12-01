@@ -1,24 +1,26 @@
 import _ from 'lodash'
 import assert from 'assert'
-import ls from 'local-storage'
+// import ls from 'local-storage'
 
 export const APP_STATE_LOCAL_STORAGE = {
-  CURRENT_TX_ID: 'CURRENT_TX_ID'
+  // CURRENT_TX_ID: 'CURRENT_TX_ID'
 }
 
 export const APP_STATE_MUTATIONS = {
-  SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
-  SET_MODAL: 'SET_MODAL'
+  // SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
+  SET_MODAL: 'SET_MODAL',
+  SET_UPLOADED_TX: 'SET_UPLOADED_TX'
 }
 
 export const APP_STATE_MODAL_TYPES = {
-  RECEIVE: 'RECEIVE',
+  // RECEIVE: 'RECEIVE',
   // SEND: 'SEND',
   TRANSACTION_ITEM: 'TRANSACTION_ITEM'
 }
 
 const state = {
-  currentTransactionId: null,
+  // currentTransactionId: null,
+  uploadedTransaction: null,
   modal: {
     isActive: false,
     type: null
@@ -26,13 +28,18 @@ const state = {
 }
 
 const getters = {
-  appState: (state) => state
+  appState: (state) => state,
+  uploadedTransaction: (state) => state.uploadedTransaction
 }
 
 const mutations = {
-  [APP_STATE_MUTATIONS.SET_CURRENT_TX_ID] (state, data) {
-    state.currentTransactionId = data
-    ls.set(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID, data)
+  // [APP_STATE_MUTATIONS.SET_CURRENT_TX_ID] (state, data) {
+  //   state.currentTransactionId = data
+  //   ls.set(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID, data)
+  // },
+  [APP_STATE_MUTATIONS.SET_UPLOADED_TX] (state, data) {
+    // Expects a raw valid transaction string
+    state.uploadedTransaction = data
   },
   [APP_STATE_MUTATIONS.SET_MODAL] (state, data) {
     const { isActive, type } = data

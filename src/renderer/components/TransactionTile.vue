@@ -14,7 +14,7 @@
 <script>
   import format from 'date-fns/format'
 
-  import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
+  // import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   export default {
@@ -42,12 +42,12 @@
     },
     methods: {
       openModal () {
-        const type = APP_STATE_MODAL_TYPES.TRANSACTION_ITEM
+        // const type = APP_STATE_MODAL_TYPES.TRANSACTION_ITEM
         const id = this.transaction.id
 
         this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION, id)
-        this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, id)
-        this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })
+        // this.$store.commit(APP_STATE_MUTATIONS.SET_CURRENT_TX_ID, id)
+        // this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })
       }
     }
   }
