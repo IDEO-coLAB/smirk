@@ -25,6 +25,11 @@
 
     <div v-if="receiveMethod===RECEIVE_METHODS.FILE">
       <h3>You want to receive a file</h3>
+
+      <div class="section">
+        <FullscreenFileUpload class-styles="upload" />
+      </div>
+
       <div v-if="uploadedTransaction">
         <h5>Looks like you jus uploaded one :)</h5>
         {{uploadedTransaction}}
@@ -39,6 +44,8 @@
 </template>
 
 <script>
+  import FullscreenFileUpload from '../components/FullscreenFileUpload'
+
   const RECEIVE_METHODS = {
     HTTP: 'HTTP',
     FILE: 'FILE',
@@ -47,6 +54,9 @@
 
   export default {
     name: 'receive-page',
+    components: {
+      FullscreenFileUpload
+    },
     mounted () {
       if (this.uploadedTransaction) {
         this.receiveMethod = this.RECEIVE_METHODS.FILE

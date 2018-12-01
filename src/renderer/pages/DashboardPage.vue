@@ -1,6 +1,6 @@
 <template>
   <main>
-    <FullscreenFileUpload />
+    <FullscreenFileUpload class-styles="upload is-global" />
     <h1>Dashboard</h1>
   <!-- <img id="logo" src="~@/assets/logo.png" alt="electron-vue"> -->
     <div>

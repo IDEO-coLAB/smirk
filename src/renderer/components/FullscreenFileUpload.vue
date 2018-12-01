@@ -1,5 +1,5 @@
 <template>
-  <div id="dropzone"
+  <div :class="classStyles"
     v-on:click="click"
     v-on:dragenter="dragEnter"
     v-on:dragover="dragOver"
@@ -13,6 +13,12 @@
 
   export default {
     name: 'fullscreen-file-upload',
+    props: {
+      classStyles: {
+        type: String,
+        required: true
+      }
+    },
     methods: {
       readFile (event) {
         // decode the incoming arrayBuffer from the event

@@ -27,13 +27,12 @@ export default new Router({
       name: 'dashboard-page',
       component: DashboardPage,
       beforeEnter: (to, from, next) => {
-        const $store = this.a.app.$store
-
         // Always reset state when entering the dashboard
         // 1) resize the window to its passive size
         resizeWindow(false)
 
         // 2) remove uploadedTransaction if it exists
+        const $store = this.a.app.$store
         if (!_.isNil($store)) {
           $store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
         }
