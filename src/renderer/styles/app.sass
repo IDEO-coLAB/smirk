@@ -1,7 +1,31 @@
-@import "~bulma/css/bulma.css"
+@import "~bulma/bulma.sass"
+
+
+$grey-dark: hsl(270, 2%, 25%)
+$grey: hsl(0, 1%, 37%)
+$grey-light: hsl(0, 1%, 64%)
+
+$yellow: hsl(51, 100%, 55%)
+$green: hsl(149, 100%, 43%)
+
+
+
+
+$app-width: 470px
+$app-height-minimized: 220px
+
+
+
+
+
+$background: $grey
+
+
 
 body, html
   height: 100%
+  background: $background
+  color: $white
 
 #app
   margin-bottom: 0px !important
@@ -19,17 +43,70 @@ body, html
   bottom: 0
   height: 100%
   width: 100%
-  background-color: rgba(0, 255, 0, .2)
+  // background-color: rgba(0, 255, 0, .2)
 
 .upload.is-global
-  position: absolute
-  background-color: rgba(255, 0, 0, .2)
-  bottom: 0
-  top: 0
-  width: 100%
+    position: absolute
+    // background-color: rgba(255, 0, 0, .2)
+    bottom: 0
+    top: 0
+    width: 100%
 
 .section
   width: 80%
-  height: 100px;
+  height: 100px
   position: relative
   background-color: rgba(100, 100, 100, .2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+.snapshot
+  width: 100%
+  height: $app-height-minimized
+
+  .content
+    float: left
+    width: calc(100% * .618)
+    height: $app-height-minimized
+    margin: 0
+    padding-top: 70px
+    color: $grey-light
+    cursor: pointer
+
+  .buttons
+    position: relative
+    width: calc(100% * 1-.618)
+    height: $app-height-minimized
+    margin: 0
+
+    .button
+      float: left
+      width: 100%
+      height: calc(#{$app-height-minimized} / 2)
+      border-radius: 0
+      margin: 0
+      color: $grey-dark
+
+
+
+
+
+
+
+
+
+
+
+
+
+

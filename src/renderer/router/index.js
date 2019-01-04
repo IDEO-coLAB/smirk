@@ -15,9 +15,11 @@ Vue.use(Router)
 
 const resizeWindow = (expandWindow) => {
   if (expandWindow) {
-    return ipcRenderer.send('resizeWindow', { width: 950, height: 520 })
+    return ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
+    // return ipcRenderer.send('resizeWindow', { width: 550, height: 520 })
   }
-  ipcRenderer.send('resizeWindow', { width: 950, height: 520 })
+  ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
+  // ipcRenderer.send('resizeWindow', { width: 550, height: 220 })
 }
 
 export default new Router({

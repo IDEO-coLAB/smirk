@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  // import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
+  import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
 
   // Prevent global drag/drop events because we only want certain
   // areas of the application to register file upload events
@@ -16,7 +16,7 @@
   export default {
     name: 'smirk',
     mounted () {
-      // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
+      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
       // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
     methods: {}

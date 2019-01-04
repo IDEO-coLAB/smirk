@@ -116,7 +116,18 @@ const getFormattedAxiosPost = (url, data = null) => {
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    axios.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
+    let foo = {
+      // method: 'GET',
+      // auth: {
+      //   username: 'grin',
+      //   password: 'gekfpXGtUNPyYc5pnTGW'
+      // }
+      headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
+    }
+    let bar = axios.create(foo)
+
+    // axios.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
+    bar.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)

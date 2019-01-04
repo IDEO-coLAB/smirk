@@ -4,5 +4,5 @@ import _ from 'lodash'
 export default (value) => {
   // TODO: improve error handling
   if (_.isNil(value) || !_.isNumber(value)) return 'unavailable'
-  return `${parseInt(value) / 1e9} GRN`
+  return parseInt(value) / 1e9
 }
