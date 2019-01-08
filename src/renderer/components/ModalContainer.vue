@@ -18,7 +18,7 @@
   export default {
     name: 'modal-container',
     components: {
-      ModalReceive,
+      // ModalReceive,
       // ModalSend,
       ModalTransactionItem
     },

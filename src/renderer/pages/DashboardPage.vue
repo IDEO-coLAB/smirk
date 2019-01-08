@@ -2,12 +2,12 @@
   <main>
     <FullscreenFileUpload class-styles="upload is-global" />
 
-    <div class="snapshot">
+    <div class="minimized">
       <div class="content is-uppercase has-text-centered">
         Spendable Balance
         <h1 class="has-text-white">G {{ spendable | grinBaseNumToPrettyNum }}</h1>
       </div>
-      <div class="buttons">
+      <div class="navigation">
         <router-link
           to="/send"
           class="button is-success is-uppercase">

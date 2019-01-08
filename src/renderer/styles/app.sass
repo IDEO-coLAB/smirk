@@ -1,19 +1,32 @@
-@import "~bulma/bulma.sass"
+
+
+// https://github.com/rails/webpacker/issues/619
+// @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss"
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts'
+@import '~@fortawesome/fontawesome-free/scss/fontawesome'
+@import '~@fortawesome/fontawesome-free/scss/solid'
 
 
 $grey-dark: hsl(270, 2%, 25%)
 $grey: hsl(0, 1%, 37%)
 $grey-light: hsl(0, 1%, 64%)
 
+
+
+$red: hsl(0, 64%, 62%)
 $yellow: hsl(51, 100%, 55%)
 $green: hsl(149, 100%, 43%)
 
 
 
 
-$app-width: 470px
-$app-height-minimized: 220px
 
+
+$app-width: 460px
+$app-height-minimized: 120px
+$app-height-expanded: 520px
+$app-gutter: 60px
 
 
 
@@ -22,19 +35,90 @@ $background: $grey
 
 
 
+
+
+
+
+$table-color: white
+$table-background-color: inherit
+
+
+
+
+
+
+@import "~bulma/bulma.sass"
+@import '~bulma-checkradio'
+
+
+
+
+
+
+
+
+
+
+
+
 body, html
   height: 100%
   background: $background
   color: $white
+  // font-family: $family-monospace
+  // font-weight: bold
 
 #app
   margin-bottom: 0px !important
 
-.app-container
+
+
+
+
+
+
+.app
   position: relative
   overflow: hidden
   height: 100%
   width: 100%
+
+.app.is-expanded
+  height: $app-height-expanded
+
+.app.is-minimized
+  height: $app-height-minimized
+
+
+
+
+.smirk-header,
+.smirk-footer
+  background-color: $grey-light
+  height: calc(#{$app-height-minimized} / 2)
+  position: relative
+  width: 100%
+
+.smirk-body
+  padding: calc(#{$app-gutter} / 4) $app-gutter
+  height: calc(#{$app-height-expanded} - (2 * #{$app-height-minimized}))
+  overflow: scroll
+
+  &.has-footer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .upload
   position: absolute
@@ -70,7 +154,7 @@ body, html
 
 
 
-.snapshot
+.minimized
   width: 100%
   height: $app-height-minimized
 
@@ -78,19 +162,19 @@ body, html
     float: left
     width: calc(100% * .618)
     height: $app-height-minimized
+    padding-top: calc(#{$app-height-minimized} / 3)
     margin: 0
-    padding-top: 70px
     color: $grey-light
     cursor: pointer
 
-  .buttons
+  .navigation
+    float: left
     position: relative
-    width: calc(100% * 1-.618)
+    width: calc(100% * .382)
     height: $app-height-minimized
     margin: 0
 
     .button
-      float: left
       width: 100%
       height: calc(#{$app-height-minimized} / 2)
       border-radius: 0
@@ -110,3 +194,113 @@ body, html
 
 
 
+
+
+
+
+
+
+
+
+
+
+.smirk-header-anchor
+  width: $app-gutter
+  float: left
+  height: inherit
+
+
+
+
+
+
+
+.dropdown.is-smirk-header
+  cursor: pointer
+
+  .dropdown-item
+    padding-right: 2rem
+    white-space: normal
+
+  .dropdown-menu
+    min-width: 14rem
+
+  .button
+    height: calc(#{$app-height-minimized} / 2)
+    width: 400px
+    border-radius: 0px
+    font-size: $size-4
+    justify-content: flex-start
+
+
+
+
+
+
+
+
+
+
+
+.smirk-footer
+  padding: 0rem $app-gutter
+
+
+
+
+
+
+
+
+
+// .button,
+// textarea,
+// input,
+// select,
+// label
+//   font-weight: bold
+//   font-family: $family-monospace
+
+
+
+
+
+
+
+
+
+
+
+
+.is-minwidth
+  min-width: 100px
+
+
+.button.is-set-width
+  min-width: 15em
+  justify-content: left
+
+
+
+.button.is-smirk-header,
+.button.is-smirk-footer
+  width: 100%
+  height: inherit
+  border-radius: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.is-checkradio[type=checkbox] + label,
+.is-checkradio[type=radio] + label
+  margin-left: 0px

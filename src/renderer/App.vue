@@ -1,5 +1,12 @@
 <template>
-  <div id="app" class="content app-container">
+  <!-- This is the place for styling expansion -->
+  <div
+    id="app"
+    class="content app"
+    v-bind:class="{
+      'is-expanded' :  appIsExpanded,
+      'is-minimized' : !appIsExpanded
+    }">
     <router-view></router-view>
   </div>
 </template>
@@ -19,7 +26,12 @@
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
       // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
-    methods: {}
+    methods: {},
+    computed: {
+      appIsExpanded () {
+        return this.$store.getters.appIsExpanded
+      }
+    }
   }
 </script>
 

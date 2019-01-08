@@ -1,6 +1,6 @@
 export default class TransactionTemplateToOther {
   constructor () {
-    this.amount = 0
+    this.amount = 1
     this.minimum_confirmations = 10
     this.method = 'http'
     this.dest = 'http://<IP>:<PORT>'

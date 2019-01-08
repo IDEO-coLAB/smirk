@@ -1,92 +1,200 @@
 <template>
   <div>
-    <h1>SEND PAGE</h1>
-    <router-link to="/dashboard">Dashboard</router-link>
 
-    <h3>Send Method</h3>
-    <div class="control">
-      <label class="radio">
-        <input type="radio" value="HTTP" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.HTTP" />
-        HTTP
-      </label>
-      <label class="radio">
-        <input type="radio" value="FILE" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.FILE" />
-        FILE
-      </label>
-      <label class="radio">
-        <input type="radio" value="SERVICE" v-model="sendMethod" :checked="sendMethod===SEND_METHODS.SERVICE" />
-        SERVICE
-      </label>
-    </div>
+    <div class="smirk-header">
+      <span class="smirk-header-anchor">
+        <router-link to="/dashboard" class="button is-smirk-header">
+          <span class="icon">
+            <i class="fas fa-times"></i>
+          </span>
+        </router-link>
+      </span>
 
-    <div v-show="currentStep===SEND_STEPS.CONSTRUCT">
-      <form v-on:submit.prevent="confirmTransaction">
-        AMOUNT:
-        <input
-          min="0"
-          v-model="transactionTemplate.amount" />
+      <div
+        class="dropdown is-smirk-header"
+        v-bind:class="{ 'is-active': dropdownIsActive }"
+        @click="toggleDropdown">
 
-        <br>
-        <div v-if="sendMethod===SEND_METHODS.HTTP">
-          DEST:
-          <input
-            type="text"
-            v-model="transactionTemplate.dest" />
+        <div class="dropdown-trigger">
+          <button class="button">
+            <span>{{sendMethod.title}}</span>
+            <span class="icon is-medium">
+              <i class="fas fa-md fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
         </div>
 
-        <label class="checkbox">
-          <input type="checkbox"
+        <!-- TODO: Array of Methods -->
+        <div class="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <span
+              v-for="(data, key) in SEND_METHODS"
+              @click="setSendMethod(data)"
+              >
+              <a class="dropdown-item">
+                <h3>{{data.title}}</h3>
+                <p>{{data.detail}}</p>
+              </a>
+              <hr v-if="key !== 'SERVICE'" class="dropdown-divider">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form
+      v-show="currentStep===SEND_STEPS.CONSTRUCT"
+      v-on:submit.prevent="confirmTransaction">
+
+      <div class="smirk-body">
+
+        <div class="field">
+          <div class="control has-icons-left">
+            <input
+              min="0"
+              class="input"
+              placeholder="Amount to send"
+              v-model="transactionTemplate.amount"
+            />
+            <span class="icon is-small is-left">
+              <i>G</i>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <input
+            type="checkbox"
+            id="advancedOptions"
+            class="is-checkradio has-background-color is-info"
             v-model="showAdvancedOptions"
-            :checked="showAdvancedOptions" />
-          Show Advanced Options
-        </label>
+            :checked="showAdvancedOptions"
+          />
+          <label for="advancedOptions">Advanced options</label>
+        </div>
 
         <div v-if="showAdvancedOptions">
 
-          <label class="checkbox">
-            <input type="checkbox"
-              v-model="transactionTemplate.fluff"
-              :checked="transactionTemplate.fluff" />
-            Use Dandelion Protocol
-          </label>
+          <!-- TODO: improve CSS classes here -->
+          <div class="field has-addons">
+            <div class="control">
+              <span class="select">
+                <select class="is-minwidth" v-model="transactionTemplate.fluff">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </span>
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Use Dandelion
+              </a>
+            </div>
+          </div>
 
-          <br>
-          <label class="checkbox">
-            <input type="checkbox"
-              v-model="transactionTemplate.selection_strategy_is_use_all"
-              :checked="transactionTemplate.selection_strategy_is_use_all" />
-            Combine existing outputs for this transaction
-          </label>
+          <div class="field has-addons">
+            <div class="control">
+              <span class="select">
+                <select class="is-minwidth" v-model="transactionTemplate.selection_strategy_is_use_all">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </span>
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Combine Outputs
+              </a>
+            </div>
+          </div>
 
-          <br>
-          NUM CHANGE OUTPUTS:
-          <input
-            min="1"
-            step="1"
-            type="number"
-            v-model="transactionTemplate.num_change_outputs" />
+          <div class="field has-addons">
+            <div class="control">
+              <input
+                min="1"
+                step="1"
+                type="number"
+                class="input "
+                v-model="transactionTemplate.num_change_outputs"
+              />
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Change Output{{ transactionTemplate.num_change_outputs > 1 ? 's' : '' }}
+              </a>
+            </div>
+          </div>
 
-          <br>
-          MINIMUM CONFIRMATIONS:
-          <input
-            min="1"
-            step="3"
-            type="number"
-            v-model="transactionTemplate.minimum_confirmations" />
+          <div class="field has-addons">
+            <div class="control">
+              <input
+                min="1"
+                step="1"
+                type="number"
+                class="input "
+                v-model="transactionTemplate.minimum_confirmations"
+              />
+            </div>
+            <div class="control">
+              <a class="button is-set-width  is-static">
+                Required Confirmation{{ transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}
+              </a>
+            </div>
+          </div>
 
         </div>
+      </div>
 
-        <br>
+      <div class="smirk-footer columns is-gapless is-mobile">
         <button
-          class="button is-success"
-          type="submit">
+          type="submit"
+          class="column button is-success is-smirk-footer is-fullwidth">
           Confirm
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
 
     <div v-show="currentStep===SEND_STEPS.SEND">
-      {{transactionTemplate}}
+<!-- {{transactionTemplate}} -->
+
+      <div class="smirk-body">
+        <table class="table is-fullwidth">
+          <tbody>
+            <tr>
+              <td>You're sending</td>
+              <td>{{transactionTemplate.amount}} Grin</td>
+            </tr>
+            <tr>
+              <td>Existing outputs will {{transactionTemplate.selection_strategy_is_use_all ? '' : 'not'}} be combined</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{{transactionTemplate.num_change_outputs}} output will be created</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Dandelion will {{transactionTemplate.fluff ? '' : 'not' }} be used</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{{transactionTemplate.minimum_confirmations}} confirmation{{transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="smirk-footer columns is-gapless is-mobile">
+        <button
+          class="column button is-warning is-smirk-footer is-fullwidth">
+          Back
+        </button>
+        <button
+          class="column button is-success is-smirk-footer is-fullwidth">
+          Send
+        </button>
+      </div>
     </div>
 
   </div>
@@ -103,17 +211,31 @@
   }
 
   const SEND_METHODS = {
-    HTTP: 'HTTP',
-    FILE: 'FILE',
-    SERVICE: 'SERVICE'
+    HTTP: {
+      key: 'HTTP',
+      title: 'Send using IP Address',
+      detail: 'some detail text regaring IP addresses is going to go here'
+    },
+    FILE: {
+      key: 'FILE',
+      title: 'Send using a Slate',
+      detail: 'some detail text'
+    },
+    SERVICE: {
+      key: 'SERVICE',
+      title: 'Send using Grinbox',
+      detail: 'some detail text'
+    }
   }
 
   export default {
     name: 'send-page',
     data () {
       return {
+        dropdownIsActive: false,
+
         SEND_STEPS: SEND_STEPS,
-        currentStep: SEND_STEPS.CONSTRUCT,
+        currentStep: SEND_STEPS.SEND,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
         showAdvancedOptions: false,
@@ -122,6 +244,12 @@
     },
     computed: {},
     methods: {
+      toggleDropdown () {
+        this.dropdownIsActive = !this.dropdownIsActive
+      },
+      setSendMethod (method) {
+        this.sendMethod = method
+      },
       confirmTransaction () {
         // advance the process
         this.currentStep = SEND_STEPS.SEND

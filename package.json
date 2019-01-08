@@ -59,6 +59,7 @@
     "assert": "^1.4.1",
     "axios": "^0.16.1",
     "bulma": "^0.7.1",
+    "bulma-checkradio": "^2.1.0",
     "date-fns": "^2.0.0-alpha.20",
     "local-storage": "^1.4.2",
     "lodash": "^4.17.10",
@@ -71,6 +72,7 @@
     "vuex": "^2.3.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.3",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",

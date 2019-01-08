@@ -9,7 +9,8 @@ export const APP_STATE_LOCAL_STORAGE = {
 export const APP_STATE_MUTATIONS = {
   // SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
   SET_MODAL: 'SET_MODAL',
-  SET_UPLOADED_TX: 'SET_UPLOADED_TX'
+  SET_UPLOADED_TX: 'SET_UPLOADED_TX',
+  SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED'
 }
 
 export const APP_STATE_MODAL_TYPES = {
@@ -19,6 +20,7 @@ export const APP_STATE_MODAL_TYPES = {
 }
 
 const state = {
+  appIsExpanded: false,
   // currentTransactionId: null,
   uploadedTransaction: null,
   modal: {
@@ -29,10 +31,15 @@ const state = {
 
 const getters = {
   appState: (state) => state,
+  appIsExpanded: (state) => state.appIsExpanded,
   uploadedTransaction: (state) => state.uploadedTransaction
 }
 
 const mutations = {
+  [APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED] (state, data) {
+    console.log('setting appIsExpanded', data)
+    state.appIsExpanded = data
+  },
   // [APP_STATE_MUTATIONS.SET_CURRENT_TX_ID] (state, data) {
   //   state.currentTransactionId = data
   //   ls.set(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID, data)
