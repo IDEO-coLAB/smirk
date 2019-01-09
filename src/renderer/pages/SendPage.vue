@@ -1,49 +1,48 @@
 <template>
   <div>
 
-    <div v-if="currentStep===SEND_STEPS.CONSTRUCT">
+    <div class="smirk-header">
+      <span class="smirk-header-anchor">
+        <router-link to="/dashboard" class="button is-smirk-header">
+          <span class="icon">
+            <i class="fas fa-times"></i>
+          </span>
+        </router-link>
+      </span>
 
-      <div class="smirk-header">
-        <span class="smirk-header-anchor">
-          <router-link to="/dashboard" class="button is-smirk-header">
-            <span class="icon">
-              <i class="fas fa-times"></i>
+      <div
+        class="dropdown is-smirk-header"
+        v-bind:class="{ 'is-active': dropdownIsActive }"
+        @click="toggleDropdown">
+
+        <div class="dropdown-trigger">
+          <button class="button is-smirk-header">
+            <span>{{sendMethod.title}}</span>
+            <span class="icon is-medium">
+              <i class="fas fa-md fa-angle-down" aria-hidden="true"></i>
             </span>
-          </router-link>
-        </span>
+          </button>
+        </div>
 
-        <div
-          class="dropdown is-smirk-header"
-          v-bind:class="{ 'is-active': dropdownIsActive }"
-          @click="toggleDropdown">
-
-          <div class="dropdown-trigger">
-            <button class="button is-smirk-header">
-              <span>{{sendMethod.title}}</span>
-              <span class="icon is-medium">
-                <i class="fas fa-md fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </div>
-
-          <div class="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <span
-                v-for="(data, key) in SEND_METHODS"
-                @click="setSendMethod(data)"
-                >
-                <a class="dropdown-item">
-                  <h3>{{data.title}}</h3>
-                  <p>{{data.detail}}</p>
-                </a>
-                <hr v-if="key !== 'SERVICE'" class="dropdown-divider">
-              </span>
-            </div>
+        <div class="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <span
+              v-for="(data, key) in SEND_METHODS"
+              @click="setSendMethod(data)"
+              >
+              <a class="dropdown-item">
+                <h3>{{data.title}}</h3>
+                <p>{{data.detail}}</p>
+              </a>
+              <hr v-if="key !== 'SERVICE'" class="dropdown-divider">
+            </span>
           </div>
         </div>
       </div>
+    </div>
 
-      <form v-on:submit.prevent="setStep(SEND_STEPS.SEND)">
+    <div v-if="currentStep===SLATE_SEND_STEPS.CONSTRUCT_SLATE">
+      <form v-on:submit.prevent="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
 
         <div class="smirk-body">
 
@@ -142,27 +141,14 @@
         <div class="smirk-footer columns is-gapless is-mobile">
           <button
             class="column button is-success is-smirk-footer is-fullwidth"
-            @click="setStep(SEND_STEPS.SEND)">
+            @click="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
             Next
           </button>
         </div>
       </form>
     </div>
 
-    <div v-if="currentStep===SEND_STEPS.SEND">
-
-      <div class="smirk-header">
-        <span class="smirk-header-anchor">
-          <router-link to="/dashboard" class="button is-smirk-header">
-            <span class="icon">
-              <i class="fas fa-times"></i>
-            </span>
-          </router-link>
-        </span>
-        <div class="smirk-header-content">
-          Confirm slate details
-        </div>
-      </div>
+    <div v-if="currentStep===SLATE_SEND_STEPS.SIGN_SLATE">
 
       <div class="smirk-body">
 
@@ -187,7 +173,7 @@
       <div class="smirk-footer columns is-gapless is-mobile">
         <button
           class="column button is-warning is-smirk-footer is-fullwidth"
-          @click="setStep(SEND_STEPS.CONSTRUCT)">
+          @click="setStep(SLATE_SEND_STEPS.CONSTRUCT_SLATE)">
           Edit
         </button>
         <button
@@ -199,20 +185,8 @@
 
     </div>
 
-    <div v-if="currentStep===SEND_STEPS.CONFIRM">
+    <div v-if="currentStep===SLATE_SEND_STEPS.CONFIRMATION">
 
-      <div class="smirk-header">
-        <span class="smirk-header-anchor">
-          <router-link to="/dashboard" class="button is-smirk-header">
-            <span class="icon">
-              <i class="fas fa-times"></i>
-            </span>
-          </router-link>
-        </span>
-        <div class="smirk-header-content">
-          Using your slate
-        </div>
-      </div>
 
       <div class="smirk-body without-footer">
         <h3>How to use this slate</h3>
@@ -233,10 +207,10 @@
   // import { prettyNumToGrinBaseNum } from '../../utils/grin-utils'
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
-  const SEND_STEPS = {
-    CONSTRUCT: 'CONSTRUCT',
-    SEND: 'SEND',
-    CONFIRM: 'CONFIRM'
+  const SLATE_SEND_STEPS = {
+    CONSTRUCT_SLATE: 'CONSTRUCT_SLATE',
+    SIGN_SLATE: 'SIGN_SLATE',
+    CONFIRMATION: 'CONFIRMATION'
   }
 
   const SEND_METHODS = {
@@ -267,10 +241,11 @@
         dropdownIsActive: false,
         showAdvancedOptions: false,
 
-        SEND_STEPS: SEND_STEPS,
-        currentStep: SEND_STEPS.CONSTRUCT,
+        SLATE_SEND_STEPS: SLATE_SEND_STEPS,
+        currentStep: SLATE_SEND_STEPS.CONSTRUCT_SLATE,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
+
         transactionTemplate: new models.TransactionTemplateToOther()
       }
     },
@@ -280,6 +255,7 @@
         this.dropdownIsActive = !this.dropdownIsActive
       },
       setSendMethod (method) {
+        this.currentStep = this.SLATE_SEND_STEPS.CONSTRUCT_SLATE
         this.sendMethod = method
       },
       setStep (step) {
@@ -287,9 +263,7 @@
       },
       sendTransaction () {
         // advance the process
-        console.log('SENDING!')
-
-        this.setStep(this.SEND_STEPS.CONFIRM)
+        this.setStep(this.SLATE_SEND_STEPS.CONFIRMATION)
 
         // Use a new object for input formatting
         // let formattedTx = Object.assign({}, this.transactionTemplate)

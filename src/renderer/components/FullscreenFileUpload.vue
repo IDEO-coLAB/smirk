@@ -25,7 +25,7 @@
         var decoder = new TextDecoder('utf-8')
         const txString = decoder.decode(event.target.result)
         const tx = JSON.parse(txString)
-        console.log('UNPACKED A TX', tx)
+        console.log('JUST UNPACKED A D&D TX:\n', tx)
         // TODO: Handle invalid file formats, timing, UX, etc
 
         // Commit the freshly uploaded tx to the store

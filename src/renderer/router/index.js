@@ -18,10 +18,10 @@ const resizeWindow = (expandWindow, $store) => {
   if (expandWindow) {
     appIsExpanded = true
     // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    ipcRenderer.send('resizeWindow', { width: 460, height: 400 })
+    ipcRenderer.send('resizeWindow', { width: 460, height: 385 })
   } else {
     // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    ipcRenderer.send('resizeWindow', { width: 460, height: 130 })
+    ipcRenderer.send('resizeWindow', { width: 460, height: 142 })
   }
 
   if (!_.isNil($store)) {

@@ -28,7 +28,7 @@ const createWindow = async () => {
     title: 'Smirk',
     x: 50,
     y: 50,
-    height: 140,
+    height: 120,
     width: 460,
     useContentSize: true,
     show: false,
