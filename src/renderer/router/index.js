@@ -17,11 +17,11 @@ const resizeWindow = (expandWindow, $store) => {
   let appIsExpanded = false
   if (expandWindow) {
     appIsExpanded = true
-    ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    // ipcRenderer.send('resizeWindow', { width: 460, height: 422 })
+    // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
+    ipcRenderer.send('resizeWindow', { width: 460, height: 400 })
   } else {
-    ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    // ipcRenderer.send('resizeWindow', { width: 460, height: 142 })
+    // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
+    ipcRenderer.send('resizeWindow', { width: 460, height: 130 })
   }
 
   if (!_.isNil($store)) {

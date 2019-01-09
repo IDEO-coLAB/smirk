@@ -1,46 +1,60 @@
-
-
-// https://github.com/rails/webpacker/issues/619
-// @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss"
-
+// Font Awesome
+//////////////////////////////////////////
 $fa-font-path: '~@fortawesome/fontawesome-free/webfonts'
 @import '~@fortawesome/fontawesome-free/scss/fontawesome'
 @import '~@fortawesome/fontawesome-free/scss/solid'
 
-
+// Color Variables
+//////////////////////////////////////////
 $grey-dark: hsl(270, 2%, 25%)
 $grey: hsl(0, 1%, 37%)
 $grey-light: hsl(0, 1%, 64%)
-
-
 
 $red: hsl(0, 64%, 62%)
 $yellow: hsl(51, 100%, 55%)
 $green: hsl(149, 100%, 43%)
 
-
-
-
-
-
+// Container / Layout
+//////////////////////////////////////////
 $app-width: 460px
 $app-height-minimized: 120px
-$app-height-expanded: 520px
+$app-height-expanded: 485px
 $app-gutter: 60px
 
+// Typography
+//////////////////////////////////////////
+$text-strong: white
+$text: $grey-light
 
 
-
+//////////////////////////////////////////
 $background: $grey
 
 
 
-
-
+//////////////////////////////////////////
+$radius: 2px
 
 
 $table-color: white
 $table-background-color: inherit
+
+
+
+// Inputs
+//////////////////////////////////////////
+$input-color: white
+$input-background-color: $grey
+$input-border-color: $grey
+
+
+$label-color: $grey-light
+
+
+
+
+
+
 
 
 
@@ -63,8 +77,9 @@ $table-background-color: inherit
 
 body, html
   height: 100%
+  overflow: hidden
+  // color: $white
   background: $background
-  color: $white
   // font-family: $family-monospace
   // font-weight: bold
 
@@ -85,6 +100,7 @@ body, html
 
 .app.is-expanded
   height: $app-height-expanded
+  background-color: $grey-dark
 
 .app.is-minimized
   height: $app-height-minimized
@@ -92,19 +108,6 @@ body, html
 
 
 
-.smirk-header,
-.smirk-footer
-  background-color: $grey-light
-  height: calc(#{$app-height-minimized} / 2)
-  position: relative
-  width: 100%
-
-.smirk-body
-  padding: calc(#{$app-gutter} / 4) $app-gutter
-  height: calc(#{$app-height-expanded} - (2 * #{$app-height-minimized}))
-  overflow: scroll
-
-  &.has-footer
 
 
 
@@ -189,6 +192,21 @@ body, html
 
 
 
+.smirk-header,
+.smirk-footer
+  background-color: $grey
+  height: calc(#{$app-height-minimized} / 2)
+  position: relative
+  width: 100%
+
+.smirk-body
+  padding: calc(#{$app-gutter} / 2) $app-gutter
+  height: calc(#{$app-height-expanded} - (4 * #{$app-gutter}))
+  overflow-y: scroll
+  overflow-x: hidden
+
+.smirk-body.without-footer
+  height: calc(#{$app-height-expanded} - (3 * #{$app-gutter}))
 
 
 
@@ -197,17 +215,50 @@ body, html
 
 
 
-
-
-
-
-
-
+.smirk-header-anchor,
+.smirk-header-content
+  height: calc(#{$app-height-minimized} / 2)
+  background-color: $grey
 
 .smirk-header-anchor
-  width: $app-gutter
   float: left
+  width: $app-gutter
   height: inherit
+
+.smirk-header-content
+  float:left
+  display: inline-block
+  height: inherit
+  width: calc(100% - $app-gutter)
+  font-size: $size-4
+  justify-content: flex-start
+  padding: 0.5em
+
+
+
+
+
+
+
+
+
+
+
+
+
+.code-container
+  margin-bottom: 1em
+  max-height: $app-gutter
+  overflow: scroll
+  overflow-wrap: break-word
+  background-color: $grey
+  border-radius: $radius
+  padding: 0.375em
+
+
+
+
+
 
 
 
@@ -216,14 +267,16 @@ body, html
 
 
 .dropdown.is-smirk-header
-  cursor: pointer
+  // cursor: pointer
 
   .dropdown-item
     padding-right: 2rem
     white-space: normal
 
   .dropdown-menu
-    min-width: 14rem
+    // min-width: 14rem
+    width: 340px
+
 
   .button
     height: calc(#{$app-height-minimized} / 2)
@@ -264,10 +317,16 @@ body, html
 
 
 
+.select:not(.is-multiple):not(.is-loading)::after
+  border-color: $green
+  right: 1.125em
+  z-index: 4
 
 
 
-
+.is-clickable
+  cursor: pointer
+  user-select: none
 
 
 
@@ -276,9 +335,17 @@ body, html
   min-width: 100px
 
 
+
+
 .button.is-set-width
   min-width: 15em
   justify-content: left
+
+
+
+
+
+
 
 
 
@@ -287,12 +354,36 @@ body, html
   width: 100%
   height: inherit
   border-radius: 0
+  // background-color: inherit
+  border-color: none
+  // color: white
+
+.button.is-smirk-header
+  background-color: $grey
+  border: none
+  color: white
 
 
 
 
 
 
+
+
+
+
+.input[disabled],
+.textarea[disabled]
+  user-select: none
+  background-color: $grey
+  border-color: $grey
+  box-shadow: none
+  color: $white
+
+.button.is-static
+  background-color: $grey
+  color: $grey-light
+  border-color: $grey
 
 
 
