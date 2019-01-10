@@ -1,11 +1,19 @@
-// Font Awesome
+// Font Awesome Import
 //////////////////////////////////////////
 $fa-font-path: '~@fortawesome/fontawesome-free/webfonts'
 @import '~@fortawesome/fontawesome-free/scss/fontawesome'
 @import '~@fortawesome/fontawesome-free/scss/solid'
 
+
+// visual layering
+//////////////////////////////////////////
+$visual-idx-top: 100
+
+
 // Color Variables
 //////////////////////////////////////////
+$white: white
+
 $grey-dark: hsl(270, 2%, 25%)
 $grey: hsl(0, 1%, 37%)
 $grey-light: hsl(0, 1%, 64%)
@@ -14,6 +22,7 @@ $red: hsl(0, 64%, 62%)
 $yellow: hsl(51, 100%, 55%)
 $green: hsl(149, 100%, 43%)
 
+
 // Container / Layout
 //////////////////////////////////////////
 $app-width: 460px
@@ -21,24 +30,21 @@ $app-height-minimized: 120px
 $app-height-expanded: 485px
 $app-gutter: $app-height-minimized / 2
 
+
 // Typography
 //////////////////////////////////////////
 $text-strong: white
 $text: $grey-light
 
 
+// Global colors
 //////////////////////////////////////////
 $background: $grey
 
 
-
+// Radius
 //////////////////////////////////////////
 $radius: 2px
-
-
-$table-color: white
-$table-background-color: inherit
-
 
 
 // Inputs
@@ -48,64 +54,144 @@ $input-background-color: $grey
 $input-border-color: $grey
 
 
-$label-color: $grey-light
+// Dropdown
+//////////////////////////////////////////
+$dropdown-content-offset: 8px
+$dropdown-content-radius: 2px
+
+$dropdown-content-background-color: $grey
+
+$dropdown-item-color: white
+$dropdown-item-hover-color: white
+$dropdown-item-hover-background-color: $green
+$dropdown-item-active-color: white
+$dropdown-item-active-background-color: $green
+
+$dropdown-divider-background-color: $grey
 
 
-
-
-
-
-
-
-
-
-
-
+// Bulma Import
+// Note: must set the above variables
+// before the import
+//////////////////////////////////////////
 @import "~bulma/bulma.sass"
 @import '~bulma-checkradio'
 
 
-
-
-
-
-
-
-
-
-
-
+// Global / App-wide
+//////////////////////////////////////////
 body, html
   height: 100%
   overflow: hidden
-  // color: $white
   background: $background
-  // font-family: $family-monospace
-  // font-weight: bold
+  color: $grey-light
 
 #app
   margin-bottom: 0px !important
-
-
-
-
-
-
-
-.app
   position: relative
   overflow: hidden
   height: 100%
   width: 100%
 
-.app.is-expanded
-  height: $app-height-expanded
-  background-color: $grey-dark
 
-.app.is-minimized
+// App Sizing
+//////////////////////////////////////////
+#app.is-expanded
+  height: $app-height-expanded
+
+#app.is-minimized
   height: $app-height-minimized
 
 
+// Header / Footer
+//////////////////////////////////////////
+.header,
+.footer
+  background-color: $grey
+  height: calc(#{$app-height-minimized} / 2)
+  position: relative
+  width: 100%
+  color: $white
+
+.footer,
+  padding: 0rem $app-gutter
+
+.body
+  padding: calc(#{$app-gutter} / 2) $app-gutter
+  height: calc(#{$app-height-expanded} - (4 * #{$app-gutter}))
+  overflow-y: scroll
+  overflow-x: hidden
+  background-color: $grey-dark
+
+.body.without-footer
+  height: calc(#{$app-height-expanded} - (3 * #{$app-gutter}))
+  color: $white
+
+
+.header-anchor,
+.header-content
+  height: calc(#{$app-height-minimized} / 2)
+  font-weight: $weight-semibold
+
+.header-anchor
+  float: left
+  width: $app-gutter
+  height: inherit
+
+
+.header-content
+  float:left
+  display: inline-block
+  height: inherit
+  width: calc(100% - $app-gutter)
+  font-size: $size-4
+  justify-content: flex-start
+  padding: 0.5em
+
+.header-dropdown
+
+  .dropdown-trigger
+    padding-top: 0.375em
+
+  .dropdown-item
+    padding-right: 2rem
+    white-space: normal
+
+  .dropdown-menu
+    width: 340px
+
+  .button
+    height: calc(#{$app-height-minimized} / 2)
+    width: 400px
+    border-radius: 0px
+    font-size: $size-4
+    justify-content: flex-start
+
+
+
+
+
+
+
+
+
+// Dashboard
+//////////////////////////////////////////
+.dashboard-content
+  float: left
+  width: calc(100% * .618)
+  height: $app-height-minimized
+  padding-top: calc(#{$app-height-minimized} / 3)
+  margin: 0
+  color: $grey-light
+  cursor: pointer
+
+.dashboard-actions
+  float: left
+  position: relative
+  width: calc(100% * .382)
+  height: $app-height-minimized
+  margin: 0
 
 
 
@@ -119,6 +205,117 @@ body, html
 
 
 
+
+
+
+
+
+
+
+// Buttons
+//////////////////////////////////////////
+.button.is-header,
+.button.is-footer
+  width: 100%
+  height: inherit
+  border-radius: 0
+  border-color: none
+
+.button.is-header
+  background-color: inherit
+  border: inherit
+  color: white
+  font-weight: $weight-semibold
+
+.button.is-dashboard
+  width: 100%
+  height: calc(#{$app-height-minimized} / 2)
+  border-radius: 0
+  margin: 0
+  color: $grey-dark
+
+.button.is-static
+  background-color: $grey
+  color: $grey-light
+  border-color: $grey
+
+
+
+
+
+
+
+
+
+
+
+// Notifications
+//////////////////////////////////////////
+.notifications
+  position: absolute
+  bottom: 0
+  top: 0
+  width: 100%
+  z-index: $visual-idx-top
+
+
+
+
+
+
+
+
+// Custom Utils
+// TODO: clean these up
+//////////////////////////////////////////
+.is-paddingless-vertical
+  padding-top: 0px !important
+  padding-bottom: 0px !important
+
+.is-clickable
+  cursor: pointer
+  user-select: none
+
+.is-minwidth
+  min-width: 100px
+
+.button.is-set-width
+  min-width: 15em
+  justify-content: left
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// OLD
+//////////////////////////////////////////
 
 
 
@@ -157,32 +354,6 @@ body, html
 
 
 
-.minimized
-  width: 100%
-  height: $app-height-minimized
-
-  .content
-    float: left
-    width: calc(100% * .618)
-    height: $app-height-minimized
-    padding-top: calc(#{$app-height-minimized} / 3)
-    margin: 0
-    color: $grey-light
-    cursor: pointer
-
-  .navigation
-    float: left
-    position: relative
-    width: calc(100% * .382)
-    height: $app-height-minimized
-    margin: 0
-
-    .button
-      width: 100%
-      height: calc(#{$app-height-minimized} / 2)
-      border-radius: 0
-      margin: 0
-      color: $grey-dark
 
 
 
@@ -192,21 +363,6 @@ body, html
 
 
 
-.smirk-header,
-.smirk-footer
-  background-color: $grey
-  height: calc(#{$app-height-minimized} / 2)
-  position: relative
-  width: 100%
-
-.smirk-body
-  padding: calc(#{$app-gutter} / 2) $app-gutter
-  height: calc(#{$app-height-expanded} - (4 * #{$app-gutter}))
-  overflow-y: scroll
-  overflow-x: hidden
-
-.smirk-body.without-footer
-  height: calc(#{$app-height-expanded} - (3 * #{$app-gutter}))
 
 
 
@@ -215,24 +371,7 @@ body, html
 
 
 
-.smirk-header-anchor,
-.smirk-header-content
-  height: calc(#{$app-height-minimized} / 2)
-  background-color: $grey
 
-.smirk-header-anchor
-  float: left
-  width: $app-gutter
-  height: inherit
-
-.smirk-header-content
-  float:left
-  display: inline-block
-  height: inherit
-  width: calc(100% - $app-gutter)
-  font-size: $size-4
-  justify-content: flex-start
-  padding: 0.5em
 
 
 
@@ -266,24 +405,6 @@ body, html
 
 
 
-.dropdown.is-smirk-header
-  // cursor: pointer
-
-  .dropdown-item
-    padding-right: 2rem
-    white-space: normal
-
-  .dropdown-menu
-    // min-width: 14rem
-    width: 340px
-
-
-  .button
-    height: calc(#{$app-height-minimized} / 2)
-    width: 400px
-    border-radius: 0px
-    font-size: $size-4
-    justify-content: flex-start
 
 
 
@@ -295,24 +416,9 @@ body, html
 
 
 
-.smirk-footer
-  padding: 0rem $app-gutter
 
 
 
-
-
-
-
-
-
-// .button,
-// textarea,
-// input,
-// select,
-// label
-//   font-weight: bold
-//   font-family: $family-monospace
 
 
 
@@ -324,22 +430,6 @@ body, html
 
 
 
-.is-clickable
-  cursor: pointer
-  user-select: none
-
-
-
-
-.is-minwidth
-  min-width: 100px
-
-
-
-
-.button.is-set-width
-  min-width: 15em
-  justify-content: left
 
 
 
@@ -349,27 +439,14 @@ body, html
 
 
 
-.button.is-smirk-header,
-.button.is-smirk-footer
-  width: 100%
-  height: inherit
-  border-radius: 0
-  // background-color: inherit
-  border-color: none
-  // color: white
-
-.button.is-smirk-header
-  background-color: $grey
-  border: none
-  color: white
 
 
 
 
 
 
-
-
+.label
+  color: $grey-light
 
 
 .input[disabled],
@@ -379,11 +456,6 @@ body, html
   border-color: $grey
   box-shadow: none
   color: $white
-
-.button.is-static
-  background-color: $grey
-  color: $grey-light
-  border-color: $grey
 
 
 

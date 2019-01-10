@@ -10,7 +10,13 @@ export const APP_STATE_MUTATIONS = {
   // SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
   SET_MODAL: 'SET_MODAL',
   SET_UPLOADED_TX: 'SET_UPLOADED_TX',
-  SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED'
+  SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED',
+  SET_APP_NOTIFICATION: 'SET_APP_NOTIFICATION'
+}
+
+export const NOTIFICATION_TYPES = {
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS'
 }
 
 export const APP_STATE_MODAL_TYPES = {
@@ -21,7 +27,7 @@ export const APP_STATE_MODAL_TYPES = {
 
 const state = {
   appIsExpanded: false,
-  // currentTransactionId: null,
+  notification: null,
   uploadedTransaction: null,
   modal: {
     isActive: false,
@@ -32,18 +38,23 @@ const state = {
 const getters = {
   appState: (state) => state,
   appIsExpanded: (state) => state.appIsExpanded,
+  notification: (state) => state.notification,
   uploadedTransaction: (state) => state.uploadedTransaction
 }
 
 const mutations = {
   [APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED] (state, data) {
-    console.log('setting appIsExpanded', data)
+    // todo: enforce bool
     state.appIsExpanded = data
   },
-  // [APP_STATE_MUTATIONS.SET_CURRENT_TX_ID] (state, data) {
-  //   state.currentTransactionId = data
-  //   ls.set(APP_STATE_LOCAL_STORAGE.CURRENT_TX_ID, data)
-  // },
+  [APP_STATE_MUTATIONS.SET_APP_NOTIFICATION] (state, data) {
+    if (_.isNil(data)) {
+      state.notification = null
+      return
+    }
+    // todo: enforce notification types
+    state.notification = data
+  },
   [APP_STATE_MUTATIONS.SET_UPLOADED_TX] (state, data) {
     // Expects a raw valid transaction string
     state.uploadedTransaction = data

@@ -1,50 +1,53 @@
 <template>
   <div>
 
-    <div class="smirk-header">
-      <span class="smirk-header-anchor">
-        <router-link to="/dashboard" class="button is-smirk-header">
-          <span class="icon">
-            <i class="fas fa-times"></i>
-          </span>
+    <div class="header">
+      <span class="header-anchor">
+        <router-link to="/dashboard" tag="button" class="button is-header">
+          <span class="icon"><i class="fas fa-times"></i></span>
         </router-link>
       </span>
 
-      <div
-        class="dropdown is-smirk-header"
-        v-bind:class="{ 'is-active': dropdownIsActive }"
-        @click="toggleDropdown">
+      <div class="header-dropdown">
 
-        <div class="dropdown-trigger">
-          <button class="button is-smirk-header">
-            <span>{{sendMethod.title}}</span>
-            <span class="icon is-medium">
-              <i class="fas fa-md fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </button>
-        </div>
 
-        <div class="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <span
-              v-for="(data, key) in SEND_METHODS"
-              @click="setSendMethod(data)"
-              >
-              <a class="dropdown-item">
-                <h3>{{data.title}}</h3>
-                <p>{{data.detail}}</p>
-              </a>
-              <hr v-if="key !== 'SERVICE'" class="dropdown-divider">
-            </span>
+        <div
+          class="dropdown"
+          @click="toggleDropdown"
+          v-bind:class="{ 'is-active': dropdownIsActive }">
+
+          <div class="dropdown-trigger">
+            <button class="button is-header">
+              <span>{{sendMethod.title}}</span>
+              <span class="icon is-medium">
+                <i class="fas fa-md fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+
+          <div class="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <span
+                v-for="(data, key) in SEND_METHODS"
+                @click="setSendMethod(data)"
+                >
+                <a class="dropdown-item" v-bind:class="{ 'is-active' : key === sendMethod.key }">
+                  <h3>{{data.title}}</h3>
+                  <p>{{data.detail}}</p>
+                </a>
+                <hr v-if="key !== 'FILE'" class="dropdown-divider">
+              </span>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
 
     <div v-if="currentStep===SLATE_SEND_STEPS.CONSTRUCT_SLATE">
       <form v-on:submit.prevent="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
 
-        <div class="smirk-body">
+        <div class="body">
 
           <div class="field">
             <label class="label">Amount</label>
@@ -138,9 +141,9 @@
           </div>
         </div>
 
-        <div class="smirk-footer columns is-gapless is-mobile">
+        <div class="footer columns is-gapless is-mobile">
           <button
-            class="column button is-success is-smirk-footer is-fullwidth"
+            class="column button is-success is-footer is-fullwidth"
             @click="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
             Next
           </button>
@@ -150,7 +153,7 @@
 
     <div v-if="currentStep===SLATE_SEND_STEPS.SIGN_SLATE">
 
-      <div class="smirk-body">
+      <div class="body">
 
         <div class="field">
           <label class="label">Amount</label>
@@ -170,14 +173,14 @@
           This transaction {{transactionTemplate.fluff === 'false' ? 'does not use' : 'uses'}} the Dandelion Relay, {{transactionTemplate.selection_strategy_is_use_all === 'false' ? 'does not bundle' : 'bundles' }} existing unspent outputs, requires {{transactionTemplate.minimum_confirmations}} confirmation{{transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}, and creates {{transactionTemplate.num_change_outputs}} new output{{ transactionTemplate.num_change_outputs > 1 ? 's' : '' }}.</p>
       </div>
 
-      <div class="smirk-footer columns is-gapless is-mobile">
+      <div class="footer columns is-gapless is-mobile">
         <button
-          class="column button is-warning is-smirk-footer is-fullwidth"
+          class="column button is-warning is-footer is-fullwidth"
           @click="setStep(SLATE_SEND_STEPS.CONSTRUCT_SLATE)">
           Edit
         </button>
         <button
-          class="column button is-success is-smirk-footer is-fullwidth"
+          class="column button is-success is-footer is-fullwidth"
           @click="sendTransaction">
           Create
         </button>
@@ -188,7 +191,7 @@
     <div v-if="currentStep===SLATE_SEND_STEPS.CONFIRMATION">
 
 
-      <div class="smirk-body without-footer">
+      <div class="body without-footer">
         <h3>How to use this slate</h3>
         <p>Copy or download the JSON below, then send it to a recipient over secure chat or email.</p>
         <div class="code-container">
@@ -204,6 +207,8 @@
 
 <script>
   import models from '../models'
+  import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
+
   // import { prettyNumToGrinBaseNum } from '../../utils/grin-utils'
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
@@ -225,17 +230,26 @@
       grinMethod: 'file',
       title: 'Send using a slate',
       detail: 'some detail text'
-    },
-    SERVICE: {
-      key: 'SERVICE',
-      grinMethod: 'file',
-      title: 'Send with Grinbox',
-      detail: 'some detail text'
     }
+    // ,
+    // SERVICE: {
+    //   key: 'SERVICE',
+    //   grinMethod: 'file',
+    //   title: 'Send with Grinbox',
+    //   detail: 'some detail text'
+    // }
   }
 
   export default {
     name: 'send-page',
+    mounted () {
+      this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
+        isFullscreen: false,
+        type: NOTIFICATION_TYPES.ERROR,
+        title: 'Some error titles',
+        message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
+      })
+    },
     data () {
       return {
         dropdownIsActive: false,

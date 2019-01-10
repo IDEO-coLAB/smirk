@@ -2,16 +2,18 @@
   <!-- This is the place for styling expansion -->
   <div
     id="app"
-    class="content app"
+    class="content"
     v-bind:class="{
       'is-expanded' :  appIsExpanded,
       'is-minimized' : !appIsExpanded
     }">
+    <Notifications />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+  import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
 
   // Prevent global drag/drop events because we only want certain
@@ -22,6 +24,9 @@
 
   export default {
     name: 'smirk',
+    components: {
+      Notifications
+    },
     mounted () {
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
       // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
