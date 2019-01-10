@@ -16,7 +16,7 @@
           @click="toggleDropdown"
           v-bind:class="{ 'is-active': dropdownIsActive }">
 
-          <div class="dropdown-trigger">
+          <div class="dropdown-trigger is-header">
             <button class="button is-header">
               <span>{{sendMethod.title}}</span>
               <span class="icon is-medium">
@@ -25,13 +25,13 @@
             </button>
           </div>
 
-          <div class="dropdown-menu" role="menu">
+          <div class="dropdown-menu is-header" role="menu">
             <div class="dropdown-content">
               <span
                 v-for="(data, key) in SEND_METHODS"
                 @click="setSendMethod(data)"
                 >
-                <a class="dropdown-item" v-bind:class="{ 'is-active' : key === sendMethod.key }">
+                <a class="dropdown-item is-header" v-bind:class="{ 'is-active' : key === sendMethod.key }">
                   <h3>{{data.title}}</h3>
                   <p>{{data.detail}}</p>
                 </a>

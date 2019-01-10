@@ -17,6 +17,7 @@ $white: white
 $grey-dark: hsl(270, 2%, 25%)
 $grey: hsl(0, 1%, 37%)
 $grey-light: hsl(0, 1%, 64%)
+$grey-lighter: hsl(0, 1%, 43%)
 
 $red: hsl(0, 64%, 62%)
 $yellow: hsl(51, 100%, 55%)
@@ -63,11 +64,11 @@ $dropdown-content-background-color: $grey
 
 $dropdown-item-color: white
 $dropdown-item-hover-color: white
-$dropdown-item-hover-background-color: $green
+$dropdown-item-hover-background-color: $grey-lighter
 $dropdown-item-active-color: white
-$dropdown-item-active-background-color: $green
+$dropdown-item-active-background-color: $grey-lighter
 
-$dropdown-divider-background-color: $grey
+$dropdown-divider-background-color: $grey-dark
 
 
 // Bulma Import
@@ -148,24 +149,34 @@ body, html
   justify-content: flex-start
   padding: 0.5em
 
-.header-dropdown
 
-  .dropdown-trigger
-    padding-top: 0.375em
 
-  .dropdown-item
-    padding-right: 2rem
-    white-space: normal
 
-  .dropdown-menu
-    width: 340px
 
-  .button
-    height: calc(#{$app-height-minimized} / 2)
-    width: 400px
-    border-radius: 0px
-    font-size: $size-4
-    justify-content: flex-start
+
+
+
+
+
+
+// Dropdown
+//////////////////////////////////////////
+.dropdown-trigger.is-header
+  padding-top: 0.375em
+
+.dropdown-menu.is-header
+  width: 340px
+
+.dropdown-item.is-header
+  padding-right: 2rem
+  white-space: normal
+
+.button.is-header
+  height: calc(#{$app-height-minimized} / 2)
+  width: 400px
+  border-radius: 0px
+  font-size: $size-4
+  justify-content: flex-start
 
 
 
