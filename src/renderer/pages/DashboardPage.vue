@@ -33,6 +33,7 @@
 
       <!-- Chart for balance -->
       <h3>Balance breakdown</h3>
+      <p>What is spendable relative to what is locked.</p>
       <div class="progress-bars">
         <span
           class="progress-bar is-success"
@@ -46,8 +47,38 @@
       <span class="tag is-success">Spendable</span>
       <span class="tag is-warning">Locked</span>
 
-      <div v-if="">
+      <h3>Pending transactions</h3>
 
+      <!-- TODO: tear out into sent / received templates -->
+      <div v-for="tx in actionableTransactions">
+        <div class="transaction">
+
+          <div class="transaction-header">Created: {{tx.creation_ts | dateFormatLong}}</div>
+
+          <div class="transaction-body">
+            <table class="table is-fullwidth">
+              <tbody>
+                <tr>
+                  <td>Amount</td>
+                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
+                </tr>
+                <tr>
+                  <td>Amount</td>
+                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
+                </tr>
+                <tr>
+                  <td>Amount</td>
+                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="transaction-footer is-clearfix">
+            <button class="button is-pulled-right is-small is-danger">Cancel</button>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -55,13 +86,18 @@
 </template>
 
 <script>
+  import _ from 'lodash'
+  import format from 'date-fns/format'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
-  import { resizeWindow } from '../utils/layout'
+  import { resizeWindow, shrinkWindow } from '../utils/layout'
 
   export default {
     name: 'dashboard-page',
     components: {
       FullscreenFileUpload
+    },
+    mounted () {
+      shrinkWindow(this.$store)
     },
     computed: {
       spendable () {
@@ -72,6 +108,15 @@
       },
       wallet () {
         return this.$store.getters.wallet
+      },
+      actionableTransactions () {
+        return _.filter(this.$store.getters.transactions, (tx) => {
+          // if (tx.confirmed || _.includes(tx.tx_type, 'Cancelled')) {
+          if (tx.confirmed) {
+            return false
+          }
+          return tx
+        })
       },
       // TODO: Move this to a getter
       lockedWidth () {
@@ -87,6 +132,10 @@
     methods: {
       toggleWindow () {
         resizeWindow(this.$store)
+      },
+      formatDate (dateStr) {
+        const dateFmt = 'MMM D, YYY'
+        return format(dateStr, dateFmt)
       }
     }
   }

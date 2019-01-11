@@ -30,7 +30,7 @@ export const GRIN_WALLET_ACTIONS = {
 }
 
 const axiosData = {
-  // TODO: dynamic pull
+  // TODO: dynamically pull these in from the main proc
   headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
 }
 const axiosInstance = axios.create(axiosData)
@@ -122,7 +122,6 @@ const getFormattedAxiosPost = (url, data = null) => {
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    // axios.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
     axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
@@ -135,7 +134,7 @@ const actions = {
       })
   },
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
-    axios.get(`${GRIN_OWNER_URL}/retrieve_txs`)
+    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
@@ -147,7 +146,7 @@ const actions = {
       })
   },
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION] ({ commit }, id) {
-    axios.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
+    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
       .then((payload) => {
         // payload.data[0] validated_against_node: boolean
         // payload.data[1] outputs: Output[]
@@ -163,6 +162,7 @@ const actions = {
         throw error
       })
   },
+
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, data)
     return axios(post)

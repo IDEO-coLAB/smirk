@@ -99,7 +99,7 @@ $dropdown-divider-background-color: $grey-dark
 
 
 
-
+$table-cell-padding: 0.5em 0.25em
 
 
 
@@ -347,6 +347,45 @@ body, html
 
 
 
+
+
+
+
+.transaction
+  background-color: $grey
+  border-radius: $radius
+  padding: .5rem 1rem
+
+.transaction-header,
+.transaction-body
+  font-weight: $weight-semibold
+  font-family: monospace
+  margin-bottom: .5rem
+
+// .transaction-header
+
+.transaction-footer
+  position: relative
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Dropdown
 //////////////////////////////////////////
 .dropdown-content
@@ -365,6 +404,11 @@ body, html
 
 hr.dropdown-divider
   margin: .25rem 1rem
+
+
+
+
+
 
 
 
@@ -412,6 +456,7 @@ hr.dropdown-divider
 
 
 
+
 .button.is-dashboard
   width: 100%
   height: calc(#{$app-height-minimized} / 2)
@@ -423,6 +468,19 @@ hr.dropdown-divider
   background-color: $grey
   color: $grey-light
   border-color: $grey
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
