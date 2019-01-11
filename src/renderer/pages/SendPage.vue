@@ -2,14 +2,14 @@
   <div>
 
     <div class="header">
-      <span class="header-anchor">
+
+      <div class="header-anchor">
         <router-link to="/dashboard" tag="button" class="button is-header">
           <span class="icon"><i class="fas fa-times"></i></span>
         </router-link>
-      </span>
+      </div>
 
       <div class="header-dropdown">
-
 
         <div
           class="dropdown"
@@ -47,7 +47,7 @@
 
     <form
       v-on:submit.prevent
-      v-if="currentStep !== SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE">
+      v-if="currentStep !== SLATE_SEND_STEPS.SEND_COMPLETE">
 
       <div class="body">
 
@@ -59,19 +59,20 @@
               step="1"
               type="number"
               class="input"
-              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
               placeholder="Amount to send"
               v-model="transactionTemplate.amount"/>
           </div>
         </div>
 
+        <!-- TODO: Decide how to do input validation -->
         <div v-if="sendMethod===SEND_METHODS.HTTP" class="field">
           <label class="label">IP Address</label>
           <div class="control">
             <input
               class="input"
               placeholder="http://<IP_ADDR>:<PORT>"
-              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
               v-model="transactionTemplate.dest"/>
           </div>
         </div>
@@ -91,7 +92,7 @@
               <span class="select">
                 <select
                   class="is-minwidth"
-                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
                   v-model="transactionTemplate.fluff">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -110,7 +111,7 @@
               <span class="select">
                 <select
                   class="is-minwidth"
-                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
                   v-model="transactionTemplate.selection_strategy_is_use_all">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -131,7 +132,7 @@
                 step="1"
                 type="number"
                 class="input"
-                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
                 v-model="transactionTemplate.num_change_outputs"
               />
             </div>
@@ -149,7 +150,7 @@
                 step="1"
                 type="number"
                 class="input"
-                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
                 v-model="transactionTemplate.minimum_confirmations"
               />
             </div>
@@ -165,26 +166,26 @@
 
       <div
         class="footer columns is-gapless is-mobile"
-        v-if="currentStep === SLATE_SEND_STEPS.INPUT_SLATE_DATA">
+        v-if="currentStep === SLATE_SEND_STEPS.INPUT_DATA">
         <button
           class="column button is-success is-footer is-fullwidth"
-          @click="setStep(SLATE_SEND_STEPS.CONFIRM_SLATE_DATA)">
-          Next
+          @click="setStep(SLATE_SEND_STEPS.CONFIRM_DATA)">
+          Confirm Before Sending
         </button>
       </div>
 
       <div
         class="footer columns is-gapless is-mobile"
-        v-if="currentStep === SLATE_SEND_STEPS.CONFIRM_SLATE_DATA">
+        v-if="currentStep === SLATE_SEND_STEPS.CONFIRM_DATA">
         <button
           class="column button is-warning is-footer is-fullwidth"
-          @click="setStep(SLATE_SEND_STEPS.INPUT_SLATE_DATA)">
-          Edit Slate
+          @click="setStep(SLATE_SEND_STEPS.INPUT_DATA)">
+          Edit
         </button>
         <button
           class="column button is-success is-footer is-fullwidth"
-          @click="createSlate">
-          Create Slate
+          @click="sendTransaction">
+          Send
         </button>
       </div>
 
@@ -193,7 +194,7 @@
 
 
 
-    <div v-if="currentStep===SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE">
+    <div v-if="currentStep===SLATE_SEND_STEPS.SEND_COMPLETE">
 
 
       <div class="body without-footer">
@@ -218,9 +219,9 @@
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const SLATE_SEND_STEPS = {
-    INPUT_SLATE_DATA: 'INPUT_SLATE_DATA',
-    CONFIRM_SLATE_DATA: 'CONFIRM_SLATE_DATA',
-    SLATE_CREATION_COMPLETE: 'SLATE_CREATION_COMPLETE'
+    INPUT_DATA: 'INPUT_DATA',
+    CONFIRM_DATA: 'CONFIRM_DATA',
+    SEND_COMPLETE: 'SEND_COMPLETE'
   }
 
   const SEND_METHODS = {
@@ -261,7 +262,7 @@
         showAdvancedOptions: false,
 
         SLATE_SEND_STEPS: SLATE_SEND_STEPS,
-        currentStep: SLATE_SEND_STEPS.INPUT_SLATE_DATA,
+        currentStep: SLATE_SEND_STEPS.INPUT_DATA,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
 
@@ -274,15 +275,15 @@
         this.dropdownIsActive = !this.dropdownIsActive
       },
       setSendMethod (method) {
-        this.currentStep = this.SLATE_SEND_STEPS.INPUT_SLATE_DATA
+        this.currentStep = this.SLATE_SEND_STEPS.INPUT_DATA
         this.sendMethod = method
       },
       setStep (step) {
         this.currentStep = step
       },
-      createSlate () {
+      sendTransaction () {
         // advance the process
-        this.setStep(this.SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE)
+        this.setStep(this.SLATE_SEND_STEPS.SEND_COMPLETE)
 
         // Use a new object for input formatting
         // let formattedTx = Object.assign({}, this.transactionTemplate)
