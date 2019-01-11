@@ -36,7 +36,7 @@
                 @click="setSendMethod(data)"
                 >
                 <a class="dropdown-item is-header" v-bind:class="{ 'is-active' : key === sendMethod.key }">
-                  <h3>{{data.title}}</h3>
+                  <h4>{{data.title}}</h4>
                   <p>{{data.detail}}</p>
                 </a>
                 <hr v-if="key !== 'FILE'" class="dropdown-divider">
@@ -181,7 +181,7 @@
         <button
           class="column button is-success is-footer is-fullwidth"
           @click="setStep(SLATE_SEND_STEPS.CONFIRM_DATA)">
-          Confirm Before Sending
+          Next
         </button>
       </div>
 
@@ -192,12 +192,13 @@
         <button
           class="column button is-warning is-footer is-fullwidth"
           @click="setStep(SLATE_SEND_STEPS.INPUT_DATA)">
-          Edit
+          Back to Edit
         </button>
         <button
           class="column button is-success is-footer is-fullwidth"
           @click="sendTransaction">
-          Send
+          <span v-if="sendMethod===SEND_METHODS.FILE">Create Slate</span>
+          <span v-if="sendMethod===SEND_METHODS.HTTP">Send Grin</span>
         </button>
       </div>
 
@@ -223,7 +224,7 @@
 
 <script>
   import models from '../models'
-  import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
+  // import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
   // import { prettyNumToGrinBaseNum } from '../../utils/grin-utils'
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
@@ -237,27 +238,27 @@
     HTTP: {
       key: 'HTTP',
       grinMethod: 'http',
-      title: 'Send to an IP address',
-      detail: 'some detail text regaring IP addresses is going to go here'
+      title: 'Send to an online wallet',
+      detail: 'This is how you send something by IP address; it is a direct connection.'
     },
     FILE: {
       key: 'FILE',
       grinMethod: 'file',
-      title: 'Send using a slate',
-      detail: 'some detail text'
+      title: 'Create a transaction file',
+      detail: 'This is how you send things by way of horseless carriage.'
     }
   }
 
   export default {
     name: 'send-page',
-    mounted () {
-      this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
-        isFullscreen: false,
-        type: NOTIFICATION_TYPES.ERROR,
-        title: 'Some error titles',
-        message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
-      })
-    },
+    // mounted () {
+    //   this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
+    //     isFullscreen: true,
+    //     type: NOTIFICATION_TYPES.ERROR,
+    //     title: 'Some error titles',
+    //     message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
+    //   })
+    // },
     data () {
       return {
         dropdownIsActive: false,

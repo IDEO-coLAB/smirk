@@ -108,7 +108,7 @@ body, html
   height: $app-height-minimized
 
 
-// Header / Footer
+// Header/ Body / Footer
 //////////////////////////////////////////
 .header,
 .footer
@@ -132,7 +132,6 @@ body, html
   height: calc(#{$app-height-expanded} - (3 * #{$app-gutter}))
   color: $white
 
-
 .header-anchor,
 .header-content
   height: calc(#{$app-height-minimized} / 2)
@@ -142,7 +141,6 @@ body, html
   float: left
   width: $app-gutter
   height: inherit
-
 
 .header-content
   float:left
@@ -208,6 +206,10 @@ body, html
 
 // Content
 //////////////////////////////////////////
+.content
+  h4
+    margin-bottom: 0.5rem
+
 .json
   margin-bottom: 1em
   height: $app-gutter
@@ -230,6 +232,11 @@ body, html
 
 // Dropdown
 //////////////////////////////////////////
+.dropdown-content
+  padding-top: .25rem
+  padding-bottom: .25rem
+  // border: 1px solid $grey-light
+
 .dropdown-trigger.is-header
   padding-top: 0.375em
 
@@ -237,15 +244,22 @@ body, html
   width: 340px
 
 .dropdown-item.is-header
+  margin: .25rem
+  padding-top: .5rem
   padding-right: 2rem
+  border-radius: $radius
   white-space: normal
 
-.button.is-header
-  height: calc(#{$app-height-minimized} / 2)
-  width: 400px
-  border-radius: 0px
-  font-size: $size-4
-  justify-content: flex-start
+hr.dropdown-divider
+  margin: .25rem 1rem
+
+
+
+
+
+
+
+
 
 
 
@@ -271,6 +285,19 @@ body, html
   border: inherit
   color: white
   font-weight: $weight-semibold
+
+
+.button.is-header
+  height: calc(#{$app-height-minimized} / 2)
+  width: 400px
+  border-radius: 0px
+  font-size: $size-4
+  justify-content: flex-start
+
+
+
+
+
 
 .button.is-dashboard
   width: 100%

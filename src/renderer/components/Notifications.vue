@@ -29,8 +29,8 @@
         'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
       }"
       v-if="notification.isFullscreen">
-      <h3 v-if="appIsExpanded">{{notification.title}}</h3>
-      <p>{{notification.message}}</p>
+      <h3 v-if="appIsExpanded" class="is-italic">{{notification.title}}</h3>
+      <p class="is-italic">{{notification.message}}</p>
     </div>
 
   </div>
@@ -41,6 +41,14 @@
 
   export default {
     name: 'notifications',
+    // mounted () {
+    //   this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
+    //     isFullscreen: true,
+    //     type: NOTIFICATION_TYPES.ERROR,
+    //     title: 'Some error title',
+    //     message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
+    //   })
+    // },
     data () {
       return {
         NOTIFICATION_TYPES
