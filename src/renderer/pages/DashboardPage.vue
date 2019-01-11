@@ -34,11 +34,11 @@
     components: {
       FullscreenFileUpload
     },
-    data () {
-      return {
-        APP_STATE_MODAL_TYPES
-      }
-    },
+    // data () {
+    //   return {
+    //     APP_STATE_MODAL_TYPES
+    //   }
+    // },
     computed: {
       spendable () {
         return this.$store.getters.spendable

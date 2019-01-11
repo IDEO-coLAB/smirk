@@ -14,6 +14,13 @@ import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 Vue.use(Router)
 
 const resizeWindow = (expandWindow, $store) => {
+  // TODO: handle app expansion more intelligently :)
+  // let appIsExpanded = $store.getters.appIsExpanded
+  //
+  // if (_.isNil($store)) {
+  //   return
+  // }
+
   let appIsExpanded = false
   if (expandWindow) {
     appIsExpanded = true
