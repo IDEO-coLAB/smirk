@@ -34,7 +34,7 @@ $app-gutter: $app-height-minimized / 2
 
 // Typography
 //////////////////////////////////////////
-$text-strong: white
+$text-strong: $white
 $text: $grey-light
 
 
@@ -50,9 +50,13 @@ $radius: 2px
 
 // Inputs
 //////////////////////////////////////////
-$input-color: white
+$input-color: $white
+
 $input-background-color: $grey
 $input-border-color: $grey
+
+$input-focus-color: $white
+$input-focus-border-color: $green
 
 
 // Dropdown
@@ -159,24 +163,6 @@ body, html
 
 
 
-// Dropdown
-//////////////////////////////////////////
-.dropdown-trigger.is-header
-  padding-top: 0.375em
-
-.dropdown-menu.is-header
-  width: 340px
-
-.dropdown-item.is-header
-  padding-right: 2rem
-  white-space: normal
-
-.button.is-header
-  height: calc(#{$app-height-minimized} / 2)
-  width: 400px
-  border-radius: 0px
-  font-size: $size-4
-  justify-content: flex-start
 
 
 
@@ -220,17 +206,65 @@ body, html
 
 
 
+// Content
+//////////////////////////////////////////
+.code-container
+  margin-bottom: 1em
+  max-height: $app-gutter
+  overflow: scroll
+  overflow-wrap: break-word
+  background-color: $grey
+  border-radius: $radius
+  padding: 0.375em
+
+
+
+
+
+
+
+
+
+
+
+
+// Dropdown
+//////////////////////////////////////////
+.dropdown-trigger.is-header
+  padding-top: 0.375em
+
+.dropdown-menu.is-header
+  width: 340px
+
+.dropdown-item.is-header
+  padding-right: 2rem
+  white-space: normal
+
+.button.is-header
+  height: calc(#{$app-height-minimized} / 2)
+  width: 400px
+  border-radius: 0px
+  font-size: $size-4
+  justify-content: flex-start
+
+
+
+
 
 
 
 // Buttons
 //////////////////////////////////////////
+.button
+  font-weight: $weight-semibold
+
 .button.is-header,
 .button.is-footer
   width: 100%
   height: inherit
   border-radius: 0
   border-color: none
+  // color: $white
 
 .button.is-header
   background-color: inherit
@@ -268,6 +302,12 @@ body, html
   top: 0
   width: 100%
   z-index: $visual-idx-top
+
+
+
+
+
+
 
 
 
@@ -396,19 +436,6 @@ body, html
 
 
 
-.code-container
-  margin-bottom: 1em
-  max-height: $app-gutter
-  overflow: scroll
-  overflow-wrap: break-word
-  background-color: $grey
-  border-radius: $radius
-  padding: 0.375em
-
-
-
-
-
 
 
 
@@ -439,7 +466,8 @@ body, html
   right: 1.125em
   z-index: 4
 
-
+.select:not(.is-multiple):not(.is-loading):hover::after
+  border-color: $green
 
 
 
@@ -461,12 +489,14 @@ body, html
 
 
 .input[disabled],
+.select select[disabled],
 .textarea[disabled]
   user-select: none
   background-color: $grey
   border-color: $grey
   box-shadow: none
   color: $white
+  font-style: italic
 
 
 

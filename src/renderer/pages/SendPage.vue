@@ -44,114 +44,10 @@
       </div>
     </div>
 
-    <div v-if="currentStep===SLATE_SEND_STEPS.CONSTRUCT_SLATE">
-      <form v-on:submit.prevent="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
 
-        <div class="body">
-
-          <div class="field">
-            <label class="label">Amount</label>
-            <div class="control">
-              <input
-                min="0"
-                step="1"
-                type="number"
-                class="input"
-                placeholder="Amount to send"
-                v-model="transactionTemplate.amount"
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <p
-              class="is-clickable"
-              @click="showAdvancedOptions = !showAdvancedOptions">{{showAdvancedOptions ? 'Hide' : 'Show'}} advanced options
-            </p>
-          </div>
-
-          <div v-if="showAdvancedOptions">
-
-            <div class="field has-addons">
-              <div class="control">
-                <span class="select">
-                  <select class="is-minwidth" v-model="transactionTemplate.fluff">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                </span>
-              </div>
-              <div class="control">
-                <a class="button is-set-width is-static">
-                  Use Dandelion
-                </a>
-              </div>
-            </div>
-
-            <div class="field has-addons">
-              <div class="control">
-                <span class="select">
-                  <select class="is-minwidth" v-model="transactionTemplate.selection_strategy_is_use_all">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                </span>
-              </div>
-              <div class="control">
-                <a class="button is-set-width is-static">
-                  Combine Outputs
-                </a>
-              </div>
-            </div>
-
-            <div class="field has-addons">
-              <div class="control">
-                <input
-                  min="1"
-                  step="1"
-                  type="number"
-                  class="input "
-                  v-model="transactionTemplate.num_change_outputs"
-                />
-              </div>
-              <div class="control">
-                <a class="button is-set-width is-static">
-                  Change Output{{ transactionTemplate.num_change_outputs > 1 ? 's' : '' }}
-                </a>
-              </div>
-            </div>
-
-            <div class="field has-addons">
-              <div class="control">
-                <input
-                  min="1"
-                  step="1"
-                  type="number"
-                  class="input "
-                  v-model="transactionTemplate.minimum_confirmations"
-                />
-              </div>
-              <div class="control">
-                <a class="button is-set-width is-static">
-                  Required Confirmation{{ transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="footer columns is-gapless is-mobile">
-          <button
-            class="column button is-success is-footer is-fullwidth"
-            @click="setStep(SLATE_SEND_STEPS.SIGN_SLATE)">
-            Next
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div v-if="currentStep===SLATE_SEND_STEPS.SIGN_SLATE">
+    <form
+      v-on:submit.prevent
+      v-if="currentStep !== SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE">
 
       <div class="body">
 
@@ -163,32 +59,141 @@
               step="1"
               type="number"
               class="input"
-              disabled
-              v-model="transactionTemplate.amount"
-            />
+              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+              placeholder="Amount to send"
+              v-model="transactionTemplate.amount"/>
           </div>
         </div>
 
-        <p>
-          This transaction {{transactionTemplate.fluff === 'false' ? 'does not use' : 'uses'}} the Dandelion Relay, {{transactionTemplate.selection_strategy_is_use_all === 'false' ? 'does not bundle' : 'bundles' }} existing unspent outputs, requires {{transactionTemplate.minimum_confirmations}} confirmation{{transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}, and creates {{transactionTemplate.num_change_outputs}} new output{{ transactionTemplate.num_change_outputs > 1 ? 's' : '' }}.</p>
+        <div v-if="sendMethod===SEND_METHODS.HTTP" class="field">
+          <label class="label">IP Address</label>
+          <div class="control">
+            <input
+              class="input"
+              placeholder="http://<IP_ADDR>:<PORT>"
+              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+              v-model="transactionTemplate.dest"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <p
+            class="is-clickable"
+            @click="showAdvancedOptions = !showAdvancedOptions">
+            {{showAdvancedOptions ? 'Hide' : 'Show'}} advanced options
+          </p>
+        </div>
+
+        <div v-if="showAdvancedOptions">
+
+          <div class="field has-addons">
+            <div class="control">
+              <span class="select">
+                <select
+                  class="is-minwidth"
+                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                  v-model="transactionTemplate.fluff">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </span>
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Use Dandelion
+              </a>
+            </div>
+          </div>
+
+          <div class="field has-addons">
+            <div class="control">
+              <span class="select">
+                <select
+                  class="is-minwidth"
+                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                  v-model="transactionTemplate.selection_strategy_is_use_all">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </span>
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Combine Outputs
+              </a>
+            </div>
+          </div>
+
+          <div class="field has-addons">
+            <div class="control">
+              <input
+                min="1"
+                step="1"
+                type="number"
+                class="input"
+                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                v-model="transactionTemplate.num_change_outputs"
+              />
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Change Output{{ transactionTemplate.num_change_outputs > 1 ? 's' : '' }}
+              </a>
+            </div>
+          </div>
+
+          <div class="field has-addons">
+            <div class="control">
+              <input
+                min="1"
+                step="1"
+                type="number"
+                class="input"
+                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_SLATE_DATA"
+                v-model="transactionTemplate.minimum_confirmations"
+              />
+            </div>
+            <div class="control">
+              <a class="button is-set-width is-static">
+                Required Confirmation{{ transactionTemplate.minimum_confirmations > 1 ? 's' : '' }}
+              </a>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="footer columns is-gapless is-mobile">
+      <div
+        class="footer columns is-gapless is-mobile"
+        v-if="currentStep === SLATE_SEND_STEPS.INPUT_SLATE_DATA">
+        <button
+          class="column button is-success is-footer is-fullwidth"
+          @click="setStep(SLATE_SEND_STEPS.CONFIRM_SLATE_DATA)">
+          Next
+        </button>
+      </div>
+
+      <div
+        class="footer columns is-gapless is-mobile"
+        v-if="currentStep === SLATE_SEND_STEPS.CONFIRM_SLATE_DATA">
         <button
           class="column button is-warning is-footer is-fullwidth"
-          @click="setStep(SLATE_SEND_STEPS.CONSTRUCT_SLATE)">
-          Edit
+          @click="setStep(SLATE_SEND_STEPS.INPUT_SLATE_DATA)">
+          Edit Slate
         </button>
         <button
           class="column button is-success is-footer is-fullwidth"
-          @click="sendTransaction">
-          Create
+          @click="createSlate">
+          Create Slate
         </button>
       </div>
 
-    </div>
+    </form>
 
-    <div v-if="currentStep===SLATE_SEND_STEPS.CONFIRMATION">
+
+
+
+    <div v-if="currentStep===SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE">
 
 
       <div class="body without-footer">
@@ -213,9 +218,9 @@
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const SLATE_SEND_STEPS = {
-    CONSTRUCT_SLATE: 'CONSTRUCT_SLATE',
-    SIGN_SLATE: 'SIGN_SLATE',
-    CONFIRMATION: 'CONFIRMATION'
+    INPUT_SLATE_DATA: 'INPUT_SLATE_DATA',
+    CONFIRM_SLATE_DATA: 'CONFIRM_SLATE_DATA',
+    SLATE_CREATION_COMPLETE: 'SLATE_CREATION_COMPLETE'
   }
 
   const SEND_METHODS = {
@@ -256,7 +261,7 @@
         showAdvancedOptions: false,
 
         SLATE_SEND_STEPS: SLATE_SEND_STEPS,
-        currentStep: SLATE_SEND_STEPS.CONSTRUCT_SLATE,
+        currentStep: SLATE_SEND_STEPS.INPUT_SLATE_DATA,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
 
@@ -269,15 +274,15 @@
         this.dropdownIsActive = !this.dropdownIsActive
       },
       setSendMethod (method) {
-        this.currentStep = this.SLATE_SEND_STEPS.CONSTRUCT_SLATE
+        this.currentStep = this.SLATE_SEND_STEPS.INPUT_SLATE_DATA
         this.sendMethod = method
       },
       setStep (step) {
         this.currentStep = step
       },
-      sendTransaction () {
+      createSlate () {
         // advance the process
-        this.setStep(this.SLATE_SEND_STEPS.CONFIRMATION)
+        this.setStep(this.SLATE_SEND_STEPS.SLATE_CREATION_COMPLETE)
 
         // Use a new object for input formatting
         // let formattedTx = Object.assign({}, this.transactionTemplate)
