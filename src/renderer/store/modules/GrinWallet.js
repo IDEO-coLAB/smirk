@@ -122,6 +122,7 @@ const actions = {
       //   username: 'grin',
       //   password: 'gekfpXGtUNPyYc5pnTGW'
       // }
+      // ingest this from the file path
       headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
     }
     let bar = axios.create(foo)

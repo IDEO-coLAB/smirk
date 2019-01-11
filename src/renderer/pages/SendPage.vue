@@ -33,13 +33,16 @@
             <div class="dropdown-content">
               <span
                 v-for="(data, key) in SEND_METHODS"
-                @click="setSendMethod(data)"
+                @click="setMethod(data)"
                 >
-                <a class="dropdown-item is-header" v-bind:class="{ 'is-active' : key === sendMethod.key }">
+                <a
+                  class="dropdown-item is-header"
+                  v-bind:class="{
+                    'is-active' : key === sendMethod.key
+                  }">
                   <h4>{{data.title}}</h4>
                   <p>{{data.detail}}</p>
                 </a>
-                <hr v-if="key !== 'FILE'" class="dropdown-divider">
               </span>
             </div>
           </div>
@@ -48,6 +51,7 @@
       </div>
     </div>
 
+    <!-- Information collecton and confirmation steps -->
     <div v-if="currentStep !== SLATE_SEND_STEPS.SEND_COMPLETE">
 
       <div class="body">
@@ -275,7 +279,7 @@
       toggleDropdown () {
         this.dropdownIsActive = !this.dropdownIsActive
       },
-      setSendMethod (method) {
+      setMethod (method) {
         this.currentStep = this.SLATE_SEND_STEPS.INPUT_DATA
         this.sendMethod = method
       },

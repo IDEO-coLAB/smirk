@@ -5,6 +5,18 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts'
 @import '~@fortawesome/fontawesome-free/scss/solid'
 
 
+// Font Family Imports
+//////////////////////////////////////////
+@font-face
+  font-family: 'TT Rounds Neue'
+  src: url('~@/assets/fonts/TTRoundsNeue-Regular.woff2') format('woff2')
+  font-weight: normal
+  font-style: normal
+
+
+
+
+
 // visual layering
 //////////////////////////////////////////
 $visual-idx-top: 100
@@ -90,6 +102,7 @@ body, html
   overflow: hidden
   background: $background
   color: $grey-light
+  font-family: 'TT Rounds Neue'
 
 #app
   margin-bottom: 0px !important
@@ -122,6 +135,7 @@ body, html
   padding: 0rem $app-gutter
 
 .body
+  position: relative
   padding: calc(#{$app-gutter} / 2) $app-gutter
   height: calc(#{$app-height-expanded} - (4 * #{$app-gutter}))
   overflow-y: scroll
@@ -207,17 +221,43 @@ body, html
 // Content
 //////////////////////////////////////////
 .content
+  code
+    font-weight: $weight-semibold
+    border-radius: $radius
+  h3
+    code
+      font-size: $size-4
   h4
     margin-bottom: 0.5rem
 
-.json
+.json,
+.upload
   margin-bottom: 1em
-  height: $app-gutter
+  height: calc(#{$app-gutter} * 2)
   overflow: scroll
   overflow-wrap: break-word
   background-color: $grey
   border-radius: $radius
-  padding: 0.375em
+  padding: 1rem
+
+.upload
+  width: 100%
+  border: 8px dashed $grey-light
+
+.upload.is-global
+  position: absolute
+  background-color: inherit
+  bottom: 0
+  top: 0
+  height: 100%
+  width: 100%
+  border: none
+
+// .section
+//   width: 80%
+//   height: 100px
+//   position: relative
+//   background-color: rgba(100, 100, 100, .2)
 
 
 
@@ -396,30 +436,6 @@ hr.dropdown-divider
 // OLD
 //////////////////////////////////////////
 
-
-
-
-.upload
-  position: absolute
-  right: 0
-  left: 0
-  bottom: 0
-  height: 100%
-  width: 100%
-  // background-color: rgba(0, 255, 0, .2)
-
-.upload.is-global
-    position: absolute
-    // background-color: rgba(255, 0, 0, .2)
-    bottom: 0
-    top: 0
-    width: 100%
-
-.section
-  width: 80%
-  height: 100px
-  position: relative
-  background-color: rgba(100, 100, 100, .2)
 
 
 
