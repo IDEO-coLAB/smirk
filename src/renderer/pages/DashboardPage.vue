@@ -30,7 +30,23 @@
     <div
       class="body"
       v-if="appIsExpanded">
-      Show the balance here!
+
+      <div class="progress-bars">
+        <span
+          class="progress-bar is-success"
+          :style="{ width: spendableWidth }">
+        </span>
+        <span
+          class="progress-bar is-warning"
+          :style="{ width: lockedWidth }">
+        </span>
+      </div>
+
+      <span class="progress-bars-key is-success"></span>Something
+      <span class="progress-bars-key is-warning"></span> Else
+
+      <br>
+      <br>
       <h1>dskjnsdkj</h1>
       <h1>dskjnsdkj</h1>
       <h1>dskjnsdkj</h1>
@@ -65,9 +81,23 @@
       },
       appIsExpanded () {
         return this.$store.getters.appIsExpanded
+      },
+      wallet () {
+        return this.$store.getters.wallet
+      },
+      lockedWidth () {
+        console.log('locked:', this.wallet.summary.amount_awaiting_confirmation / this.wallet.summary.total)
+        return `${this.wallet.summary.amount_awaiting_confirmation / this.wallet.summary.total * 100}%`
+      },
+      spendableWidth () {
+        console.log('spendable:', this.wallet.summary.amount_currently_spendable / this.wallet.summary.total)
+        return `${this.wallet.summary.amount_currently_spendable / this.wallet.summary.total * 100}%`
       }
     },
     methods: {
+      loadChart () {
+        console.log('loading!')
+      },
       resizeWindow () {
         resizeWindow(this.$store)
       }

@@ -47,10 +47,9 @@ export default new Router({
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
         if (!_.isNil($store)) {
-          // Always reset state when entering the dashboard
-          // Resize the window to its passive size
+          // Shrink the app when entering the dashboard
           handleAppSizing($store, to.path)
-          // Remove uploadedTransaction if it exists
+          // Clear any uploadedTransactions
           $store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
         }
         next()
@@ -72,7 +71,6 @@ export default new Router({
       component: SendPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        // resizeWindow($store)
         handleAppSizing($store, to.path)
         next()
       }
@@ -83,7 +81,6 @@ export default new Router({
       component: ReceivePage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        // resizeWindow($store)
         handleAppSizing($store, to.path)
         next()
       }
@@ -94,7 +91,6 @@ export default new Router({
       component: BroadcastPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        // resizeWindow($store)
         handleAppSizing($store, to.path)
         next()
       }

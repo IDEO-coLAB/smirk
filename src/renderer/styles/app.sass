@@ -221,6 +221,62 @@ body, html
 
 
 
+.progress-bars
+  width: 100%
+  height: 20px
+  position: relative
+  border-radius: $radius
+  background-color: $grey
+  margin-bottom: 0.75rem
+
+.progress-bar
+  height: inherit
+  display: inline-block
+  float: left
+
+.progress-bar:first-child
+  border-radius: $radius 0 0 $radius
+
+.progress-bar:last-child
+  border-radius: 0 $radius $radius 0
+
+.progress-bar.is-success
+  background-color: $green
+
+.progress-bar.is-info
+  background-color: $cyan
+
+.progress-bar.is-warning
+  background-color: $yellow
+
+.progress-bar.is-error
+  background-color: $red
+
+.progress-bars-key
+  width: 16px
+  height: 16px
+  border-radius: $radius
+  display: inline-block
+
+.progress-bars-key.is-success
+  background-color: $green
+
+.progress-bars-key.is-info
+  background-color: $cyan
+
+.progress-bars-key.is-warning
+  background-color: $yellow
+
+.progress-bars-key.is-error
+  background-color: $red
+
+
+
+
+
+
+
+
 
 // Content
 //////////////////////////////////////////
