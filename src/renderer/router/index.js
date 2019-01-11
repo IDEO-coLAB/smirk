@@ -13,10 +13,35 @@ import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 Vue.use(Router)
 
+const PATHS = {
+  SEND: '/send',
+  RECEIVE: '/receive',
+  BROADCAST: '/broadcast',
+  DASHBOARD: '/dashboard'
+}
+
+const handleAppSizing = ($store, path) => {
+  if (_.isNil($store)) {
+    return
+  }
+  switch (path) {
+    case PATHS.SEND:
+    case PATHS.RECEIVE:
+    case PATHS.BROADCAST:
+      if (!$store.getters.appIsExpanded) {
+        resizeWindow($store)
+      }
+      break
+    case PATHS.DASHBOARD:
+      resizeWindow($store)
+      break
+  }
+}
+
 export default new Router({
   routes: [
     {
-      path: '/dashboard',
+      path: PATHS.DASHBOARD,
       name: 'dashboard-page',
       component: DashboardPage,
       beforeEnter: (to, from, next) => {
@@ -24,7 +49,7 @@ export default new Router({
         if (!_.isNil($store)) {
           // Always reset state when entering the dashboard
           // Resize the window to its passive size
-          resizeWindow($store)
+          handleAppSizing($store, to.path)
           // Remove uploadedTransaction if it exists
           $store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
         }
@@ -42,38 +67,41 @@ export default new Router({
     //   }
     // },
     {
-      path: '/send',
+      path: PATHS.SEND,
       name: 'send-page',
       component: SendPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow($store)
+        // resizeWindow($store)
+        handleAppSizing($store, to.path)
         next()
       }
     },
     {
-      path: '/receive',
+      path: PATHS.RECEIVE,
       name: 'receive-page',
       component: ReceivePage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow($store)
+        // resizeWindow($store)
+        handleAppSizing($store, to.path)
         next()
       }
     },
     {
-      path: '/broadcast',
+      path: PATHS.RECEIVE,
       name: 'broadcast-page',
       component: BroadcastPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow($store)
+        // resizeWindow($store)
+        handleAppSizing($store, to.path)
         next()
       }
     },
     {
       path: '*',
-      redirect: '/dashboard'
+      redirect: PATHS.DASHBOARD
     }
   ]
 })
