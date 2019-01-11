@@ -29,6 +29,12 @@ export const GRIN_WALLET_ACTIONS = {
   FINALIZE_TRANSACTION: 'FINALIZE_TRANSACTION'
 }
 
+const axiosData = {
+  // TODO: dynamic pull
+  headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
+}
+const axiosInstance = axios.create(axiosData)
+
 const state = {
   summary: null,
   outputs: [],
@@ -116,19 +122,8 @@ const getFormattedAxiosPost = (url, data = null) => {
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    let foo = {
-      // method: 'GET',
-      // auth: {
-      //   username: 'grin',
-      //   password: 'gekfpXGtUNPyYc5pnTGW'
-      // }
-      // ingest this from the file path
-      headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
-    }
-    let bar = axios.create(foo)
-
     // axios.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
-    bar.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
+    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)

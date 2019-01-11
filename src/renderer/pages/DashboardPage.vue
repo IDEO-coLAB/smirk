@@ -6,7 +6,7 @@
 
       <div
         class="dashboard-content is-uppercase has-text-centered"
-        @click="resizeWindow">
+        @click="toggleWindow">
         <span class="is-size-6 has-text-weight-semibold">
           Spendable Balance <i class="fas fa-caret-down"></i>
         </span>
@@ -31,6 +31,7 @@
       class="body"
       v-if="appIsExpanded">
 
+      <!-- Chart for balance -->
       <div class="progress-bars">
         <span
           class="progress-bar is-success"
@@ -41,23 +42,14 @@
           :style="{ width: lockedWidth }">
         </span>
       </div>
+      <span class="tag is-success">Spendable</span>
+      <span class="tag is-warning">Locked</span>
 
-      <span class="progress-bars-key is-success"></span>Something
-      <span class="progress-bars-key is-warning"></span> Else
+      <div v-if="">
 
-      <br>
-      <br>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
-      <h1>dskjnsdkj</h1>
+      </div>
+
     </div>
-  <!-- <img id="logo" src="~@/assets/logo.png" alt="electron-vue"> -->
   </main>
 </template>
 
@@ -70,11 +62,6 @@
     components: {
       FullscreenFileUpload
     },
-    // data () {
-    //   return {
-    //     APP_STATE_MODAL_TYPES
-    //   }
-    // },
     computed: {
       spendable () {
         return this.$store.getters.spendable
@@ -85,25 +72,21 @@
       wallet () {
         return this.$store.getters.wallet
       },
+      // TODO: Move this to a getter
       lockedWidth () {
-        console.log('locked:', this.wallet.summary.amount_awaiting_confirmation / this.wallet.summary.total)
+        if (!this.wallet.summary) return
         return `${this.wallet.summary.amount_awaiting_confirmation / this.wallet.summary.total * 100}%`
       },
+      // TODO: Move this to a getter
       spendableWidth () {
-        console.log('spendable:', this.wallet.summary.amount_currently_spendable / this.wallet.summary.total)
+        if (!this.wallet.summary) return
         return `${this.wallet.summary.amount_currently_spendable / this.wallet.summary.total * 100}%`
       }
     },
     methods: {
-      loadChart () {
-        console.log('loading!')
-      },
-      resizeWindow () {
+      toggleWindow () {
         resizeWindow(this.$store)
       }
-      // openModal (type) {
-      //   this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })
-      // }
     }
   }
 </script>

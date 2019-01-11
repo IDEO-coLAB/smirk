@@ -7,7 +7,7 @@ import DashboardPage from '../pages/DashboardPage'
 import ReceivePage from '../pages/ReceivePage'
 import BroadcastPage from '../pages/BroadcastPage'
 import SendPage from '../pages/SendPage'
-import { resizeWindow } from '../utils/layout'
+import { resizeWindow, shrinkWindow } from '../utils/layout'
 
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
@@ -33,7 +33,7 @@ const handleAppSizing = ($store, path) => {
       }
       break
     case PATHS.DASHBOARD:
-      resizeWindow($store)
+      shrinkWindow($store)
       break
   }
 }
