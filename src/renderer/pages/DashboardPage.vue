@@ -32,6 +32,7 @@
       v-if="appIsExpanded">
 
       <!-- Chart for balance -->
+      <h3>Balance breakdown</h3>
       <div class="progress-bars">
         <span
           class="progress-bar is-success"
