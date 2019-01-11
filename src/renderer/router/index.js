@@ -1,40 +1,17 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import Router from 'vue-router'
-import { ipcRenderer } from 'electron'
 
 import DashboardPage from '../pages/DashboardPage'
-import BalancePage from '../pages/BalancePage'
+// import BalancePage from '../pages/BalancePage'
 import ReceivePage from '../pages/ReceivePage'
 import BroadcastPage from '../pages/BroadcastPage'
 import SendPage from '../pages/SendPage'
+import { resizeWindow } from '../utils/layout'
 
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 Vue.use(Router)
-
-const resizeWindow = (expandWindow, $store) => {
-  // TODO: handle app expansion more intelligently :)
-  // let appIsExpanded = $store.getters.appIsExpanded
-  //
-  // if (_.isNil($store)) {
-  //   return
-  // }
-
-  let appIsExpanded = false
-  if (expandWindow) {
-    appIsExpanded = true
-    // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    ipcRenderer.send('resizeWindow', { width: 460, height: 385 })
-  } else {
-    // ipcRenderer.send('resizeWindow', { width: 1250, height: 820 })
-    ipcRenderer.send('resizeWindow', { width: 460, height: 142 })
-  }
-
-  if (!_.isNil($store)) {
-    $store.commit(APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED, appIsExpanded)
-  }
-}
 
 export default new Router({
   routes: [
@@ -47,30 +24,30 @@ export default new Router({
         if (!_.isNil($store)) {
           // Always reset state when entering the dashboard
           // Resize the window to its passive size
-          resizeWindow(false, $store)
+          resizeWindow($store)
           // Remove uploadedTransaction if it exists
           $store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
         }
         next()
       }
     },
-    {
-      path: '/balance',
-      name: 'balance-page',
-      component: BalancePage,
-      beforeEnter: (to, from, next) => {
-        const $store = this.a.app.$store
-        resizeWindow(true, $store)
-        next()
-      }
-    },
+    // {
+    //   path: '/balance',
+    //   name: 'balance-page',
+    //   component: BalancePage,
+    //   beforeEnter: (to, from, next) => {
+    //     const $store = this.a.app.$store
+    //     resizeWindow($store)
+    //     next()
+    //   }
+    // },
     {
       path: '/send',
       name: 'send-page',
       component: SendPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow(true, $store)
+        resizeWindow($store)
         next()
       }
     },
@@ -80,7 +57,7 @@ export default new Router({
       component: ReceivePage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow(true, $store)
+        resizeWindow($store)
         next()
       }
     },
@@ -90,7 +67,7 @@ export default new Router({
       component: BroadcastPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
-        resizeWindow(true, $store)
+        resizeWindow($store)
         next()
       }
     },

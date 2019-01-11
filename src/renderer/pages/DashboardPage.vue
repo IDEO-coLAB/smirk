@@ -4,7 +4,7 @@
     <div class="dashboard-content is-uppercase has-text-centered">
       <span
         class="is-size-6 has-text-weight-semibold"
-        @click="showDetails">
+        @click="resizeWindow">
         Spendable Balance <i class="fas fa-caret-down"></i>
       </span>
       <h1 class="has-text-white">G {{ spendable | grinBaseNumToPrettyNum }}</h1>
@@ -27,7 +27,7 @@
 
 <script>
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
-  // import { APP_STATE_MODAL_TYPES, APP_STATE_MUTATIONS } from '../store/modules/AppState'
+  import { resizeWindow } from '../utils/layout'
 
   export default {
     name: 'dashboard-page',
@@ -42,11 +42,14 @@
     computed: {
       spendable () {
         return this.$store.getters.spendable
+      },
+      appIsExpanded () {
+        return this.$store.getters.appIsExpanded
       }
     },
     methods: {
-      showDetails () {
-
+      resizeWindow () {
+        resizeWindow(this.$store)
       }
       // openModal (type) {
       //   this.$store.commit(APP_STATE_MUTATIONS.SET_MODAL, { isActive: true, type })

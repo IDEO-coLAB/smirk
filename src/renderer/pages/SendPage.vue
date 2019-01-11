@@ -229,7 +229,7 @@
 <script>
   import models from '../models'
   // import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
-  // import { prettyNumToGrinBaseNum } from '../../utils/grin-utils'
+  // import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
   // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const SLATE_SEND_STEPS = {
