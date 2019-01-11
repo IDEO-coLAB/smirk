@@ -186,21 +186,23 @@ body, html
 
 // Dashboard
 //////////////////////////////////////////
-.dashboard-content
-  float: left
-  width: calc(100% * .618)
+.dashboard
   height: $app-height-minimized
-  padding-top: calc(#{$app-height-minimized} / 3)
+
+.dashboard-content,
+.dashboard-actions
+  height: 100%
   margin: 0
-  color: $grey-light
+  float: left
+  position: relative
+
+.dashboard-content
+  width: calc(100% * .618)
+  padding-top: calc(#{$app-height-minimized} / 4)
   cursor: pointer
 
 .dashboard-actions
-  float: left
-  position: relative
   width: calc(100% * .382)
-  height: $app-height-minimized
-  margin: 0
 
 
 
@@ -224,9 +226,14 @@ body, html
   code
     font-weight: $weight-semibold
     border-radius: $radius
+
+  h1:not(:first-child)
+    margin-top: 0
+
   h3
     code
       font-size: $size-4
+
   h4
     margin-bottom: 0.5rem
 
