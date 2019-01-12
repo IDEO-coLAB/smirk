@@ -6,6 +6,9 @@ import DashboardPage from '../pages/DashboardPage'
 import ReceivePage from '../pages/ReceivePage'
 import BroadcastPage from '../pages/BroadcastPage'
 import SendPage from '../pages/SendPage'
+import TransactionsPage from '../pages/TransactionsPage'
+import OutputsPage from '../pages/OutputsPage'
+import SettingsPage from '../pages/SettingsPage'
 
 import { resizeWindow, shrinkWindow } from '../utils/layout'
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
@@ -16,7 +19,10 @@ const PATHS = {
   SEND: '/send',
   RECEIVE: '/receive',
   BROADCAST: '/broadcast',
-  DASHBOARD: '/dashboard'
+  DASHBOARD: '/dashboard',
+  TRANSACTIONS: '/transactions',
+  OUTPUTS: '/outputs',
+  SETTINGS: '/settings'
 }
 
 const handleAppSizing = ($store, path) => {
@@ -27,6 +33,9 @@ const handleAppSizing = ($store, path) => {
     case PATHS.SEND:
     case PATHS.RECEIVE:
     case PATHS.BROADCAST:
+    case PATHS.TRANSACTIONS:
+    case PATHS.OUTPUTS:
+    case PATHS.SETTINGS:
       if (!$store.getters.appIsExpanded) {
         resizeWindow($store)
       }
@@ -78,6 +87,36 @@ export default new Router({
       path: PATHS.BROADCAST,
       name: 'broadcast-page',
       component: BroadcastPage,
+      beforeEnter: (to, from, next) => {
+        const $store = this.a.app.$store
+        handleAppSizing($store, to.path)
+        next()
+      }
+    },
+    {
+      path: PATHS.TRANSACTIONS,
+      name: 'transactions-page',
+      component: TransactionsPage,
+      beforeEnter: (to, from, next) => {
+        const $store = this.a.app.$store
+        handleAppSizing($store, to.path)
+        next()
+      }
+    },
+    {
+      path: PATHS.OUTPUTS,
+      name: 'outputs-page',
+      component: OutputsPage,
+      beforeEnter: (to, from, next) => {
+        const $store = this.a.app.$store
+        handleAppSizing($store, to.path)
+        next()
+      }
+    },
+    {
+      path: PATHS.SETTINGS,
+      name: 'settings-page',
+      component: SettingsPage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
         handleAppSizing($store, to.path)

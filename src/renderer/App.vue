@@ -13,6 +13,7 @@
 </template>
 
 <script>
+  import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
   import { APP_STATE_MUTATIONS, createNetworkErrorNotification } from './store/modules/AppState'
@@ -30,6 +31,12 @@
       Notifications
     },
     mounted () {
+      // TODO: Abstract out these global actions + constants
+      ipcRenderer.on('MAIN_MENU_NAV', (event, data) => {
+        this.$router.push({ path: data.path })
+      })
+
+      // akjsd
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
         // ATTACH THIS TO THE NODE HEIGHT PINGER - makes the most sense
         .catch((error) => {

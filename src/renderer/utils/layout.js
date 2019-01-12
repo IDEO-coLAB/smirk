@@ -15,11 +15,11 @@ export const resizeWindow = ($store) => {
 }
 
 export const shrinkWindow = ($store) => {
-  ipcRenderer.send('resizeWindow', { width: 460, height: 142 })
+  ipcRenderer.send('RESIZE_WINDOW', { width: 460, height: 142 })
   $store.commit(APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED, false)
 }
 
 export const expandWindow = ($store) => {
-  ipcRenderer.send('resizeWindow', { width: 460, height: 385 })
+  ipcRenderer.send('RESIZE_WINDOW', { width: 460, height: 385 })
   $store.commit(APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED, true)
 }

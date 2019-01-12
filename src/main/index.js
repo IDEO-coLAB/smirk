@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -37,6 +37,32 @@ const createWindow = async () => {
     fullscreenable: false
     // resizable: false
   })
+
+  var mainMenu = Menu.buildFromTemplate([
+    {
+      label: 'Smirk',
+      submenu: [
+        {
+          label: 'Settings',
+          // TODO: Abstract out main + render constants
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/settings' })
+        },
+        {
+          label: 'Outputs',
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/outputs' })
+        },
+        {
+          label: 'Transactions',
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/transactions' })
+        },
+        {
+          label: 'Quit',
+          click: () => app.quit()
+        }
+      ]
+    }
+  ])
+  Menu.setApplicationMenu(mainMenu)
 
   mainWindow.loadURL(WINDOW_URL)
 
@@ -89,7 +115,7 @@ app.on('before-quit', () => {
 })
 
 // resize window event passed in from client
-ipcMain.on('resizeWindow', (event, data) => {
+ipcMain.on('RESIZE_WINDOW', (event, data) => {
   mainWindow.setSize(data.width, data.height, true)
 })
 
