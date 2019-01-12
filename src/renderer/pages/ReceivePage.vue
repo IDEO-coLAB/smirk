@@ -82,7 +82,7 @@
 
         <div class="footer columns is-gapless is-mobile">
           <button
-            class="column button is-warning is-footer is-fullwidth"
+            class="column button is-footer is-fullwidth"
             v-bind:disabled="!uploadedTransaction"
             @click="removeTransaction">
             Cancel

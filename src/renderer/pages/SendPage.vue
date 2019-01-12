@@ -194,7 +194,7 @@
         class="footer columns is-gapless is-mobile"
         v-if="currentStep === SLATE_SEND_STEPS.CONFIRM_DATA">
         <button
-          class="column button is-warning is-footer is-fullwidth"
+          class="column button is-footer is-fullwidth"
           @click="setStep(SLATE_SEND_STEPS.INPUT_DATA)">
           Back to Edit
         </button>

@@ -86,7 +86,7 @@ export default new Router({
       }
     },
     {
-      path: PATHS.RECEIVE,
+      path: PATHS.BROADCAST,
       name: 'broadcast-page',
       component: BroadcastPage,
       beforeEnter: (to, from, next) => {

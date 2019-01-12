@@ -8,7 +8,14 @@
         class="dashboard-content is-uppercase has-text-centered"
         @click="toggleWindow">
         <span class="is-size-6 has-text-weight-semibold">
-          Spendable Balance <i class="fas fa-caret-down"></i>
+          Spendable Balance
+          <i
+            class="fas"
+            v-bind:class="{
+              'fa-caret-down': !appIsExpanded,
+              'fa-caret-up': appIsExpanded
+            }">
+          </i>
         </span>
         <h1 class="has-text-white">G {{ spendable | grinBaseNumToPrettyNum }}</h1>
       </div>
