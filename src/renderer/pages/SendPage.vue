@@ -229,8 +229,8 @@
 <script>
   import models from '../models'
   // import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
-  // import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
-  // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
+  import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
+  import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const SLATE_SEND_STEPS = {
     INPUT_DATA: 'INPUT_DATA',
@@ -288,29 +288,28 @@
       },
       sendTransaction () {
         // advance the process
-        this.setStep(this.SLATE_SEND_STEPS.SEND_COMPLETE)
+        // this.setStep(this.SLATE_SEND_STEPS.SEND_COMPLETE)
 
         // Use a new object for input formatting
-        // let formattedTx = Object.assign({}, this.transactionTemplate)
+        let formattedTx = Object.assign({}, this.transactionTemplate)
 
-        // set the tx.method based on the sendMethod // http vs file
+        // set the tx.method based on what was set // http vs file
+        formattedTx.method = this.sendMethod.grinMethod
 
-        // // Convert tx amount to the Grin base format
-        // console.log(prettyNumToGrinBaseNum(this.transactionTemplate.amount))
-        // formattedTx.amount = prettyNumToGrinBaseNum(this.transactionTemplate.amount)
+        // Convert tx amount to the Grin base format
+        console.log(prettyNumToGrinBaseNum(this.transactionTemplate.amount))
+        formattedTx.amount = prettyNumToGrinBaseNum(this.transactionTemplate.amount)
 
-        // // the call below are the self send flow
-        // this.$store.dispatch(GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION, formattedTx)
-        //   .then((payload) => {
-        //     this.$store.dispatch(GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION, payload)
-        //     return payload
-        //   })
-        //   .then((payload) => {
-        //     this.$store.dispatch(GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION, payload)
-        //     return payload
-        //   })
-        //   // TODO: uniform error handler for the app
-        //   .catch((error) => console.warn(error))
+        // TODO: should we use a dynamic/different name for the file?
+        console.log(formattedTx)
+
+        // File send
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION, formattedTx)
+          .then((payload) => {
+            console.log('tx creation success = ', payload)
+          })
+          // TODO: uniform error handler for the app
+          .catch((error) => console.warn(error))
       }
     }
   }

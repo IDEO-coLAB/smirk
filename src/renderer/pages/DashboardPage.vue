@@ -55,13 +55,13 @@
       <span class="tag is-warning">Locked</span>
 
       <!-- Tear our better abstraction -->
-      <h3>Incoming transactions</h3>
+<!--       <h3>Incoming transactions</h3>
 
       <div v-for="tx in transactions">
         <TransactionTilePending
           :transaction="tx"
-          v-if="transactionWasReceived(tx)" />
-      </div>
+          v-if="transactionIsPending(tx)" />
+      </div> -->
 
       <hr>
       <h3>Outgoing transactions</h3>
@@ -69,7 +69,7 @@
       <div v-for="tx in transactions">
         <TransactionTilePending
           :transaction="tx"
-          v-if="transactionWasSent(tx)" />
+          v-if="transactionIsPending(tx)" />
       </div>
 
     </div>
@@ -133,11 +133,15 @@
         const dateFmt = 'MMM D, YYY'
         return format(dateStr, dateFmt)
       },
-      transactionWasReceived (tx) {
-        return tx.tx_type === 'TxReceived' || tx.tx_type === 'TxReceivedCancelled'
-      },
-      transactionWasSent (tx) {
-        return tx.tx_type === 'TxSent' || tx.tx_type === 'TxSentCancelled'
+      transactionIsPending (tx) {
+        // show a tx if it is pending
+        // - if it has cancelled in it DO NOT SHOW
+        // - otherwise, check if confirmation_ts is !null
+        if (_.includes(tx.tx_type, 'Cancelled')) {
+          return false
+        }
+        return tx.confirmation_ts === null
+        // return tx.tx_type === 'TxSent' || tx.tx_type === 'TxSentCancelled'
       }
     }
   }

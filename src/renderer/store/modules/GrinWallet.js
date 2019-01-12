@@ -60,27 +60,16 @@ const mutations = {
     state.summary = new models.WalletSummary(data)
   },
   [GRIN_WALLET_MUTATIONS.SET_OUTPUTS] (state, data) {
+    // TODO: convert bytes into hex here - remove from OutputTile
+    // const commitmentBytes = this.commitment
+    // return Array.prototype.map.call(commitmentBytes, (byte) => {
+    //   return ('0' + (byte & 0xFF).toString(16)).slice(-2)
+    // }).join('')
     const buildOutputs = (outputs) => _.map(outputs, (output) => {
       const outputObj = new models.Output(output[0])
       const outputSig = output[1]
       return [outputObj, outputSig]
     })
-
-    // // 1) If there are no outputs in the store, add the first set
-    // if (_.isEmpty(state.outputs)) {
-    //   state.outputs = buildOutputs(state.outputs.concat(data))
-    //   return
-    // }
-
-    // // 2) Otherwise swap out stale outputs based on the tx_log_entry (tx.id)
-    // const pruneIdx = data[0][0].tx_log_entry
-    // const freshOutputs = _.filter(state.outputs, (output) => {
-    //   if (output[0].tx_log_entry !== pruneIdx) {
-    //     return output
-    //   }
-    //   return false
-    // }).concat(data)
-    // state.outputs = buildOutputs(freshOutputs)
     state.outputs = buildOutputs(data)
   },
   [GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS] (state, data) {
@@ -94,7 +83,8 @@ const mutations = {
 const getFormattedAxiosPost = (url, data = null) => {
   return {
     method: 'POST',
-    headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
+    // headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
+    // headers: { 'content-type': 'application/json' }, // talk to Grin core about this
     data,
     url
   }
@@ -172,14 +162,18 @@ const actions = {
   //
   //
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
-    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, data)
-    return axios(post)
+    // const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, { file: data })
+    // return axios(post)
+    // console.log('about to send', post)
+    return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
+    // return axiosInstance(post)
       .then(payload => payload.data)
       .catch((error) => {
         error.type = GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION
         throw error
       })
   },
+
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_FOREIGN_URL}/receive_tx`, data)
     axios(post)
