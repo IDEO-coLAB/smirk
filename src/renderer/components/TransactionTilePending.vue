@@ -61,10 +61,9 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import format from 'date-fns/format'
-
-  // import { APP_STATE_MUTATIONS, APP_STATE_MODAL_TYPES } from '../store/modules/AppState'
-  // import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
+  import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const STATES = {
     PASSIVE: 'PASSIVE',
@@ -87,9 +86,8 @@
     },
     computed: {
       transactionWasReceived () {
-        return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
+        return _.includes(this.transaction.tx_type, 'Received')
       },
-      // NOTE: Also need to know if is confirmed yet...
       date () {
         // TODO: turn this into a short date string format filter
         const dateFmt = 'MMM D'
@@ -103,8 +101,14 @@
       setState (state) {
         this.currentState = state
       },
-      cancel () {
-        console.log('cancelling!')
+      cancel (event) {
+        event.stopPropagation()
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION, this.transaction.id)
+          .then((payload) => {
+            console.log('tx cancel success: ', payload)
+          })
+          // TODO: uniform error handler for the app
+          .catch((error) => console.warn(error))
       }
     }
   }

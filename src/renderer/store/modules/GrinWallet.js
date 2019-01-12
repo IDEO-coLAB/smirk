@@ -50,6 +50,10 @@ const getters = {
     if (_.isNil(state.summary)) return 0
     return state.summary.amount_currently_spendable
   },
+  locked: (state) => {
+    if (_.isNil(state.summary)) return 0
+    return state.summary.amount_awaiting_confirmation
+  },
   outputs: (state) => state.outputs,
   transactions: (state) => state.transactions,
   nodeHeight: (state) => state.nodeHeight
@@ -80,15 +84,15 @@ const mutations = {
   }
 }
 
-const getFormattedAxiosPost = (url, data = null) => {
-  return {
-    method: 'POST',
-    // headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
-    // headers: { 'content-type': 'application/json' }, // talk to Grin core about this
-    data,
-    url
-  }
-}
+// const getFormattedAxiosPost = (url, data = null) => {
+//   return {
+//     method: 'POST',
+//     // headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
+//     // headers: { 'content-type': 'application/json' }, // talk to Grin core about this
+//     data,
+//     url
+//   }
+// }
 
 // NOTES ON HANDLING
 // WHEN NO SERVER IS RUNNING => :400 CODE
@@ -162,11 +166,7 @@ const actions = {
   //
   //
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
-    // const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, { file: data })
-    // return axios(post)
-    // console.log('about to send', post)
     return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
-    // return axiosInstance(post)
       .then(payload => payload.data)
       .catch((error) => {
         error.type = GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION
@@ -175,8 +175,9 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
-    const post = getFormattedAxiosPost(`${GRIN_FOREIGN_URL}/receive_tx`, data)
-    axios(post)
+    // const post = getFormattedAxiosPost(`${GRIN_FOREIGN_URL}/receive_tx`, data)
+    // axios(post)
+    return axiosInstance.post(`${GRIN_FOREIGN_URL}/receive_tx`, data)
       .then(payload => payload.data)
       .catch((error) => {
         error.type = GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION
@@ -184,8 +185,9 @@ const actions = {
       })
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
-    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/finalize_tx`, data)
-    axios(post)
+    // const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/finalize_tx`, data)
+    // axios(post)
+    return axiosInstance.post(`${GRIN_OWNER_URL}/finalize_tx`, data)
       .then(payload => payload.data)
       .catch((error) => {
         error.type = GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION
@@ -193,8 +195,7 @@ const actions = {
       })
   },
   [GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION] ({ commit }, data) {
-    const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
-    return axios(post)
+    return axiosInstance.post(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
       .then(payload => payload.data)
       .catch((error) => {
         error.type = GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION

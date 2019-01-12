@@ -17,7 +17,7 @@
             }">
           </i>
         </span>
-        <h1 class="has-text-white">G {{ spendable | grinBaseNumToPrettyNum }}</h1>
+        <h1 class="has-text-white">{{ spendable | grinBaseNumToPrettyNum }} G</h1>
       </div>
 
       <div class="dashboard-actions">
@@ -40,7 +40,6 @@
 
       <!-- Chart for balance -->
       <h3>Balance breakdown</h3>
-      <p>What is spendable relative to what is locked.</p>
       <div class="progress-bars">
         <span
           class="progress-bar is-success"
@@ -51,8 +50,16 @@
           :style="{ width: lockedWidth }">
         </span>
       </div>
-      <span class="tag is-success">Spendable</span>
-      <span class="tag is-warning">Locked</span>
+
+        <div class="tags">
+          <p>
+            <span class="tag is-success">{{ spendable | grinBaseNumToPrettyNum }} Grin</span>
+            <span class="is-bold">Spendable</span>
+          <br>
+            <span class="tag is-warning">{{ locked | grinBaseNumToPrettyNum }} Grin</span>
+            <span class="is-bold">Awaiting Confirmation</span>
+          </p>
+        </div>
 
       <!-- Tear our better abstraction -->
 <!--       <h3>Incoming transactions</h3>
@@ -95,6 +102,9 @@
     computed: {
       spendable () {
         return this.$store.getters.spendable
+      },
+      locked () {
+        return this.$store.getters.locked
       },
       appIsExpanded () {
         return this.$store.getters.appIsExpanded
