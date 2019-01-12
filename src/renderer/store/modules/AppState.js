@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import assert from 'assert'
+// import assert from 'assert'
 // import ls from 'local-storage'
 
 export const APP_STATE_LOCAL_STORAGE = {
@@ -7,8 +7,6 @@ export const APP_STATE_LOCAL_STORAGE = {
 }
 
 export const APP_STATE_MUTATIONS = {
-  // SET_CURRENT_TX_ID: 'SET_CURRENT_TX_ID',
-  SET_MODAL: 'SET_MODAL',
   SET_UPLOADED_TX: 'SET_UPLOADED_TX',
   SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED',
   SET_APP_NOTIFICATION: 'SET_APP_NOTIFICATION'
@@ -56,20 +54,10 @@ export const createNetworkErrorNotification = () => {
   })
 }
 
-export const APP_STATE_MODAL_TYPES = {
-  // RECEIVE: 'RECEIVE',
-  // SEND: 'SEND',
-  TRANSACTION_ITEM: 'TRANSACTION_ITEM'
-}
-
 const state = {
   appIsExpanded: false,
   notification: null,
-  uploadedTransaction: null,
-  modal: {
-    isActive: false,
-    type: null
-  }
+  uploadedTransaction: null
 }
 
 const getters = {
@@ -95,16 +83,6 @@ const mutations = {
   [APP_STATE_MUTATIONS.SET_UPLOADED_TX] (state, data) {
     // Expects a raw valid transaction string
     state.uploadedTransaction = data
-  },
-  [APP_STATE_MUTATIONS.SET_MODAL] (state, data) {
-    const { isActive, type } = data
-    assert(_.isBoolean(isActive))
-    if (isActive) {
-      assert(_.has(APP_STATE_MODAL_TYPES, type))
-    } else {
-      assert(_.isNil(type))
-    }
-    state.modal = { isActive, type }
   }
 }
 

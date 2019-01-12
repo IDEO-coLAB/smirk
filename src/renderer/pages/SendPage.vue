@@ -271,7 +271,7 @@
         currentStep: SLATE_SEND_STEPS.INPUT_DATA,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
-        transactionTemplate: new models.TransactionTemplateToOther()
+        transactionTemplate: new models.TransactionTemplate()
       }
     },
     computed: {},

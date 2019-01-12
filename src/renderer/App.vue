@@ -39,6 +39,7 @@
             this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, notification)
           }
         })
+
       // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
     methods: {},

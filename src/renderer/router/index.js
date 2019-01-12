@@ -3,12 +3,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import DashboardPage from '../pages/DashboardPage'
-// import BalancePage from '../pages/BalancePage'
 import ReceivePage from '../pages/ReceivePage'
 import BroadcastPage from '../pages/BroadcastPage'
 import SendPage from '../pages/SendPage'
-import { resizeWindow, shrinkWindow } from '../utils/layout'
 
+import { resizeWindow, shrinkWindow } from '../utils/layout'
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 Vue.use(Router)
@@ -55,16 +54,6 @@ export default new Router({
         next()
       }
     },
-    // {
-    //   path: '/balance',
-    //   name: 'balance-page',
-    //   component: BalancePage,
-    //   beforeEnter: (to, from, next) => {
-    //     const $store = this.a.app.$store
-    //     resizeWindow($store)
-    //     next()
-    //   }
-    // },
     {
       path: PATHS.SEND,
       name: 'send-page',
