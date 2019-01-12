@@ -11,16 +11,17 @@
       </span>
 
 			<div class="header-content">
-				Settings
+				Smirk Settings
 			</div>
     </div>
 
 		<div class="body without-footer">
-      <h3>Smirk Settings</h3>
-      <p>sdkjn wekjr wejr wejw eh jsjf dsjfhs j</p>
-      <button class="button is-fullwidth">
-        ?????
-      </button>
+      <h5>File Download Path</h5>
+      <code>{{settings.paths.download}}</code>
+
+      <h5>Grin library Path</h5>
+      <code>{{settings.paths.grin}}</code>
+
 		</div>
 
   </main>
@@ -31,6 +32,9 @@
     name: 'settings-page',
     components: {},
     computed: {
+      settings () {
+        return this.$store.getters.settings
+      }
     }
   }
 </script>

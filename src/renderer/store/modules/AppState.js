@@ -14,7 +14,8 @@ export const APP_STATE_MUTATIONS = {
   SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED',
   SET_APP_IP_ADDRESS: 'SET_APP_IP_ADDRESS',
   // TODO: Move notifications into their own store
-  SET_APP_NOTIFICATION: 'SET_APP_NOTIFICATION'
+  SET_APP_NOTIFICATION: 'SET_APP_NOTIFICATION',
+  SET_SETTINGS: 'SET_SETTINGS'
 }
 
 export const APP_STATE_ACTIONS = {
@@ -65,6 +66,7 @@ export const createNetworkErrorNotification = () => {
 }
 
 const state = {
+  settings: null,
   ipAddress: null,
   appIsExpanded: false,
   notification: null,
@@ -73,6 +75,7 @@ const state = {
 
 const getters = {
   appState: (state) => state,
+  settings: (state) => state.settings,
   appIsExpanded: (state) => state.appIsExpanded,
   ipAddress: (state) => state.ipAddress,
   notification: (state) => state.notification,
@@ -80,6 +83,9 @@ const getters = {
 }
 
 const mutations = {
+  [APP_STATE_MUTATIONS.SET_SETTINGS] (state, data) {
+    state.settings = data
+  },
   // TODO: Port scan to check if the user is reachable
   [APP_STATE_MUTATIONS.SET_APP_IP_ADDRESS] (state, data) {
     state.ipAddress = data
@@ -89,12 +95,8 @@ const mutations = {
     state.appIsExpanded = data
   },
   [APP_STATE_MUTATIONS.SET_APP_NOTIFICATION] (state, data) {
-    if (_.isNil(data)) {
-      state.notification = null
-      return
-    }
     // todo: enforce notification types
-    state.notification = data
+    state.notification = data || null
   },
   [APP_STATE_MUTATIONS.SET_UPLOADED_TX] (state, data) {
     // Expects a raw valid transaction string

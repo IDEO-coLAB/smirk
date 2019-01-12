@@ -36,6 +36,11 @@
         this.$router.push({ path: data.path })
       })
 
+      // TODO: Abstract out these global actions + constants
+      ipcRenderer.on('LOAD_SETTINGS', (event, data) => {
+        this.$store.commit(APP_STATE_MUTATIONS.SET_SETTINGS, data)
+      })
+
       this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
 
       // akjsd
@@ -49,7 +54,7 @@
           }
         })
 
-      // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
+      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
     methods: {},
     computed: {

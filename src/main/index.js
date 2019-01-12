@@ -11,6 +11,11 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
+const PATHS = {
+  DOWNLOAD: app.getPath('downloads'),
+  GRIN: `${app.getPath('home')}/.grin/floo`
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -72,6 +77,12 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.send('LOAD_SETTINGS', {
+      paths: {
+        download: PATHS.DOWNLOAD,
+        grin: PATHS.GRIN
+      }
+    })
   })
 
   // 'close' fires before 'closed' event, this handler checks
@@ -126,8 +137,7 @@ ipcMain.on('RESIZE_WINDOW', (event, data) => {
 })
 
 ipcMain.on('DOWNLOAD', (event, args) => {
-  const path = app.getPath('downloads')
-  fs.writeFile(`${path}/${args.filename}`, args.filedata, (error) => {
+  fs.writeFile(`${PATHS.DOWNLOAD}/${args.filename}`, args.filedata, (error) => {
     if (error) {
       // TODO: handle file download errors
     } else {
@@ -135,6 +145,11 @@ ipcMain.on('DOWNLOAD', (event, args) => {
     }
   })
 })
+
+
+const buffer = fs.readFileSync(PATHS.GRIN + '/.api_secret')
+console.log('the secret is....')
+console.log('Basic ' + buffer.toString('base64'))
 
 /**
  * Auto Updater

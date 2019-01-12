@@ -54,38 +54,22 @@
       <span class="tag is-success">Spendable</span>
       <span class="tag is-warning">Locked</span>
 
-      <h3>Pending transactions</h3>
+      <!-- Tear our better abstraction -->
+      <h3>Incoming transactions</h3>
 
-      <!-- TODO: tear out into sent / received templates -->
-      <div v-for="tx in actionableTransactions">
-        <div class="transaction">
+      <div v-for="tx in transactions">
+        <PendingTransactionReceive
+          :transaction="tx"
+          v-if="transactionWasReceived(tx)" />
+      </div>
 
-          <div class="transaction-header">Created: {{tx.creation_ts | dateFormatLong}}</div>
+      <hr>
+      <h3>Outgoing transactions</h3>
 
-          <div class="transaction-body">
-            <table class="table is-fullwidth">
-              <tbody>
-                <tr>
-                  <td>Amount</td>
-                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
-                </tr>
-                <tr>
-                  <td>Amount</td>
-                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
-                </tr>
-                <tr>
-                  <td>Amount</td>
-                  <td>{{ tx.amount_credited | grinBaseNumToPrettyNum }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="transaction-footer is-clearfix">
-            <button class="button is-pulled-right is-small is-danger">Cancel</button>
-          </div>
-
-        </div>
+      <div v-for="tx in transactions">
+        <PendingTransactionReceive
+          :transaction="tx"
+          v-if="transactionWasSent(tx)" />
       </div>
 
     </div>
@@ -96,12 +80,14 @@
   import _ from 'lodash'
   import format from 'date-fns/format'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
+  import PendingTransactionReceive from '../components/PendingTransactionReceive'
   import { resizeWindow, shrinkWindow } from '../utils/layout'
 
   export default {
     name: 'dashboard-page',
     components: {
-      FullscreenFileUpload
+      FullscreenFileUpload,
+      PendingTransactionReceive
     },
     mounted () {
       shrinkWindow(this.$store)
@@ -115,6 +101,9 @@
       },
       wallet () {
         return this.$store.getters.wallet
+      },
+      transactions () {
+        return this.$store.getters.transactions
       },
       actionableTransactions () {
         return _.filter(this.$store.getters.transactions, (tx) => {
@@ -143,6 +132,12 @@
       formatDate (dateStr) {
         const dateFmt = 'MMM D, YYY'
         return format(dateStr, dateFmt)
+      },
+      transactionWasReceived (tx) {
+        return tx.tx_type === 'TxReceived' || tx.tx_type === 'TxReceivedCancelled'
+      },
+      transactionWasSent (tx) {
+        return tx.tx_type === 'TxSent' || tx.tx_type === 'TxSentCancelled'
       }
     }
   }
