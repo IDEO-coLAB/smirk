@@ -4,6 +4,7 @@
     <div
       class="header"
       v-bind:class="{
+        'has-background-info': notification.type === NOTIFICATION_TYPES.INFO,
         'has-background-danger': notification.type === NOTIFICATION_TYPES.ERROR,
         'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
       }">
@@ -25,12 +26,13 @@
       class="body without-footer"
       v-bind:class="{
         'is-paddingless-vertical': !appIsExpanded,
+        'has-background-info': notification.type === NOTIFICATION_TYPES.INFO,
         'has-background-danger': notification.type === NOTIFICATION_TYPES.ERROR,
         'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
       }"
       v-if="notification.isFullscreen">
       <h3 v-if="appIsExpanded" class="is-italic">{{notification.title}}</h3>
-      <p class="is-italic">{{notification.message}}</p>
+      <span v-html="notification.message" class="is-italic"></span>
     </div>
 
   </div>

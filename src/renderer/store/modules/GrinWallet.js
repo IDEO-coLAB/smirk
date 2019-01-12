@@ -122,7 +122,7 @@ const getFormattedAxiosPost = (url, data = null) => {
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
+    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
@@ -133,6 +133,7 @@ const actions = {
         throw error
       })
   },
+
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
     axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
       .then((payload) => {
@@ -145,6 +146,7 @@ const actions = {
         throw error
       })
   },
+
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION] ({ commit }, id) {
     axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
       .then((payload) => {

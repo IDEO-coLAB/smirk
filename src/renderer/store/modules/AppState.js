@@ -16,7 +16,44 @@ export const APP_STATE_MUTATIONS = {
 
 export const NOTIFICATION_TYPES = {
   ERROR: 'ERROR',
-  SUCCESS: 'SUCCESS'
+  SUCCESS: 'SUCCESS',
+  INFO: 'INFO'
+}
+
+export const createNotification = (data) => {
+  const { type, message, title, isFullscreen } = data
+  if (!_.includes(NOTIFICATION_TYPES, type)) {
+    throw new Error('invalid notification type', data)
+  }
+  if (_.isNil(title) || _.isNil(message)) {
+    throw new Error('notifications require a message and title', data)
+  }
+  if (!_.isBoolean(isFullscreen)) {
+    throw new Error('notifications require "isFullscreen" to be a boolean', data)
+  }
+  return {
+    type,
+    title,
+    message,
+    isFullscreen
+  }
+}
+
+export const createNetworkErrorNotification = () => {
+  return createNotification({
+    isFullscreen: true,
+    title: 'Network Error',
+    type: NOTIFICATION_TYPES.INFO,
+    message: `
+      <p>There is an issue connecting to your Grin node.</p>
+      <p>1. Ensure the Grin server is running:<br>
+        <code>$ grin</code>
+      </p>
+      <p>2. Ensure the owner_api is running:<br>
+        <code>$ grin wallet owner_api</code>
+      </p>
+    `
+  })
 }
 
 export const APP_STATE_MODAL_TYPES = {

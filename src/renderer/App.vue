@@ -15,6 +15,8 @@
 <script>
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
+  import { APP_STATE_MUTATIONS, createNetworkErrorNotification } from './store/modules/AppState'
+  import { expandWindow } from './utils/layout'
 
   // Prevent global drag/drop events because we only want certain
   // areas of the application to register file upload events
@@ -29,7 +31,15 @@
     },
     mounted () {
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
+        // ATTACH THIS TO THE NODE HEIGHT PINGER - makes the most sense
+        .catch((error) => {
+          if (error.message === 'Network Error') {
+            expandWindow(this.$store)
+            const notification = createNetworkErrorNotification()
+            this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, notification)
+          }
+        })
+      // this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
     methods: {},
     computed: {
