@@ -19,7 +19,7 @@
       <h3>Your transaction history</h3>
 
       <!-- TODO: dynamically load more  -->
-      <TransactionHistoryTile
+      <TransactionTileHistorical
         v-for="tx, idx in transactions"
         :key="idx"
         :transaction="tx" />
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-  import TransactionHistoryTile from '../components/TransactionHistoryTile'
+  import TransactionTileHistorical from '../components/TransactionTileHistorical'
 
   export default {
     name: 'transactions-page',
     components: {
-      TransactionHistoryTile
+      TransactionTileHistorical
     },
     computed: {
       transactions () {

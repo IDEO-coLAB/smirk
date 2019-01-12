@@ -36,7 +36,7 @@
   import format from 'date-fns/format'
 
   export default {
-    name: 'transaction-history-tile',
+    name: 'transaction-tile-historical',
     props: {
       transaction: {
         type: Object,

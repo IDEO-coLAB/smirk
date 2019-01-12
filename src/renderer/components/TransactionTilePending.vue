@@ -28,10 +28,6 @@
             <td>Locked</td>
             <td>G {{ transaction.amount_debited | grinBaseNumToPrettyNum }}</td>
           </tr>
-          <tr>
-            <td>Slate ID</td>
-            <td>{{ transaction.tx_slate_id }}</td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -57,7 +53,7 @@
         </button>
       <button
         @click="cancel"
-        class="button is-small is-danger">Yes, Cancel It</button>
+        class="button is-small is-danger">Confirm Cancellation</button>
     </div>
 
   </div>
@@ -76,7 +72,7 @@
   }
 
   export default {
-    name: 'transaction-pending-tile',
+    name: 'transaction-tile-pending',
     props: {
       transaction: {
         type: Object,

@@ -66,21 +66,22 @@ const mutations = {
       return [outputObj, outputSig]
     })
 
-    // 1) If there are no outputs in the store, add the first set
-    if (_.isEmpty(state.outputs)) {
-      state.outputs = buildOutputs(state.outputs.concat(data))
-      return
-    }
+    // // 1) If there are no outputs in the store, add the first set
+    // if (_.isEmpty(state.outputs)) {
+    //   state.outputs = buildOutputs(state.outputs.concat(data))
+    //   return
+    // }
 
-    // 2) Otherwise swap out stale outputs based on the tx_log_entry (tx.id)
-    const pruneIdx = data[0][0].tx_log_entry
-    const freshOutputs = _.filter(state.outputs, (output) => {
-      if (output[0].tx_log_entry !== pruneIdx) {
-        return output
-      }
-      return false
-    }).concat(data)
-    state.outputs = buildOutputs(freshOutputs)
+    // // 2) Otherwise swap out stale outputs based on the tx_log_entry (tx.id)
+    // const pruneIdx = data[0][0].tx_log_entry
+    // const freshOutputs = _.filter(state.outputs, (output) => {
+    //   if (output[0].tx_log_entry !== pruneIdx) {
+    //     return output
+    //   }
+    //   return false
+    // }).concat(data)
+    // state.outputs = buildOutputs(freshOutputs)
+    state.outputs = buildOutputs(data)
   },
   [GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS] (state, data) {
     state.transactions = _.map(data, tx => new models.TransactionLogEntry(tx))
@@ -109,7 +110,6 @@ const actions = {
   [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
     return axiosInstance.get(`${GRIN_OWNER_URL}/node_height`)
       .then((payload) => {
-        // NOTE FOR API CORE DEVS: this is the opposite payload strcture from other sources
         const height = payload.data[0]
         const nodeIsOnline = payload.data[1]
         if (!nodeIsOnline) {
@@ -138,7 +138,7 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
-    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
+    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
@@ -151,13 +151,11 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }, id) {
-    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
+    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
       .then((payload) => {
-        // payload.data[0] validated_against_node: boolean
-        // payload.data[1] outputs: Output[]
         const data = payload.data[1]
         if (_.isEmpty(data)) {
-          return null
+          return []
         }
         commit(GRIN_WALLET_MUTATIONS.SET_OUTPUTS, data)
         return data
@@ -168,6 +166,11 @@ const actions = {
       })
   },
 
+  //
+  //
+  // POSTS!
+  //
+  //
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/issue_send_tx`, data)
     return axios(post)
