@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, ipcMain, Menu } from 'electron'
+import fs from 'graceful-fs'
 
 /**
  * Set `__static` path to static files in production
@@ -117,9 +118,22 @@ app.on('before-quit', () => {
   willQuitApp = true
 })
 
+// TODO: Pull events into own file?
+// TODO: Pull constants into file for main and render
 // resize window event passed in from client
 ipcMain.on('RESIZE_WINDOW', (event, data) => {
   mainWindow.setSize(data.width, data.height, true)
+})
+
+ipcMain.on('DOWNLOAD', (event, args) => {
+  const path = app.getPath('downloads')
+  fs.writeFile(`${path}/${args.filename}`, args.filedata, (error) => {
+    if (error) {
+      // TODO: handle file download errors
+    } else {
+      // TODO: handle file download errors
+    }
+  })
 })
 
 /**

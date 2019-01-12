@@ -80,8 +80,8 @@ const getters = {
 }
 
 const mutations = {
+  // TODO: Port scan to check if the user is reachable
   [APP_STATE_MUTATIONS.SET_APP_IP_ADDRESS] (state, data) {
-    // todo: enforce bool
     state.ipAddress = data
   },
   [APP_STATE_MUTATIONS.SET_APP_IS_EXPANDED] (state, data) {

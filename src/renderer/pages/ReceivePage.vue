@@ -90,7 +90,8 @@
           <button
             class="column button is-success is-footer is-fullwidth"
             v-bind:disabled="!uploadedTransaction"
-            @click="signTransaction">
+            @click="download">
+            <!-- @click="signTransaction"> -->
             Sign
           </button>
         </div>
@@ -112,6 +113,7 @@
 </template>
 
 <script>
+  import { ipcRenderer } from 'electron'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
@@ -186,6 +188,9 @@
       },
       signTransaction () {
         this.currentStep = this.RECEIVE_STEPS.RECEIVE_COMPLETE
+      },
+      download () {
+        ipcRenderer.send('DOWNLOAD', { filename: 'testJSON', filedata: JSON.stringify(this.uploadedTransaction) })
       }
     }
   }

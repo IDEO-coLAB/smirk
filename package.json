@@ -61,6 +61,7 @@
     "bulma": "^0.7.1",
     "bulma-checkradio": "^2.1.0",
     "date-fns": "^2.0.0-alpha.20",
+    "graceful-fs": "^4.1.15",
     "local-storage": "^1.4.2",
     "lodash": "^4.17.10",
     "node-sass": "^4.9.3",
