@@ -58,9 +58,9 @@
       <!-- Handle the IP use case -->
       <div v-if="receiveMethod===RECEIVE_METHODS.HTTP">
         <div class="body without-footer">
-          <h3>Your IP is <code>127.0.0.1</code></h3>
-          <p>To allow a sending party to connect to your wallet, share your IP address with them.</p>
-          <p>Need to build this dynamic fetch and whether or not it is public into the Data fetch layer.</p>
+          <h3>Your IP is <code>{{ipAddress}}</code></h3>
+          <p>To directly connect to a sender, share your IP address with them.</p>
+          <p class="is-italic">Note: You may need to check that your port is publicly reachable.</p>
         </div>
       </div>
 
@@ -158,6 +158,9 @@
     computed: {
       uploadedTransaction () {
         return this.$store.getters.uploadedTransaction
+      },
+      ipAddress () {
+        return this.$store.getters.ipAddress
       }
     },
     watch: {

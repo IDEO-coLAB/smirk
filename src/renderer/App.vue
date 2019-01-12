@@ -16,7 +16,7 @@
   import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-  import { APP_STATE_MUTATIONS, createNetworkErrorNotification } from './store/modules/AppState'
+  import { APP_STATE_ACTIONS, APP_STATE_MUTATIONS, createNetworkErrorNotification } from './store/modules/AppState'
   import { expandWindow } from './utils/layout'
 
   // Prevent global drag/drop events because we only want certain
@@ -35,6 +35,8 @@
       ipcRenderer.on('MAIN_MENU_NAV', (event, data) => {
         this.$router.push({ path: data.path })
       })
+
+      this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
 
       // akjsd
       this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)

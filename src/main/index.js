@@ -56,6 +56,9 @@ const createWindow = async () => {
           click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/transactions' })
         },
         {
+          type: 'separator'
+        },
+        {
           label: 'Quit',
           click: () => app.quit()
         }
