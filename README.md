@@ -9,7 +9,7 @@ Today, the need exists for a client and user experience that meets the promises 
 __Enter Smirk.__
 
 ## Design Research
-With IDEO design research in its DNA, Smirk was started by identifying and interviewing the people likely to make up Grin's initial user base; this ranged from savvy cryptocurrency developers and GPU miners, to those who have only heard the term UTXO. Smirk moved through several rounds of design and UX iteration to arrive at its design language and principles.
+With IDEO design research in its DNA, Smirk was started by talking with the people likely to comprise Grin's initial user base; this ranged from savvy cryptocurrency developers and GPU miners, to those who have only heard the term UTXO. Smirk moved through several rounds of design and UX iteration to arrive at its design language and principles.
 
 ## Desing Principles
 
