@@ -17,26 +17,29 @@
 
 		<div class="body without-footer">
       <h3>Your transaction history</h3>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <h1>list of txs</h1>
-      <button class="button is-fullwidth">
-        Load Next 10
-      </button>
+
+      <!-- TODO: dynamically load more  -->
+      <TransactionHistoryTile
+        v-for="tx, idx in transactions"
+        :key="idx"
+        :transaction="tx" />
 		</div>
 
   </main>
 </template>
 
 <script>
+  import TransactionHistoryTile from '../components/TransactionHistoryTile'
+
   export default {
     name: 'transactions-page',
-    components: {},
+    components: {
+      TransactionHistoryTile
+    },
     computed: {
+      transactions () {
+        return this.$store.getters.transactions
+      }
     }
   }
 </script>

@@ -58,7 +58,7 @@
       <h3>Incoming transactions</h3>
 
       <div v-for="tx in transactions">
-        <PendingTransactionReceive
+        <TransactionPendingTile
           :transaction="tx"
           v-if="transactionWasReceived(tx)" />
       </div>
@@ -67,7 +67,7 @@
       <h3>Outgoing transactions</h3>
 
       <div v-for="tx in transactions">
-        <PendingTransactionReceive
+        <TransactionPendingTile
           :transaction="tx"
           v-if="transactionWasSent(tx)" />
       </div>
@@ -80,14 +80,14 @@
   import _ from 'lodash'
   import format from 'date-fns/format'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
-  import PendingTransactionReceive from '../components/PendingTransactionReceive'
+  import TransactionPendingTile from '../components/TransactionPendingTile'
   import { resizeWindow, shrinkWindow } from '../utils/layout'
 
   export default {
     name: 'dashboard-page',
     components: {
       FullscreenFileUpload,
-      PendingTransactionReceive
+      TransactionPendingTile
     },
     mounted () {
       shrinkWindow(this.$store)

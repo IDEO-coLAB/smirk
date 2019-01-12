@@ -1,11 +1,19 @@
 <template>
   <div class="transaction">
 
-    <div class="transaction-header">ID:{{ transaction.id }} - {{ transaction.creation_ts | dateFormatLong }}</div>
+    <!-- <div class="transaction-header">{{ transaction.creation_ts | dateFormatLong }}</div> -->
 
     <div class="transaction-body">
       <table class="table is-fullwidth">
         <tbody>
+          <tr>
+            <td>Tx ID</td>
+            <td>{{ transaction.id }}</td>
+          </tr>
+          <tr>
+            <td>Initiated</td>
+            <td>{{ transaction.creation_ts | dateFormatLong }}</td>
+          </tr>
           <tr>
             <td v-if="transactionWasReceived">Incoming</td>
             <td v-else>Outgoing</td>
@@ -68,7 +76,7 @@
   }
 
   export default {
-    name: 'pending-transaction-receive',
+    name: 'transaction-pending-tile',
     props: {
       transaction: {
         type: Object,
