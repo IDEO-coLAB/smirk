@@ -16,12 +16,14 @@ const GRIN_FOREIGN_URL = `${GRIN_HOST}:13415/v1/wallet/foreign`
 export const GRIN_WALLET_MUTATIONS = {
   SET_SUMMARY: 'SET_SUMMARY',
   SET_OUTPUTS: 'SET_OUTPUTS',
-  SET_TRANSACTIONS: 'SET_TRANSACTIONS'
+  SET_TRANSACTIONS: 'SET_TRANSACTIONS',
+  SET_NODE_HEIGHT: 'SET_NODE_HEIGHT'
 }
 
 export const GRIN_WALLET_ACTIONS = {
+  GET_NODE_HEIGHT: 'GET_NODE_HEIGHT',
   GET_SUMMARY: 'GET_SUMMARY',
-  GET_OUTPUTS_FOR_TRANSACTION: 'GET_OUTPUTS_FOR_TRANSACTION',
+  GET_OUTPUTS: 'GET_OUTPUTS',
   GET_TRANSACTIONS: 'GET_TRANSACTIONS',
   ISSUE_SEND_TRANSACTION: 'ISSUE_SEND_TRANSACTION',
   RECEIVE_TRANSACTION: 'RECEIVE_TRANSACTION',
@@ -38,7 +40,8 @@ const axiosInstance = axios.create(axiosData)
 const state = {
   summary: null,
   outputs: [],
-  transactions: []
+  transactions: [],
+  nodeHeight: null
 }
 
 const getters = {
@@ -48,30 +51,8 @@ const getters = {
     return state.summary.amount_currently_spendable
   },
   outputs: (state) => state.outputs,
-  outputByTransactionId: (state) => {
-    return (id) => {
-      // Use _.filter because we can have multiple outputs with one tx id
-      return _.filter(state.outputs, (output) => {
-        const outputTxId = output[0].tx_log_entry
-        if (outputTxId === id) {
-          return output
-        }
-        return false
-      })
-    }
-  },
   transactions: (state) => state.transactions,
-  transactionById: (state) => {
-    return (id) => {
-      // Use _.find because we should only have one tx with this id
-      return _.find(state.transactions, (tx) => {
-        if (tx.id === id) {
-          return tx
-        }
-        return false
-      })
-    }
-  }
+  nodeHeight: (state) => state.nodeHeight
 }
 
 const mutations = {
@@ -103,6 +84,9 @@ const mutations = {
   },
   [GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS] (state, data) {
     state.transactions = _.map(data, tx => new models.TransactionLogEntry(tx))
+  },
+  [GRIN_WALLET_MUTATIONS.SET_NODE_HEIGHT] (state, data) {
+    state.nodeHeight = data
   }
 }
 
@@ -119,8 +103,27 @@ const getFormattedAxiosPost = (url, data = null) => {
 // WHEN NO SERVER IS RUNNING => :400 CODE
 // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
 // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
+const throwNodeOfflineError = () => { throw new Error('Grin node is unreachable') }
 
 const actions = {
+  [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
+    return axiosInstance.get(`${GRIN_OWNER_URL}/node_height`)
+      .then((payload) => {
+        // NOTE FOR API CORE DEVS: this is the opposite payload strcture from other sources
+        const height = payload.data[0]
+        const nodeIsOnline = payload.data[1]
+        if (!nodeIsOnline) {
+          throwNodeOfflineError()
+        }
+        commit(GRIN_WALLET_MUTATIONS.SET_NODE_HEIGHT, height)
+        return height
+      })
+      .catch((error) => {
+        error.type = GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT
+        throw error
+      })
+  },
+
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
     return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
@@ -147,8 +150,8 @@ const actions = {
       })
   },
 
-  [GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION] ({ commit }, id) {
-    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?tx_id=${id}&show_spent=true`)
+  [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }, id) {
+    axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
       .then((payload) => {
         // payload.data[0] validated_against_node: boolean
         // payload.data[1] outputs: Output[]
@@ -160,7 +163,7 @@ const actions = {
         return data
       })
       .catch((error) => {
-        error.type = GRIN_WALLET_ACTIONS.GET_OUTPUTS_FOR_TRANSACTION
+        error.type = GRIN_WALLET_ACTIONS.GET_OUTPUTS
         throw error
       })
   },

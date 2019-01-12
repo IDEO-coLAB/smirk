@@ -41,20 +41,33 @@
         this.$store.commit(APP_STATE_MUTATIONS.SET_SETTINGS, data)
       })
 
+      // TODO: this is hacky; improve the network ping when have more time
+      let cachedNodeHeight = null
+      setInterval(() => {
+        this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT)
+          .then((height) => {
+            let currentNodeHeight = this.$store.getters.nodeHeight
+            if (currentNodeHeight !== cachedNodeHeight) {
+              // set this locally for a comparison
+              cachedNodeHeight = height
+              // if node height changes, refetch summary, transactions
+              // Note: only do outputs on its respective page
+              this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
+              this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
+            }
+          })
+          .catch((error) => {
+            if (error.message === 'Network Error') {
+              // TODO: have network errors set themselves and unset
+              // themselves when things come back online
+              expandWindow(this.$store)
+              const notification = createNetworkErrorNotification()
+              this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, notification)
+            }
+          })
+      }, 2000)
+
       this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
-
-      // akjsd
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
-        // ATTACH THIS TO THE NODE HEIGHT PINGER - makes the most sense
-        .catch((error) => {
-          if (error.message === 'Network Error') {
-            expandWindow(this.$store)
-            const notification = createNetworkErrorNotification()
-            this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, notification)
-          }
-        })
-
-      this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
     },
     methods: {},
     computed: {
