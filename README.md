@@ -8,11 +8,17 @@ Today, the need exists for a client and user experience that matches the promise
 
 __Enter Smirk.__
 
-## A Quick Tour
+## Smirk at a Glance
 
-### Sending with Automatic Slate Download
-![Send Grin using Smirk](https://media.giphy.com/media/1wpMxeEcqgUKCnfQ9f/giphy.gif)
+### Sending with Automatic File Downloads
+![Send Grin using Smirk](https://media.giphy.com/media/1wpMxeEcqgUKCnfQ9f/giphy.gif)<br />
 Sending Grin with Smirk—whether using http or transaction slates—is smooth experience. Smirk abstracts away extraneous details with reasonable defaults, presents you with JSON for copy/paste when needed, and downloads slates automatically.
+
+### Drag-and-Drop Receive + Finalize 
+![Receive Grin using Smirk](https://media.giphy.com/media/fWgfStX6XoLa0VkcQY/giphy.gif)<br />
+Simply drag and drop transaction slates into Smirk. The app will determine if the transaction needs to be received or finalized and route you appropriately. In the process Smirk also handles automatic slate downloads and presents you with relevant transaction details.
+
+-----
 
 ## Design Research
 With IDEO design research in its DNA, Smirk was kicked off by talking with the people likely to comprise Grin's initial user base; this ranged from savvy cryptocurrency developers and GPU miners, to those who have only heard the term UTXO. Smirk moved through several rounds of design and UX iteration to arrive at its design language and principles.
