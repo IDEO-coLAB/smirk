@@ -14,9 +14,17 @@ __Enter Smirk.__
 ![Send Grin using Smirk](https://media.giphy.com/media/1wpMxeEcqgUKCnfQ9f/giphy.gif)<br />
 Sending Grin with Smirk—whether using http or transaction slates—is smooth experience. Smirk abstracts away extraneous details with reasonable defaults, presents you with JSON for copy/paste when needed, and downloads slates automatically.
 
-### Drag-and-Drop Receive + Finalize 
+### Drag & Drop Receive
 ![Receive Grin using Smirk](https://media.giphy.com/media/fWgfStX6XoLa0VkcQY/giphy.gif)<br />
-Simply drag and drop transaction slates into Smirk. The app will determine if the transaction needs to be received or finalized and route you appropriately. In the process Smirk also handles automatic slate downloads and presents you with relevant transaction details.
+Simply drag and drop transaction slates into Smirk. The app will determine if the transaction needs to be received and route you appropriately. In the process Smirk also handles automatic slate downloads and presents you with relevant transaction details.
+
+### Drag & Drop Finalize
+![Finalize Transactions using Smirk](https://media.giphy.com/media/31Yk1dd6KraitdkJfv/giphy.gif)<br />
+Drop in transaction slates that are ready to be finalized. Smirk signs and broadcasts the transaction, downloads the finalized slate to your preferred path, and presents you with the finalized transaction.
+
+### Intelligent Abstractions for Wallet Details
+![](https://media.giphy.com/media/47K4g01GHYl8es6nAZ/giphy.gif)<br />
+Smirk tucks the idiosyncratic aspects of Grin into areas that make sense. For example, teaching people about their spendable balance only when they're focused on it.
 
 -----
 
