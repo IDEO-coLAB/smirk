@@ -10,7 +10,7 @@ Grin is a [lightweight, privacy-focused cryptocurrency](http://grin-tech.org) se
 
 Today, the need exists for a client and user experience that matches the promise of Grin's simplicity and the spirit of its community. 
 
-__Enter smirk.__
+_Enter __smirk__._
 
 ## Features
 
