@@ -17,8 +17,7 @@
       </span>
 
       <span class="header-content">
-        <span v-if="appIsExpanded">An Error Occurred</span>
-        <span v-else>{{notification.title}}</span>
+        <span class="is-italic">{{notification.title}}</span>
       </span>
     </div>
 
@@ -31,7 +30,6 @@
         'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
       }"
       v-if="notification.isFullscreen">
-      <h3 v-if="appIsExpanded" class="is-italic">{{notification.title}}</h3>
       <span v-html="notification.message" class="is-italic"></span>
     </div>
 
@@ -39,7 +37,7 @@
 </template>
 
 <script>
-  import { NOTIFICATION_TYPES, APP_STATE_MUTATIONS } from '../store/modules/AppState'
+  import { NOTIFICATION_TYPES, NOTIFICATION_MUTATIONS } from '../store/modules/Notifications'
 
   export default {
     name: 'notifications',
@@ -66,7 +64,7 @@
     },
     methods: {
       clearNotification () {
-        this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION)
+        this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, null)
       }
     }
   }

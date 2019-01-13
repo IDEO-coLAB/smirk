@@ -5,5 +5,6 @@
 
 import { GrinWallet } from './GrinWallet'
 import { AppState } from './AppState'
+import { Notifications } from './Notifications'
 
-export default { GrinWallet, AppState }
+export default { GrinWallet, AppState, Notifications }

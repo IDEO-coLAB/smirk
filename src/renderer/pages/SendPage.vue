@@ -52,7 +52,7 @@
     </div>
 
     <!-- Information collecton and confirmation steps -->
-    <div v-if="currentStep !== SLATE_SEND_STEPS.SEND_COMPLETE">
+    <div v-if="currentStep === SEND_STEPS.SEND_COMPLETE">
 
       <div class="body">
 
@@ -65,7 +65,7 @@
               step="1"
               type="number"
               class="input"
-              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+              v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
               placeholder="Amount to send"
               v-model="transactionTemplate.amount"/>
           </div>
@@ -80,7 +80,7 @@
             <input
               class="input"
               placeholder="http://<IP_ADDR>:<PORT>"
-              v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+              v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
               v-model="transactionTemplate.dest"/>
           </div>
         </div>
@@ -103,7 +103,7 @@
               <span class="select">
                 <select
                   class="is-minwidth"
-                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+                  v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
                   v-model="transactionTemplate.fluff">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -123,7 +123,7 @@
               <span class="select">
                 <select
                   class="is-minwidth"
-                  v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+                  v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
                   v-model="transactionTemplate.selection_strategy_is_use_all">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -145,7 +145,7 @@
                 step="1"
                 type="number"
                 class="input"
-                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+                v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
                 v-model="transactionTemplate.num_change_outputs"
               />
             </div>
@@ -164,7 +164,7 @@
                 step="1"
                 type="number"
                 class="input"
-                v-bind:disabled="currentStep !== SLATE_SEND_STEPS.INPUT_DATA"
+                v-bind:disabled="currentStep !== SEND_STEPS.INPUT_DATA"
                 v-model="transactionTemplate.minimum_confirmations"
               />
             </div>
@@ -181,10 +181,10 @@
       <!-- Button for INPUT_DATA Step -->
       <div
         class="footer columns is-gapless is-mobile"
-        v-if="currentStep === SLATE_SEND_STEPS.INPUT_DATA">
+        v-if="currentStep === SEND_STEPS.INPUT_DATA">
         <button
           class="column button is-success is-footer is-fullwidth"
-          @click="setStep(SLATE_SEND_STEPS.CONFIRM_DATA)">
+          @click="setStep(SEND_STEPS.CONFIRM_DATA)">
           Next
         </button>
       </div>
@@ -192,33 +192,46 @@
       <!-- Button for CONFIRM_DATA Step -->
       <div
         class="footer columns is-gapless is-mobile"
-        v-if="currentStep === SLATE_SEND_STEPS.CONFIRM_DATA">
+        v-if="currentStep === SEND_STEPS.CONFIRM_DATA">
         <button
           class="column button is-footer is-fullwidth"
-          @click="setStep(SLATE_SEND_STEPS.INPUT_DATA)">
+          @click="setStep(SEND_STEPS.INPUT_DATA)">
           Back to Edit
         </button>
+        <!-- If File -->
         <button
+          v-if="sendMethod===SEND_METHODS.FILE"
           class="column button is-success is-footer is-fullwidth"
-          @click="sendTransaction">
-          <span v-if="sendMethod===SEND_METHODS.FILE">Create Slate</span>
-          <span v-if="sendMethod===SEND_METHODS.HTTP">Send Grin</span>
+          @click="createTransactionFile">
+          Create Slate
+        </button>
+        <!-- If Http -->
+        <button
+          v-if="sendMethod===SEND_METHODS.HTTP"
+          class="column button is-success is-footer is-fullwidth"
+          @click="createTransactionFile">
+          Send Grin
         </button>
       </div>
 
     </div>
 
     <!-- Completion Step -->
-    <div v-if="currentStep===SLATE_SEND_STEPS.SEND_COMPLETE">
+    <div v-if="currentStep!==SEND_STEPS.SEND_COMPLETE">
 
       <!-- Completion for FILE Send -->
       <div
         v-if="sendMethod===SEND_METHODS.FILE"
         class="body without-footer">
-        <h3>How to use this slate</h3>
-        <p>Copy or download the JSON below, then send it to a recipient over secure chat or email.</p>
-        <p class="json"> Lots of JSON here</p>
-        <button class="button is-success is-fullwidth">Download to File</button>
+        <h3>Transaction file created</h3>
+        <!-- TODO: specific path messaging -->
+        <p>You can find the file in your <code>Downloads</code> folder. You can also copy the JSON below and send it to a recipient over secure chat or email.</p>
+        <p class="json">{{ transactionFileJSON }}</p>
+        <button
+          class="button is-success is-fullwidth"
+          @click="downloadTransaction">
+          Download Again
+        </button>
       </div>
 
       <!-- We do not require explicit confirm screen for HTTP (comments below) -->
@@ -227,12 +240,17 @@
 </template>
 
 <script>
+  import { ipcRenderer } from 'electron'
   import models from '../models'
-  // import { APP_STATE_MUTATIONS, NOTIFICATION_TYPES } from '../store/modules/AppState'
+  import {
+    NOTIFICATION_MUTATIONS,
+    createSmallSuccessNotification,
+    createLargeErrorNotification
+  } from '../store/modules/Notifications'
   import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
-  const SLATE_SEND_STEPS = {
+  const SEND_STEPS = {
     INPUT_DATA: 'INPUT_DATA',
     CONFIRM_DATA: 'CONFIRM_DATA',
     SEND_COMPLETE: 'SEND_COMPLETE'
@@ -255,61 +273,70 @@
 
   export default {
     name: 'send-page',
-    // mounted () {
-    //   this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
-    //     isFullscreen: true,
-    //     type: NOTIFICATION_TYPES.ERROR,
-    //     title: 'Some error titles',
-    //     message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
-    //   })
-    // },
     data () {
       return {
         dropdownIsActive: false,
         showAdvancedOptions: false,
-        SLATE_SEND_STEPS: SLATE_SEND_STEPS,
-        currentStep: SLATE_SEND_STEPS.INPUT_DATA,
+        SEND_STEPS: SEND_STEPS,
+        currentStep: SEND_STEPS.INPUT_DATA,
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.FILE,
-        transactionTemplate: new models.TransactionTemplate()
+        transactionTemplate: new models.TransactionTemplate(),
+        transactionFileJSON: null
       }
     },
-    computed: {},
     methods: {
       toggleDropdown () {
         this.dropdownIsActive = !this.dropdownIsActive
       },
       setMethod (method) {
-        this.currentStep = this.SLATE_SEND_STEPS.INPUT_DATA
+        this.currentStep = this.SEND_STEPS.INPUT_DATA
         this.sendMethod = method
       },
       setStep (step) {
         this.currentStep = step
       },
-      sendTransaction () {
-        // advance the process
-        // this.setStep(this.SLATE_SEND_STEPS.SEND_COMPLETE)
-
+      downloadTransaction (tx) {
+        // TODO: should we use a dynamic/different name for the file?
+        ipcRenderer.send('DOWNLOAD_FILE', {
+          filename: `tx_${tx.id}`,
+          filedata: JSON.stringify(tx)
+        })
+      },
+      createTransactionFile () {
         // Use a new object for input formatting
         let formattedTx = Object.assign({}, this.transactionTemplate)
 
         // set the tx.method based on what was set // http vs file
         formattedTx.method = this.sendMethod.grinMethod
-
         // Convert tx amount to the Grin base format
-        console.log(prettyNumToGrinBaseNum(this.transactionTemplate.amount))
         formattedTx.amount = prettyNumToGrinBaseNum(this.transactionTemplate.amount)
-
-        // TODO: should we use a dynamic/different name for the file?
-        console.log(formattedTx)
 
         // File send
         this.$store.dispatch(GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION, formattedTx)
           .then((payload) => {
-            console.log('tx creation success = ', payload)
+            // Alert the user
+            const notification = createSmallSuccessNotification({
+              title: 'Transaction file created'
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+
+            // Route to the completion page
+            this.setStep(this.SEND_STEPS.SEND_COMPLETE)
+
+            // Set the local variable so a user can copy and past manually
+            this.transactionFileJSON = payload
+
+            // Auto-download the content to the filesystem
+            this.downloadTransaction(payload)
           })
-          // TODO: uniform error handler for the app
-          .catch((error) => console.warn(error))
+          .catch((error) => {
+            const notification = createLargeErrorNotification({
+              title: 'Transaction error',
+              message: error.response.data
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+          })
       }
     }
   }

@@ -16,7 +16,8 @@
   import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-  import { APP_STATE_ACTIONS, APP_STATE_MUTATIONS, createNetworkErrorNotification } from './store/modules/AppState'
+  import { APP_STATE_ACTIONS, APP_STATE_MUTATIONS } from './store/modules/AppState'
+  import { NOTIFICATION_MUTATIONS, createNetworkErrorNotification } from './store/modules/Notifications'
   import { expandWindow } from './utils/layout'
 
   // Prevent global drag/drop events because we only want certain
@@ -37,6 +38,7 @@
       })
 
       // TODO: Abstract out these global actions + constants
+      // NEED TO DETCH THESE WHEN PAGE LOADS...
       ipcRenderer.on('LOAD_SETTINGS', (event, data) => {
         this.$store.commit(APP_STATE_MUTATIONS.SET_SETTINGS, data)
       })
@@ -62,7 +64,7 @@
               // themselves when things come back online
               expandWindow(this.$store)
               const notification = createNetworkErrorNotification()
-              this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, notification)
+              this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
             }
           })
       }, 2000)

@@ -63,6 +63,11 @@
 <script>
   import _ from 'lodash'
   import format from 'date-fns/format'
+  import {
+    NOTIFICATION_MUTATIONS,
+    createLargeSuccessNotification,
+    createLargeErrorNotification
+  } from '../store/modules/Notifications'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
   const STATES = {
@@ -105,10 +110,21 @@
         event.stopPropagation()
         this.$store.dispatch(GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION, this.transaction.id)
           .then((payload) => {
-            console.log('tx cancel success: ', payload)
+            const notification = createLargeSuccessNotification({
+              title: 'Transaction cancelled',
+              message: `Transaction ${this.transaction.id} successfully cancelled. It will take 10 blocks for this to be reflected in your spendable balance.`
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+            // TODO: Best way to resync the app state
           })
           // TODO: uniform error handler for the app
-          .catch((error) => console.warn(error))
+          .catch((error) => {
+            const notification = createLargeErrorNotification({
+              title: 'Error during cancellation',
+              message: `${error.response.data}`
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+          })
       }
     }
   }

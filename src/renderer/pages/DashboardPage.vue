@@ -51,32 +51,32 @@
         </span>
       </div>
 
-        <div class="tags">
-          <p>
-            <span class="tag is-success">{{ spendable | grinBaseNumToPrettyNum }} Grin</span>
-            <span class="is-bold">Spendable</span>
-          <br>
-            <span class="tag is-warning">{{ locked | grinBaseNumToPrettyNum }} Grin</span>
-            <span class="is-bold">Awaiting Confirmation</span>
-          </p>
+      <div class="tags">
+        <p>
+          <span class="tag is-success">{{ spendable | grinBaseNumToPrettyNum }} Grin</span>
+          <span class="is-bold">Spendable</span>
+        <br>
+          <span class="tag is-warning">{{ locked | grinBaseNumToPrettyNum }} Grin</span>
+          <span class="is-bold">Awaiting Confirmation</span>
+        </p>
+      </div>
+
+      <div v-if="pendingReceivedTransactions.length">
+        <hr>
+        <h3>Pending incoming transactions</h3>
+        <div v-for="tx in pendingSentTransactions">
+          <TransactionTilePending
+            :transaction="tx" />
         </div>
+      </div>
 
-      <!-- Tear our better abstraction -->
-<!--       <h3>Incoming transactions</h3>
-
-      <div v-for="tx in transactions">
-        <TransactionTilePending
-          :transaction="tx"
-          v-if="transactionIsPending(tx)" />
-      </div> -->
-
-      <hr>
-      <h3>Outgoing transactions</h3>
-
-      <div v-for="tx in transactions">
-        <TransactionTilePending
-          :transaction="tx"
-          v-if="transactionIsPending(tx)" />
+      <div v-if="pendingSentTransactions.length">
+        <hr>
+        <h3>Pending outgoing transactions</h3>
+        <div v-for="tx in pendingSentTransactions">
+          <TransactionTilePending
+            :transaction="tx" />
+        </div>
       </div>
 
     </div>
@@ -112,16 +112,25 @@
       wallet () {
         return this.$store.getters.wallet
       },
-      transactions () {
-        return this.$store.getters.transactions
-      },
-      actionableTransactions () {
+      pendingTransactions () {
+        // a tx is not pending if it has:
+        // - been cancelled
+        // - a confirmation_ts
         return _.filter(this.$store.getters.transactions, (tx) => {
-          // if (tx.confirmed || _.includes(tx.tx_type, 'Cancelled')) {
-          if (tx.confirmed) {
+          if (_.includes(tx.tx_type, 'Cancelled')) {
             return false
           }
-          return tx
+          return tx.confirmation_ts === null
+        })
+      },
+      pendingSentTransactions () {
+        return _.filter(this.pendingTransactions, (tx) => {
+          return _.includes('Sent', tx.tx_type)
+        })
+      },
+      pendingReceivedTransactions () {
+        return _.filter(this.pendingTransactions, (tx) => {
+          return _.includes('Received', tx.tx_type)
         })
       },
       // TODO: Move this to a getter
@@ -142,16 +151,6 @@
       formatDate (dateStr) {
         const dateFmt = 'MMM D, YYY'
         return format(dateStr, dateFmt)
-      },
-      transactionIsPending (tx) {
-        // show a tx if it is pending
-        // - if it has cancelled in it DO NOT SHOW
-        // - otherwise, check if confirmation_ts is !null
-        if (_.includes(tx.tx_type, 'Cancelled')) {
-          return false
-        }
-        return tx.confirmation_ts === null
-        // return tx.tx_type === 'TxSent' || tx.tx_type === 'TxSentCancelled'
       }
     }
   }

@@ -136,20 +136,19 @@ ipcMain.on('RESIZE_WINDOW', (event, data) => {
   mainWindow.setSize(data.width, data.height, true)
 })
 
-ipcMain.on('DOWNLOAD', (event, args) => {
+ipcMain.on('DOWNLOAD_FILE', (event, args) => {
   fs.writeFile(`${PATHS.DOWNLOAD}/${args.filename}`, args.filedata, (error) => {
     if (error) {
       // TODO: handle file download errors
     } else {
-      // TODO: handle file download errors
+      // TODO: handle file downloads with success
     }
   })
 })
 
-
-const buffer = fs.readFileSync(PATHS.GRIN + '/.api_secret')
-console.log('the secret is....')
-console.log('Basic ' + buffer.toString('base64'))
+// const buffer = fs.readFileSync(PATHS.GRIN + '/.api_secret')
+// console.log('the secret is....')
+// console.log('Basic ' + buffer.toString('base64'))
 
 /**
  * Auto Updater
