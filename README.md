@@ -8,7 +8,7 @@ Today, the need exists for a client and user experience that matches the promise
 
 __Enter Smirk.__
 
-## Smirk at a Glance
+## Features
 
 ### Sending with Automatic File Downloads
 ![Send Grin using Smirk](https://media.giphy.com/media/1wpMxeEcqgUKCnfQ9f/giphy.gif)<br />
@@ -22,9 +22,13 @@ Simply drag and drop transaction slates into Smirk. The app will determine if th
 ![Finalize Transactions using Smirk](https://media.giphy.com/media/31Yk1dd6KraitdkJfv/giphy.gif)<br />
 Drop in transaction slates that are ready to be finalized. Smirk signs and broadcasts the transaction, downloads the finalized slate to your preferred path, and presents you with the finalized transaction.
 
-### Intelligent Abstractions for Wallet Details
-![](https://media.giphy.com/media/47K4g01GHYl8es6nAZ/giphy.gif)<br />
+### Intelligent Abstractions
+![Smirk Abstractions](https://media.giphy.com/media/47K4g01GHYl8es6nAZ/giphy.gif)<br />
 Smirk tucks the idiosyncratic aspects of Grin into areas that make sense. For example, teaching people about their spendable balance only when they're focused on it.
+
+### One-click Transaction Cancellation
+![One Click Transaction Cancellation](https://media.giphy.com/media/1ziD7JGMnq9Eh29GKU/giphy.gif)<br />
+Smirk allows you to quickly understand your balance, and view or cancel any pending transactions that have not confirmed or been finalized on the network.
 
 -----
 
@@ -38,8 +42,6 @@ Most notably, Grin is challenging for people to use (...often a property of alph
 
 ### Digital Cash
 With its emission rate and community ethos, Grin is setting itself up to be digital cash. Smirk asks what is necessary when a wallet deals primarily with digital cash as the operative metaphor—explicitly not solving for the advanced and merchant use cases (perhaps in another wallet). Smirk subordinates extraneous data and functionality to the prmiary functions of sending, receiving and managing pending transactions.
-
-
 
 -----
 
