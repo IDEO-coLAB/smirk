@@ -1,12 +1,16 @@
 # smirk ;)
 > A user-friendly Grin client
 
+#### Important: smirk is dependent on Grin and is not yet ready for production (though it is close!). This warning will be removed when the production app is bundled and shipped.
+
+----
+
 ## Inspiration
 Grin is a [lightweight, privacy-focused cryptocurrency](http://grin-tech.org) set to launch in early 2019. Community financed from the beginning, Grin has bootstrapped an amazing development team through some lean times. As a result, the urgency for a user-focused Grin client has (understandably) taken a back seat to protocol development.
 
 Today, the need exists for a client and user experience that matches the promise of Grin's simplicity and the spirit of its community. 
 
-__Enter smirk.__
+_Enter __smirk__._
 
 ## Features
 
@@ -40,20 +44,27 @@ With IDEO design research in its DNA, smirk was kicked off by talking with the p
 ## Desing Principles
 
 ### Simplicity
-Most notably, Grin is challenging for people to use (...often a property of alpha software). But when something is hard to use, people get nervous when taking any action—especially when those actions deal with money. smirk softens the mimblewimble's unique edges to create moments of confidence and understanding when using this new technology. 
+Grin is notably challenging for people to use (...often a property of alpha software, but mimblewimble has its own complexity). But when something is hard to use, people get nervous when taking any action—especially when those actions deal with money. smirk softens the mimblewimble's unique edges to create moments of confidence and understanding when using this new technology. 
 
 ### The Digital Cash Metaphor
 With its emission rate and community ethos, Grin is setting itself up to be digital cash. smirk asks what is necessary when a wallet deals primarily with digital cash as the operative metaphor—explicitly not solving for the advanced and merchant use cases (perhaps in another wallet). smirk subordinates extraneous data and functionality to the prmiary functions of sending, receiving, and managing pending transactions.
 
 ### Abstraction
-To maintain a minimal surface area and surface only one action at a time, smirk abstracts Grin's wallet information and actions into sensible areas that present themselves when needed.
+To maintain a minimal surface area and present one action in a given section, smirk abstracts Grin's wallet information and actions into sensible areas that present themselves when needed.
 
 -----
 
 ## Engineering 
-> Engineering docs are a wip - there will be a signed/bundled electron app build when smirk ships
 
-smirk is an Electron client. To get it running, follow the directions below: 
+### Notes
+- The engineering docs are a wip; more on the way.
+- The app (obviously) has Grin as a dependency. As a result, smirk is almost ready for production, but not yet. There are some patches that need to land in Grin first.
+- There will be a signed/bundled electron app build when smirk ships, but you need to run locally for now
+- The code is in its last legs of moving from prototype to production; reviewer beware ;)
+
+smirk is an Electron client that will be bundled into an app when it ships. 
+
+To run locally, follow the instructions below: 
 
 #### Run Locally
 
