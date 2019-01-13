@@ -240,7 +240,7 @@
     createLargeErrorNotification
   } from '../store/modules/Notifications'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
-  import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
+  import { prettyNumToGrinBaseNum } from '../utils/grin'
 
   const SEND_STEPS = {
     INPUT_DATA: 'INPUT_DATA',

@@ -51,15 +51,15 @@ const createWindow = async () => {
         {
           label: 'Settings',
           // TODO: Abstract out main + render constants
-          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/settings' })
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/settings' })
         },
         {
           label: 'Outputs',
-          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/outputs' })
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/outputs' })
         },
         {
           label: 'Transactions',
-          click: () => mainWindow.webContents.send('MAIN_MENU_NAV', { path: '/transactions' })
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/transactions' })
         },
         {
           type: 'separator'
@@ -77,12 +77,6 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.send('LOAD_SETTINGS', {
-      paths: {
-        download: PATHS.DOWNLOAD,
-        grin: PATHS.GRIN
-      }
-    })
   })
 
   // 'close' fires before 'closed' event, this handler checks
@@ -129,9 +123,7 @@ app.on('before-quit', () => {
   willQuitApp = true
 })
 
-// TODO: Pull events into own file?
-// TODO: Pull constants into file for main and render
-// resize window event passed in from client
+// TODO: Pull events constants into own file to dedupe
 ipcMain.on('RESIZE_WINDOW', (event, data) => {
   mainWindow.setSize(data.width, data.height, true)
 })
@@ -139,10 +131,19 @@ ipcMain.on('RESIZE_WINDOW', (event, data) => {
 ipcMain.on('DOWNLOAD_FILE', (event, args) => {
   fs.writeFile(`${PATHS.DOWNLOAD}/${args.filename}`, args.filedata, (error) => {
     if (error) {
-      event.sender.send('DOWNLOAD_FILE_ERROR')
+      event.sender.send('FILE_DOWNLOAD_ERROR')
       return
     }
-    event.sender.send('DOWNLOAD_FILE_SUCCESS')
+    event.sender.send('FILE_DOWNLOAD_SUCCESS')
+  })
+})
+
+ipcMain.on('GET_APP_CONFIG_FROM_MAIN', (event, args) => {
+  mainWindow.webContents.send('MAIN_APP_CONFIG_READY', {
+    paths: {
+      download: PATHS.DOWNLOAD,
+      grin: PATHS.GRIN
+    }
   })
 })
 

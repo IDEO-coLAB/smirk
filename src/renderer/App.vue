@@ -13,21 +13,23 @@
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
+  // import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
   import { expandWindow } from './utils/layout'
   import {
-    APP_STATE_ACTIONS,
-    APP_STATE_MUTATIONS
+    APP_STATE_ACTIONS
+    // APP_STATE_MUTATIONS
   } from './store/modules/AppState'
+  // TODO: Move notifications like this into the store actions!!
   import {
     NOTIFICATION_TYPES,
     NOTIFICATION_MUTATIONS,
-    createNetworkErrorNotification,
-    createSmallSuccessNotification,
-    createSmallErrorNotification
+    createNetworkErrorNotification
   } from './store/modules/Notifications'
+
+  import { registerIPCRendererListeners } from './utils/ipc-renderer'
+  import { refreshAppState } from './utils/app-state'
 
   // Prevent global drag/drop events because we only want certain
   // areas of the application to register file upload events
@@ -41,37 +43,9 @@
       Notifications
     },
     mounted () {
-      // TODO: Pull all listeners out into a proper abstraction
-      // listening
-      ipcRenderer.on('DOWNLOAD_FILE_SUCCESS', (event, data) => {
-        // TODO: dynamic download path
-        console.log('success')
-        const notification = createSmallSuccessNotification({
-          type: NOTIFICATION_TYPES.ELECTRON_PROC,
-          title: 'Download successful'
-        })
-        this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
-      })
-
-      ipcRenderer.on('DOWNLOAD_FILE_ERROR', (event, data) => {
-        console.log('error')
-        const notification = createSmallErrorNotification({
-          type: NOTIFICATION_TYPES.ELECTRON_PROC,
-          title: 'Download error'
-        })
-        this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
-      })
-
-      // TODO: Abstract out these global actions + constants
-      ipcRenderer.on('MAIN_MENU_NAV', (event, data) => {
-        this.$router.push({ path: data.path })
-      })
-
-      // TODO: Abstract out these global actions + constants
-      // NEED TO DETCH THESE WHEN PAGE LOADS...
-      ipcRenderer.on('LOAD_SETTINGS', (event, data) => {
-        this.$store.commit(APP_STATE_MUTATIONS.SET_SETTINGS, data)
-      })
+      // register handlers on the IPCRenderer so that the client
+      // can receive messages from the main process
+      registerIPCRendererListeners(this.$store, this.$router)
 
       // TODO: this is hacky; improve the network ping when have more time
       let cachedNodeHeight = null
@@ -82,10 +56,8 @@
             if (currentNodeHeight !== cachedNodeHeight) {
               // set this locally for a comparison
               cachedNodeHeight = height
-              // if node height changes, refetch summary, transactions
-              // Note: only do outputs on its respective page
-              this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
-              this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
+              // if node height changes, refresh the app state
+              refreshAppState(this.$store)
             }
             //
             if (this.$store.getters.notification.type === NOTIFICATION_TYPES.NETWORK) {
@@ -93,20 +65,19 @@
             }
           })
           .catch((error) => {
+            // TODO: have network errors set themselves and unset
+            // themselves when things come back online
             if (error.message === 'Network Error') {
               console.log(error.response)
-              // TODO: have network errors set themselves and unset
-              // themselves when things come back online
               expandWindow(this.$store)
               const notification = createNetworkErrorNotification()
               this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
             }
           })
       }, 2000)
-
+      //
       this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
     },
-    methods: {},
     computed: {
       appIsExpanded () {
         return this.$store.getters.appIsExpanded
