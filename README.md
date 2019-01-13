@@ -2,7 +2,7 @@
 > A user-friendly Grin client
 
 ## Inspiration
-Grin is a [lightweight, privacy-focused cryptocurrency](http://grin-tech.org) set to launch in early 2019. Community financed from the beginning, Grin has bootstrapped a development team through some lean times. As a result, the urgency for a user-focused Grin client has (understandably) taken a back seat to protocol development.
+Grin is a [lightweight, privacy-focused cryptocurrency](http://grin-tech.org) set to launch in early 2019. Community financed from the beginning, Grin has bootstrapped an amazing development team through some lean times. As a result, the urgency for a user-focused Grin client has (understandably) taken a back seat to protocol development.
 
 Today, the need exists for a client and user experience that matches the promise of Grin's simplicity and the spirit of its community. 
 
