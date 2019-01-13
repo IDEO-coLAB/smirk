@@ -6,7 +6,7 @@
       <!-- Header anchor nav button -->
       <div class="header-anchor">
         <router-link to="/dashboard" tag="button" class="button is-header">
-          <span class="icon"><i class="fas fa-times"></i></span>
+          <span class="icon"><i class="fas fa-angle-left"></i></span>
         </router-link>
       </div>
 
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Information collecton and confirmation steps -->
-    <div v-if="currentStep === SEND_STEPS.SEND_COMPLETE">
+    <div v-if="currentStep !== SEND_STEPS.SEND_COMPLETE">
 
       <div class="body">
 
@@ -198,34 +198,26 @@
           @click="setStep(SEND_STEPS.INPUT_DATA)">
           Back to Edit
         </button>
-        <!-- If File -->
         <button
-          v-if="sendMethod===SEND_METHODS.FILE"
           class="column button is-success is-footer is-fullwidth"
-          @click="createTransactionFile">
-          Create Slate
-        </button>
-        <!-- If Http -->
-        <button
-          v-if="sendMethod===SEND_METHODS.HTTP"
-          class="column button is-success is-footer is-fullwidth"
-          @click="createTransactionFile">
-          Send Grin
+          @click="sendTransaction">
+          <span v-if="sendMethod===SEND_METHODS.FILE">Create Tx File</span>
+          <span v-if="sendMethod===SEND_METHODS.HTTP">Send Grin</span>
         </button>
       </div>
 
     </div>
 
     <!-- Completion Step -->
-    <div v-if="currentStep!==SEND_STEPS.SEND_COMPLETE">
+    <div v-if="currentStep===SEND_STEPS.SEND_COMPLETE">
 
       <!-- Completion for FILE Send -->
       <div
         v-if="sendMethod===SEND_METHODS.FILE"
         class="body without-footer">
-        <h3>Transaction file created</h3>
+        <h3>Tx file downloaded!</h3>
         <!-- TODO: specific path messaging -->
-        <p>You can find the file in your <code>Downloads</code> folder. You can also copy the JSON below and send it to a recipient over secure chat or email.</p>
+        <p>You'll find the transaction file in your <code>~/Downloads/</code> folder. You can also copy the JSON below and send it to a recipient over secure chat or email.</p>
         <p class="json">{{ transactionFileJSON }}</p>
         <button
           class="button is-success is-fullwidth"
@@ -259,15 +251,15 @@
   const SEND_METHODS = {
     HTTP: {
       key: 'HTTP',
-      grinMethod: 'http',
-      title: 'Send to an online wallet',
-      detail: 'This is how you send something by IP address; it is a direct connection.'
+      grinApiMethod: 'http',
+      title: 'Send directly to a wallet',
+      detail: 'Connect to a recipient directly and send Grin instantly.'
     },
     FILE: {
       key: 'FILE',
-      grinMethod: 'file',
-      title: 'Create a transaction file',
-      detail: 'This is how you send things by way of horseless carriage.'
+      grinApiMethod: 'file',
+      title: 'Send using a transaction file',
+      detail: 'Send Grin asynchronously using an out-of-band method like secure email or chat.'
     }
   }
 
@@ -280,7 +272,7 @@
         SEND_STEPS: SEND_STEPS,
         currentStep: SEND_STEPS.INPUT_DATA,
         SEND_METHODS: SEND_METHODS,
-        sendMethod: SEND_METHODS.FILE,
+        sendMethod: SEND_METHODS.HTTP,
         transactionTemplate: new models.TransactionTemplate(),
         transactionFileJSON: null
       }
@@ -303,36 +295,57 @@
           filedata: JSON.stringify(tx)
         })
       },
-      createTransactionFile () {
+      sendTransaction () {
         // Use a new object for input formatting
         let formattedTx = Object.assign({}, this.transactionTemplate)
 
         // set the tx.method based on what was set // http vs file
-        formattedTx.method = this.sendMethod.grinMethod
+        formattedTx.method = this.sendMethod.grinApiMethod
         // Convert tx amount to the Grin base format
         formattedTx.amount = prettyNumToGrinBaseNum(this.transactionTemplate.amount)
 
-        // File send
+        if (this.sendMethod === SEND_METHODS.FILE) {
+          formattedTx.dest = 'transaction.json'
+        }
+
+        // Send the tx
         this.$store.dispatch(GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION, formattedTx)
           .then((payload) => {
-            // Alert the user
-            const notification = createSmallSuccessNotification({
-              title: 'Transaction file created'
-            })
-            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+            // Handle HTTP and FILE
+            switch (this.sendMethod) {
+              case SEND_METHODS.FILE:
+                // Alert the user
+                const fileNotification = createSmallSuccessNotification({
+                  title: 'Transaction file created'
+                })
+                this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, fileNotification)
 
-            // Route to the completion page
-            this.setStep(this.SEND_STEPS.SEND_COMPLETE)
+                // Route to the completion page
+                this.setStep(this.SEND_STEPS.SEND_COMPLETE)
 
-            // Set the local variable so a user can copy and past manually
-            this.transactionFileJSON = payload
+                // Set the local variable so a user can copy and past manually
+                this.transactionFileJSON = payload
 
-            // Auto-download the content to the filesystem
-            this.downloadTransaction(payload)
+                // Auto-download the content to the filesystem
+                this.downloadTransaction(payload)
+                break
+              case SEND_METHODS.HTTP:
+                // Alert the user
+                const httpNotification = createSmallSuccessNotification({
+                  title: 'Transaction sent'
+                })
+                this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, httpNotification)
+                // there is no file/JSON for a person to work with
+                // so we can route them back to the dashboard
+                this.$router.push({ path: '/dashboard' })
+                break
+              default:
+                console.warn('unknown sendMethod on transaction:', this.sendMethod)
+            }
           })
           .catch((error) => {
             const notification = createLargeErrorNotification({
-              title: 'Transaction error',
+              title: 'Transaction send error',
               message: error.response.data
             })
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)

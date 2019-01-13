@@ -98,7 +98,7 @@ const mutations = {
 // WHEN NO SERVER IS RUNNING => :400 CODE
 // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
 // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-const throwNodeOfflineError = () => { throw new Error('Grin node is unreachable') }
+const throwNodeOfflineError = () => { throw new Error('NETWORK_ERROR') }
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {

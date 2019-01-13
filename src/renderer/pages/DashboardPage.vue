@@ -62,9 +62,8 @@
       </div>
 
       <div v-if="pendingReceivedTransactions.length">
-        <hr>
         <h3>Pending incoming transactions</h3>
-        <div v-for="tx in pendingSentTransactions">
+        <div v-for="tx in pendingReceivedTransactions">
           <TransactionTilePending
             :transaction="tx" />
         </div>
@@ -125,12 +124,12 @@
       },
       pendingSentTransactions () {
         return _.filter(this.pendingTransactions, (tx) => {
-          return _.includes('Sent', tx.tx_type)
+          return _.includes(tx.tx_type, 'Sent')
         })
       },
       pendingReceivedTransactions () {
         return _.filter(this.pendingTransactions, (tx) => {
-          return _.includes('Received', tx.tx_type)
+          return _.includes(tx.tx_type, 'Received')
         })
       },
       // TODO: Move this to a getter

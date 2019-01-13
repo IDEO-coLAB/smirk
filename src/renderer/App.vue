@@ -16,9 +16,18 @@
   import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-  import { APP_STATE_ACTIONS, APP_STATE_MUTATIONS } from './store/modules/AppState'
-  import { NOTIFICATION_MUTATIONS, createNetworkErrorNotification } from './store/modules/Notifications'
   import { expandWindow } from './utils/layout'
+  import {
+    APP_STATE_ACTIONS,
+    APP_STATE_MUTATIONS
+  } from './store/modules/AppState'
+  import {
+    NOTIFICATION_TYPES,
+    NOTIFICATION_MUTATIONS,
+    createNetworkErrorNotification,
+    createSmallSuccessNotification,
+    createSmallErrorNotification
+  } from './store/modules/Notifications'
 
   // Prevent global drag/drop events because we only want certain
   // areas of the application to register file upload events
@@ -32,6 +41,27 @@
       Notifications
     },
     mounted () {
+      // TODO: Pull all listeners out into a proper abstraction
+      // listening
+      ipcRenderer.on('DOWNLOAD_FILE_SUCCESS', (event, data) => {
+        // TODO: dynamic download path
+        console.log('success')
+        const notification = createSmallSuccessNotification({
+          type: NOTIFICATION_TYPES.ELECTRON_PROC,
+          title: 'File download success'
+        })
+        this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+      })
+
+      ipcRenderer.on('DOWNLOAD_FILE_ERROR', (event, data) => {
+        console.log('error')
+        const notification = createSmallErrorNotification({
+          type: NOTIFICATION_TYPES.ELECTRON_PROC,
+          title: 'File download error'
+        })
+        this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+      })
+
       // TODO: Abstract out these global actions + constants
       ipcRenderer.on('MAIN_MENU_NAV', (event, data) => {
         this.$router.push({ path: data.path })
@@ -57,9 +87,14 @@
               this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_SUMMARY)
               this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_TRANSACTIONS)
             }
+            //
+            if (this.$store.getters.notification.type === NOTIFICATION_TYPES.NETWORK) {
+              this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, null)
+            }
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
+              console.log(error.response)
               // TODO: have network errors set themselves and unset
               // themselves when things come back online
               expandWindow(this.$store)

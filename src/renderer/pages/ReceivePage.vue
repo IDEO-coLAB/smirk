@@ -7,7 +7,7 @@
       <!-- Header anchor nav button -->
       <span class="header-anchor">
         <router-link to="/dashboard" tag="button" class="button is-header">
-          <span class="icon"><i class="fas fa-times"></i></span>
+          <span class="icon"><i class="fas fa-angle-left"></i></span>
         </router-link>
       </span>
 

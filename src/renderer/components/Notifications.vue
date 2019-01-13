@@ -4,9 +4,9 @@
     <div
       class="header"
       v-bind:class="{
-        'has-background-info': notification.type === NOTIFICATION_TYPES.INFO,
-        'has-background-danger': notification.type === NOTIFICATION_TYPES.ERROR,
-        'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
+        'has-background-info': notification.style === NOTIFICATION_STYLES.INFO,
+        'has-background-danger': notification.style === NOTIFICATION_STYLES.ERROR,
+        'has-background-success': notification.style === NOTIFICATION_STYLES.SUCCESS
       }">
       <span
         class="header-anchor"
@@ -25,9 +25,9 @@
       class="body without-footer"
       v-bind:class="{
         'is-paddingless-vertical': !appIsExpanded,
-        'has-background-info': notification.type === NOTIFICATION_TYPES.INFO,
-        'has-background-danger': notification.type === NOTIFICATION_TYPES.ERROR,
-        'has-background-success': notification.type === NOTIFICATION_TYPES.SUCCESS
+        'has-background-info': notification.style === NOTIFICATION_STYLES.INFO,
+        'has-background-danger': notification.style === NOTIFICATION_STYLES.ERROR,
+        'has-background-success': notification.style === NOTIFICATION_STYLES.SUCCESS
       }"
       v-if="notification.isFullscreen">
       <span v-html="notification.message" class="is-italic"></span>
@@ -37,21 +37,13 @@
 </template>
 
 <script>
-  import { NOTIFICATION_TYPES, NOTIFICATION_MUTATIONS } from '../store/modules/Notifications'
+  import { NOTIFICATION_STYLES, NOTIFICATION_MUTATIONS } from '../store/modules/Notifications'
 
   export default {
     name: 'notifications',
-    // mounted () {
-    //   this.$store.commit(APP_STATE_MUTATIONS.SET_APP_NOTIFICATION, {
-    //     isFullscreen: true,
-    //     type: NOTIFICATION_TYPES.ERROR,
-    //     title: 'Some error title',
-    //     message: 'And this will be some descriptive text talking a person down from jumping off the ledge.'
-    //   })
-    // },
     data () {
       return {
-        NOTIFICATION_TYPES
+        NOTIFICATION_STYLES
       }
     },
     computed: {

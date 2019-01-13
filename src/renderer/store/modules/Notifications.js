@@ -4,14 +4,23 @@ export const NOTIFICATION_MUTATIONS = {
   SET_NOTIFICATION: 'SET_NOTIFICATION'
 }
 
-export const NOTIFICATION_TYPES = {
+export const NOTIFICATION_STYLES = {
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
   INFO: 'INFO'
 }
 
+export const NOTIFICATION_TYPES = {
+  NETWORK: 'NETWORK',
+  GRIN_API: 'GRIN_API',
+  ELECTRON_PROC: 'ELECTRON_PROC'
+}
+
 export const createNotification = (data) => {
-  const { type, message, title, isFullscreen } = data
+  const { style, type, message, title, isFullscreen } = data
+  if (!_.includes(NOTIFICATION_STYLES, style)) {
+    throw new Error('invalid notification style', data)
+  }
   if (!_.includes(NOTIFICATION_TYPES, type)) {
     throw new Error('invalid notification type', data)
   }
@@ -24,6 +33,7 @@ export const createNotification = (data) => {
   return {
     type,
     title,
+    style,
     message,
     isFullscreen
   }
@@ -31,9 +41,10 @@ export const createNotification = (data) => {
 
 export const createNetworkErrorNotification = () => {
   return createNotification({
-    isFullscreen: true,
     title: 'Network Error',
-    type: NOTIFICATION_TYPES.INFO,
+    style: NOTIFICATION_STYLES.INFO,
+    type: NOTIFICATION_TYPES.NETWORK,
+    isFullscreen: true,
     message: `
       <p>There is an issue connecting to your Grin node.</p>
       <p>1. Ensure the Grin server is running:<br>
@@ -46,43 +57,62 @@ export const createNetworkErrorNotification = () => {
   })
 }
 
+// TODO: abstract now that we know what notifications are
 export const createLargeSuccessNotification = (args) => {
-  let { title = 'Success!', message = 'Your action was successful.' } = args
+  let {
+    title = 'Success!',
+    type = NOTIFICATION_TYPES.GRIN_API,
+    message = 'Your action was successful.'
+  } = args
   return createNotification({
+    type,
     title,
     message,
     isFullscreen: true,
-    type: NOTIFICATION_TYPES.SUCCESS
+    style: NOTIFICATION_STYLES.SUCCESS
   })
 }
 
 export const createSmallSuccessNotification = (args) => {
-  let { title = 'Success!', message = '' } = args
+  let {
+    title = 'Success!',
+    type = NOTIFICATION_TYPES.GRIN_API
+  } = args
   return createNotification({
+    type,
     title,
-    message,
+    message: '',
     isFullscreen: false,
-    type: NOTIFICATION_TYPES.SUCCESS
+    style: NOTIFICATION_STYLES.SUCCESS
   })
 }
 
 export const createLargeErrorNotification = (args) => {
-  let { title = 'An error occurred', message = 'An error occurred with your last action.' } = args
+  let {
+    title = 'An error occurred',
+    type = NOTIFICATION_TYPES.GRIN_API,
+    message = 'An error occurred with your last action.'
+  } = args
   return createNotification({
+    type,
     title,
     message,
     isFullscreen: true,
-    type: NOTIFICATION_TYPES.ERROR
+    style: NOTIFICATION_STYLES.ERROR
   })
 }
 
 export const createSmallErrorNotification = (args) => {
-  let { title = 'An error occurred', message = '' } = args
+  let {
+    title = 'An error occurred',
+    type = NOTIFICATION_TYPES.GRIN_API
+  } = args
   return createNotification({
+    type,
     title,
-    message,
+    message: '',
     isFullscreen: false,
-    type: NOTIFICATION_TYPES.ERROR
+    style: NOTIFICATION_STYLES.ERROR
   })
 }
 

@@ -5,7 +5,7 @@
       <span class="header-anchor">
         <router-link to="/dashboard" class="button is-header">
           <span class="icon">
-            <i class="fas fa-times"></i>
+            <i class="fas fa-angle-left"></i>
           </span>
         </router-link>
       </span>

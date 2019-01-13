@@ -139,10 +139,10 @@ ipcMain.on('RESIZE_WINDOW', (event, data) => {
 ipcMain.on('DOWNLOAD_FILE', (event, args) => {
   fs.writeFile(`${PATHS.DOWNLOAD}/${args.filename}`, args.filedata, (error) => {
     if (error) {
-      // TODO: handle file download errors
-    } else {
-      // TODO: handle file downloads with success
+      event.sender.send('DOWNLOAD_FILE_ERROR')
+      return
     }
+    event.sender.send('DOWNLOAD_FILE_SUCCESS')
   })
 })
 

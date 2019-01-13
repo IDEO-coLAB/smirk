@@ -15,8 +15,7 @@
             <td>{{ transaction.creation_ts | dateFormatLong }}</td>
           </tr>
           <tr>
-            <td v-if="transactionWasReceived">Incoming</td>
-            <td v-else>Outgoing</td>
+            <td>Amount</td>
             <td v-if="transactionWasReceived">G {{ transaction.amount_credited - transaction.amount_debited | grinBaseNumToPrettyNum }}</td>
             <td v-else>G {{ transaction.amount_debited - transaction.amount_credited | grinBaseNumToPrettyNum }}</td>
           </tr>
@@ -64,6 +63,7 @@
   import _ from 'lodash'
   import format from 'date-fns/format'
   import {
+    NOTIFICATION_TYPES,
     NOTIFICATION_MUTATIONS,
     createLargeSuccessNotification,
     createLargeErrorNotification
@@ -112,6 +112,7 @@
           .then((payload) => {
             const notification = createLargeSuccessNotification({
               title: 'Transaction cancelled',
+              type: NOTIFICATION_TYPES.GRIN_API,
               message: `Transaction ${this.transaction.id} successfully cancelled. It will take 10 blocks for this to be reflected in your spendable balance.`
             })
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
@@ -121,6 +122,7 @@
           .catch((error) => {
             const notification = createLargeErrorNotification({
               title: 'Error during cancellation',
+              type: NOTIFICATION_TYPES.GRIN_API,
               message: `${error.response.data}`
             })
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
