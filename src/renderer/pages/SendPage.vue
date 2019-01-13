@@ -239,8 +239,8 @@
     createSmallSuccessNotification,
     createLargeErrorNotification
   } from '../store/modules/Notifications'
-  import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
+  import { prettyNumToGrinBaseNum } from '../utils/grin-utils'
 
   const SEND_STEPS = {
     INPUT_DATA: 'INPUT_DATA',

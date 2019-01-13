@@ -59,12 +59,12 @@
       <div v-if="receiveMethod===RECEIVE_METHODS.HTTP">
         <div class="body without-footer">
           <h3>Receive directly</h3>
-          <p>Follow the directions below to receive transactions directly.</p>
+          <p>Follow the directions below to receive transactions directly from another wallet.</p>
 
           <section class="section">
             <h4>
               <span class="icon has-text-danger">
-                <i class="fas fa-comments"></i>
+                <i class="fas fa-caret-square-right"></i>
               </span>
               &nbsp;Share your IP address
             </h4>
@@ -76,7 +76,7 @@
           <section class="section">
             <h4>
               <span class="icon has-text-danger">
-                <i class="fas fa-terminal"></i>
+                <i class="fas fa-caret-square-right"></i>
               </span>
               &nbsp;Listen for transactions
             </h4>
@@ -84,11 +84,6 @@
               You also need to enable your wallet to listen for incoming transactions. Start the wallet listener using the following command: <br> <code>$ grin wallet listen</code>
             </p>
           </section>
-              <!-- <span class="tag is-info">Tip</span> Make sure your wallet is publicly reachable by using a service to ping</p> -->
-
-          <!-- <span class="tag is-info">Tip</span> -->
-          <!-- grin --floonet wallet -p='' listen -->
-          <!-- <p class="is-italic">Note: You may need to check that your port is publicly reachable.</p> -->
         </div>
       </div>
 
@@ -96,7 +91,7 @@
       <div v-if="receiveMethod===RECEIVE_METHODS.FILE">
         <div class="body" >
           <h3>Transact by file</h3>
-          <p v-if="!uploadedTransaction">Drop a transaction file in the upload area.</p>
+          <p v-if="!uploadedTransaction">Drop a transaction file into the upload area.</p>
           <p v-else>
             <span class="icon has-text-success">
               <i class="fas fa-file-signature"></i>
