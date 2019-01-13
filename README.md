@@ -8,6 +8,12 @@ Today, the need exists for a client and user experience that matches the promise
 
 __Enter Smirk.__
 
+## A Quick Tour
+
+### Sending with Automatic Slate Download
+![Send Grin using Smirk](https://media.giphy.com/media/1wpMxeEcqgUKCnfQ9f/giphy.gif)
+Sending Grin with Smirk—whether using http or transaction slates—is smooth experience. Smirk abstracts away extraneous details with reasonable defaults, presents you with JSON for copy/paste when needed, and downloads slates automatically.
+
 ## Design Research
 With IDEO design research in its DNA, Smirk was kicked off by talking with the people likely to comprise Grin's initial user base; this ranged from savvy cryptocurrency developers and GPU miners, to those who have only heard the term UTXO. Smirk moved through several rounds of design and UX iteration to arrive at its design language and principles.
 
@@ -18,6 +24,8 @@ Most notably, Grin is challenging for people to use (...often a property of alph
 
 ### Digital Cash
 With its emission rate and community ethos, Grin is setting itself up to be digital cash. Smirk asks what is necessary when a wallet deals primarily with digital cash as the operative metaphor—explicitly not solving for the advanced and merchant use cases (perhaps in another wallet). Smirk subordinates extraneous data and functionality to the prmiary functions of sending, receiving and managing pending transactions.
+
+
 
 -----
 
