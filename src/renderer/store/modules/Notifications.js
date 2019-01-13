@@ -39,24 +39,6 @@ export const createNotification = (data) => {
   }
 }
 
-export const createNetworkErrorNotification = () => {
-  return createNotification({
-    title: 'Network Error',
-    style: NOTIFICATION_STYLES.INFO,
-    type: NOTIFICATION_TYPES.NETWORK,
-    isFullscreen: true,
-    message: `
-      <p>There is an issue connecting to your Grin node.</p>
-      <p>1. Ensure the Grin server is running:<br>
-        <code>$ grin</code>
-      </p>
-      <p>2. Ensure the owner_api is running:<br>
-        <code>$ grin wallet owner_api</code>
-      </p>
-    `
-  })
-}
-
 // TODO: abstract now that we know what notifications are
 export const createLargeSuccessNotification = (args) => {
   let {

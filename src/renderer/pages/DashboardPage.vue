@@ -87,7 +87,7 @@
   import format from 'date-fns/format'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
   import TransactionTilePending from '../components/TransactionTilePending'
-  import { resizeWindow, shrinkWindow } from '../utils/layout'
+  import { resizeWindow, shrinkWindow } from '../utils/app-layout'
 
   export default {
     name: 'dashboard-page',

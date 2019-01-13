@@ -8,6 +8,14 @@ import axios from 'axios'
 import _ from 'lodash'
 
 import models from '../../models'
+import { expandWindow } from '../../utils/app-layout'
+
+import {
+  // NOTIFICATION_TYPES,
+  NOTIFICATION_MUTATIONS,
+  // createNetworkErrorNotification,
+  createLargeErrorNotification
+} from './Notifications'
 
 const GRIN_HOST = 'http://localhost'
 const GRIN_OWNER_URL = `${GRIN_HOST}:13420/v1/wallet/owner`
@@ -84,31 +92,64 @@ const mutations = {
   }
 }
 
-// const getFormattedAxiosPost = (url, data = null) => {
-//   return {
-//     method: 'POST',
-//     // headers: { 'content-type': 'text/plain' }, // talk to Grin core about this
-//     // headers: { 'content-type': 'application/json' }, // talk to Grin core about this
-//     data,
-//     url
-//   }
-// }
-
-// NOTES ON HANDLING
-// WHEN NO SERVER IS RUNNING => :400 CODE
-// IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
-// IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-const handleNetworkError = (error) => {
-  if (error.message === 'Network Error') {
-    error.type = 'NETWORK'
+const handleForeignListenerNetworkError = ({ commit, store }) => {
+  return (error) => {
+    if (error.message === 'Network Error') {
+      expandWindow(store)
+      const notification = createLargeErrorNotification({
+        title: 'Listener offline error',
+        message: `
+          <p>Your wallet listener doesn't appear to be running.
+            Turn on the listener by running:<br>
+            <code>$ grin wallet listen</code>
+          </p>
+        `
+      })
+      commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+    }
+    throw error
   }
-  throw error
 }
 
-const throwNodeOfflineError = () => {
-  let error = new Error('Network Error')
-  error.type = 'NETWORK'
-  throw error
+const handleOwnerListenerNetworkError = ({ commit, store }) => {
+  return (error) => {
+    if (error.message === 'Network Error') {
+      expandWindow(store)
+      const notification = createLargeErrorNotification({
+        title: 'Network error',
+        message: `
+          <p>There is an issue connecting to your Grin node.</p>
+          <p>1. Ensure the Grin server is running:<br>
+            <code>$ grin</code>
+          </p>
+          <p>2. Ensure the owner_api is running:<br>
+            <code>$ grin wallet owner_api</code>
+          </p>
+        `
+      })
+      commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+    }
+    throw error
+  }
+}
+
+const handleGrinApiError = ({ commit }, title) => {
+  return (error) => {
+    // Network errors are handled downstream
+    if (error.message === 'Network Error') {
+      throw error
+    }
+    let notification = createLargeErrorNotification({
+      title,
+      message: error.response.data
+    })
+    commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+    throw error
+  }
+}
+
+const throwNetworkError = () => {
+  throw new Error('Network Error')
 }
 
 const actions = {
@@ -118,12 +159,13 @@ const actions = {
         const height = payload.data[0]
         const nodeIsOnline = payload.data[1]
         if (!nodeIsOnline) {
-          throwNodeOfflineError()
+          throwNetworkError()
         }
         commit(GRIN_WALLET_MUTATIONS.SET_NODE_HEIGHT, height)
         return height
       })
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error getting node height'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
@@ -133,7 +175,8 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
         return data
       })
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error getting wallet summary'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
@@ -143,7 +186,8 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
         return data
       })
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error getting transactions'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }, id) {
@@ -156,7 +200,8 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_OUTPUTS, data)
         return data
       })
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error getting outputs'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   //
@@ -167,23 +212,27 @@ const actions = {
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
       .then(payload => payload.data)
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error sending transaction'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_FOREIGN_URL}/receive_tx`, data)
       .then(payload => payload.data)
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error receiving transaction'))
+      .catch(handleForeignListenerNetworkError({ commit, store: this }))
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/finalize_tx`, data)
       .then(payload => payload.data)
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error finalizing transaction'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
   [GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
       .then(payload => payload.data)
-      .catch(handleNetworkError)
+      .catch(handleGrinApiError({ commit }, 'Error canceling transaction'))
+      .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   }
 }
 

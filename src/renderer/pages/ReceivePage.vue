@@ -149,10 +149,10 @@
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
-  import {
-    NOTIFICATION_MUTATIONS,
-    createLargeErrorNotification
-  } from '../store/modules/Notifications'
+  // import {
+  //   NOTIFICATION_MUTATIONS,
+  //   createLargeErrorNotification
+  // } from '../store/modules/Notifications'
 
   const RECEIVE_STEPS = {
     SELECT_METHOD: 'SELECT_METHOD',
@@ -182,7 +182,7 @@
     mounted () {
       if (this.uploadedTransaction) {
         this.receiveMethod = this.RECEIVE_METHODS.FILE
-        this.currentStep = this.SLATE_RECEIVE_STEPS.SELECT_METHOD
+        this.currentStep = this.RECEIVE_STEPS.SELECT_METHOD
       }
     },
     data () {
@@ -243,29 +243,6 @@
 
             // Auto-download the signed file
             this.downloadTransaction()
-          })
-          .catch((error) => {
-            let notification = null
-            if (error.type === 'NETWORK') {
-              notification = createLargeErrorNotification({
-                title: 'Listener offline error',
-                message: `
-                  <p>Your wallet listener doesn't appear to be running.
-                    Turn on the listener by running:<br>
-                    <code>$ grin wallet listen</code>
-                  </p>
-                `
-              })
-              // No need to remove the uploaded tx yet
-            } else {
-              notification = createLargeErrorNotification({
-                title: 'Transaction signing error',
-                message: error.response.data
-              })
-              // Remove the invalid uploaded tx
-              this.$store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
-            }
-            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
           })
       }
     }

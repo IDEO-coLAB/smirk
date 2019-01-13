@@ -10,7 +10,7 @@ import TransactionsPage from '../pages/TransactionsPage'
 import OutputsPage from '../pages/OutputsPage'
 import SettingsPage from '../pages/SettingsPage'
 
-import { resizeWindow, shrinkWindow } from '../utils/layout'
+import { resizeWindow, shrinkWindow } from '../utils/app-layout'
 import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 Vue.use(Router)

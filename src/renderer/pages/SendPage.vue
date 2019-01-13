@@ -236,8 +236,8 @@
   import models from '../models'
   import {
     NOTIFICATION_MUTATIONS,
-    createSmallSuccessNotification,
-    createLargeErrorNotification
+    createSmallSuccessNotification
+    // createLargeErrorNotification
   } from '../store/modules/Notifications'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
   import { prettyNumToGrinBaseNum } from '../utils/grin'
@@ -342,13 +342,6 @@
               default:
                 console.warn('unknown sendMethod on transaction:', this.sendMethod)
             }
-          })
-          .catch((error) => {
-            const notification = createLargeErrorNotification({
-              title: 'Transaction send error',
-              message: error.response.data
-            })
-            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
           })
       }
     }

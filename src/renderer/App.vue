@@ -8,6 +8,7 @@
       'is-minimized' : !appIsExpanded
     }">
     <Notifications />
+    {{ notification }}
     <router-view></router-view>
   </div>
 </template>
@@ -16,17 +17,17 @@
   // import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-  import { expandWindow } from './utils/layout'
+  // import { expandWindow } from './utils/app-layout'
   import {
     APP_STATE_ACTIONS
     // APP_STATE_MUTATIONS
   } from './store/modules/AppState'
   // TODO: Move notifications like this into the store actions!!
-  import {
-    NOTIFICATION_TYPES,
-    NOTIFICATION_MUTATIONS,
-    createNetworkErrorNotification
-  } from './store/modules/Notifications'
+  // import {
+  //   NOTIFICATION_TYPES,
+  //   NOTIFICATION_MUTATIONS
+  //   // createNetworkErrorNotification
+  // } from './store/modules/Notifications'
 
   import { registerIPCRendererListeners } from './utils/ipc-renderer'
   import { refreshAppState } from './utils/app-state'
@@ -60,27 +61,21 @@
               refreshAppState(this.$store)
             }
             //
-            if (this.$store.getters.notification.type === NOTIFICATION_TYPES.NETWORK) {
-              this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, null)
-            }
-          })
-          .catch((error) => {
-            // TODO: have network errors set themselves and unset
-            // themselves when things come back online
-            if (error.message === 'Network Error') {
-              console.log(error.response)
-              expandWindow(this.$store)
-              const notification = createNetworkErrorNotification()
-              this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
-            }
+            // if (this.$store.getters.notification.type === NOTIFICATION_TYPES.NETWORK) {
+            //   this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, null)
+            // }
           })
       }, 2000)
-      //
+
+      // TODO: move into the refresh function
       this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
     },
     computed: {
       appIsExpanded () {
         return this.$store.getters.appIsExpanded
+      },
+      notification () {
+        return this.$store.getters.notification
       }
     }
   }
