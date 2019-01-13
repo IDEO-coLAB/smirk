@@ -22,7 +22,7 @@
     </div>
 
     <div
-      class="body without-footer"
+      class="body without-footer has-text-white"
       v-bind:class="{
         'is-paddingless-vertical': !appIsExpanded,
         'has-background-info': notification.style === NOTIFICATION_STYLES.INFO,

@@ -107,7 +107,7 @@ $table-background-color: $grey-light
 
 
 
-
+$section-padding: .5rem .5rem
 
 
 
@@ -168,7 +168,7 @@ body, html
 
 .body.without-footer
   height: calc(#{$app-height-expanded} - (3 * #{$app-gutter}))
-  color: $white
+  color: $grey-light
 
 .header-anchor,
 .header-content
@@ -196,6 +196,12 @@ body, html
 
 
 
+
+.section
+  border-radius: $radius
+  margin-bottom: .5rem
+  padding-left: 0rem
+  padding-right: 0rem
 
 
 
@@ -436,6 +442,7 @@ hr.dropdown-divider
 //////////////////////////////////////////
 .button
   font-weight: $weight-semibold
+  border: 0px
 
 .button.is-header,
 .button.is-footer

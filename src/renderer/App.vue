@@ -48,7 +48,7 @@
         console.log('success')
         const notification = createSmallSuccessNotification({
           type: NOTIFICATION_TYPES.ELECTRON_PROC,
-          title: 'File download success'
+          title: 'Download successful'
         })
         this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
       })
@@ -57,7 +57,7 @@
         console.log('error')
         const notification = createSmallErrorNotification({
           type: NOTIFICATION_TYPES.ELECTRON_PROC,
-          title: 'File download error'
+          title: 'Download error'
         })
         this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
       })

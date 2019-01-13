@@ -215,7 +215,7 @@
       <div
         v-if="sendMethod===SEND_METHODS.FILE"
         class="body without-footer">
-        <h3>Tx file downloaded!</h3>
+        <h3>Transaction file downloaded</h3>
         <!-- TODO: specific path messaging -->
         <p>You'll find the transaction file in your <code>~/Downloads/</code> folder. You can also copy the JSON below and send it to a recipient over secure chat or email.</p>
         <p class="json">{{ transactionFileJSON }}</p>
@@ -288,11 +288,11 @@
       setStep (step) {
         this.currentStep = step
       },
-      downloadTransaction (tx) {
+      downloadTransaction () {
         // TODO: should we use a dynamic/different name for the file?
         ipcRenderer.send('DOWNLOAD_FILE', {
-          filename: `tx_${tx.id}`,
-          filedata: JSON.stringify(tx)
+          filename: `tx_send_${this.transactionFileJSON.id}`,
+          filedata: JSON.stringify(this.transactionFileJSON)
         })
       },
       sendTransaction () {
@@ -320,14 +320,14 @@
                 })
                 this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, fileNotification)
 
-                // Route to the completion page
-                this.setStep(this.SEND_STEPS.SEND_COMPLETE)
-
                 // Set the local variable so a user can copy and past manually
                 this.transactionFileJSON = payload
 
+                // Route to the completion page
+                this.setStep(this.SEND_STEPS.SEND_COMPLETE)
+
                 // Auto-download the content to the filesystem
-                this.downloadTransaction(payload)
+                this.downloadTransaction()
                 break
               case SEND_METHODS.HTTP:
                 // Alert the user

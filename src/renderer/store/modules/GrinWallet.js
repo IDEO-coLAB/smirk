@@ -98,7 +98,18 @@ const mutations = {
 // WHEN NO SERVER IS RUNNING => :400 CODE
 // IF LISTENER is off: 500 error, net::ERR_CONNECTION_REFUSED
 // IF HEADER is missing: Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response.
-const throwNodeOfflineError = () => { throw new Error('NETWORK_ERROR') }
+const handleNetworkError = (error) => {
+  if (error.message === 'Network Error') {
+    error.type = 'NETWORK'
+  }
+  throw error
+}
+
+const throwNodeOfflineError = () => {
+  let error = new Error('Network Error')
+  error.type = 'NETWORK'
+  throw error
+}
 
 const actions = {
   [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
@@ -112,6 +123,7 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_NODE_HEIGHT, height)
         return height
       })
+      .catch(handleNetworkError)
   },
 
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
@@ -121,6 +133,7 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
         return data
       })
+      .catch(handleNetworkError)
   },
 
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
@@ -130,6 +143,7 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
         return data
       })
+      .catch(handleNetworkError)
   },
 
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }, id) {
@@ -142,6 +156,7 @@ const actions = {
         commit(GRIN_WALLET_MUTATIONS.SET_OUTPUTS, data)
         return data
       })
+      .catch(handleNetworkError)
   },
 
   //
@@ -152,21 +167,23 @@ const actions = {
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
       .then(payload => payload.data)
+      .catch(handleNetworkError)
   },
 
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_FOREIGN_URL}/receive_tx`, data)
       .then(payload => payload.data)
+      .catch(handleNetworkError)
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
-    // const post = getFormattedAxiosPost(`${GRIN_OWNER_URL}/finalize_tx`, data)
-    // axios(post)
     return axiosInstance.post(`${GRIN_OWNER_URL}/finalize_tx`, data)
       .then(payload => payload.data)
+      .catch(handleNetworkError)
   },
   [GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
       .then(payload => payload.data)
+      .catch(handleNetworkError)
   }
 }
 
