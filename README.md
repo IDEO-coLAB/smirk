@@ -1,6 +1,10 @@
 # smirk ;)
 > A user-friendly Grin client
 
+#### Important: smirk is dependent on Grin and is not yet ready for production (though it is close!). This warning will be removed when the production app is bundled and shipped.
+
+----
+
 ## Inspiration
 Grin is a [lightweight, privacy-focused cryptocurrency](http://grin-tech.org) set to launch in early 2019. Community financed from the beginning, Grin has bootstrapped an amazing development team through some lean times. As a result, the urgency for a user-focused Grin client has (understandably) taken a back seat to protocol development.
 
