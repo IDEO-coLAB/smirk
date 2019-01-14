@@ -61,7 +61,6 @@
 
 <script>
   import _ from 'lodash'
-  import format from 'date-fns/format'
   import {
     NOTIFICATION_TYPES,
     NOTIFICATION_MUTATIONS,
@@ -92,14 +91,6 @@
     computed: {
       transactionWasReceived () {
         return _.includes(this.transaction.tx_type, 'Received')
-      },
-      date () {
-        // TODO: turn this into a short date string format filter
-        const dateFmt = 'MMM D'
-        const dateStr = !this.transaction.confirmation_ts
-          ? this.transaction.creation_ts
-          : this.transaction.confirmation_ts
-        return format(dateStr, dateFmt)
       }
     },
     methods: {

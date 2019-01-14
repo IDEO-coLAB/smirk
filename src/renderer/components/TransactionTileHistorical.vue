@@ -33,8 +33,6 @@
 </template>
 
 <script>
-  import format from 'date-fns/format'
-
   export default {
     name: 'transaction-tile-historical',
     props: {
@@ -44,18 +42,18 @@
       }
     },
     computed: {
+      // NOTE: Also need to know if is confirmed yet...
       transactionWasReceived () {
         return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
-      },
-      // NOTE: Also need to know if is confirmed yet...
-      date () {
-        // TODO: turn this into a short date string format filter
-        const dateFmt = 'MMM D'
-        const dateStr = !this.transaction.confirmation_ts
-          ? this.transaction.creation_ts
-          : this.transaction.confirmation_ts
-        return format(dateStr, dateFmt)
       }
+      // date () {
+      //   // TODO: turn this into a short date string format filter
+      //   const dateFmt = 'MMM D'
+      //   const dateStr = !this.transaction.confirmation_ts
+      //     ? this.transaction.creation_ts
+      //     : this.transaction.confirmation_ts
+      //   return moment(dateStr).format(dateFmt)
+      // }
     }
   }
 </script>

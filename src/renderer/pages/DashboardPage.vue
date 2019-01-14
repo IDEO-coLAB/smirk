@@ -84,7 +84,6 @@
 
 <script>
   import _ from 'lodash'
-  import format from 'date-fns/format'
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
   import TransactionTilePending from '../components/TransactionTilePending'
   import { resizeWindow, shrinkWindow } from '../utils/app-layout'
@@ -146,10 +145,6 @@
     methods: {
       toggleWindow () {
         resizeWindow(this.$store)
-      },
-      formatDate (dateStr) {
-        const dateFmt = 'MMM D, YYY'
-        return format(dateStr, dateFmt)
       }
     }
   }

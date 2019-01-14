@@ -31,12 +31,12 @@ export const GRIN_WALLET_ACTIONS = {
 }
 
 const grinConfig = remote.getGlobal('GRIN_CONFIG')
+// TODO: handle the case when grinConfig || apiSecret is missing
 const axiosData = {
   headers: {
     'Authorization': grinConfig.apiSecret
   }
 }
-// TODO: handle the case when apiSecret is missing
 const axiosInstance = axios.create(axiosData)
 
 // TODO: clean up the interface now that usage is understood
