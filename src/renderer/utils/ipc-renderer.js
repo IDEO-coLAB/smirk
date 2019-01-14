@@ -1,5 +1,4 @@
 import { ipcRenderer } from 'electron'
-import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 import {
   NOTIFICATION_TYPES,
   NOTIFICATION_MUTATIONS,
@@ -28,10 +27,5 @@ export const registerIPCRendererListeners = ($store, $router) => {
 
   ipcRenderer.on('MAIN_MENU_NAV_TRIGGERED', (event, data) => {
     $router.push({ path: data.path })
-  })
-
-  ipcRenderer.on('MAIN_APP_CONFIG_READY', (event, data) => {
-    // TODO: rename to app config
-    $store.commit(APP_STATE_MUTATIONS.SET_SETTINGS, data)
   })
 }

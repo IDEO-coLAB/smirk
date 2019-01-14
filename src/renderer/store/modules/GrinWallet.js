@@ -1,19 +1,10 @@
-/*
-TODO:
-- Add a heartbeat ping to sync (http://localhost:13420/v1/wallet/owner/node_height)
-- Add data caching layer
-*/
-
 import axios from 'axios'
 import _ from 'lodash'
-
+import { remote } from 'electron'
 import models from '../../models'
 import { expandWindow } from '../../utils/app-layout'
-
 import {
-  // NOTIFICATION_TYPES,
   NOTIFICATION_MUTATIONS,
-  // createNetworkErrorNotification,
   createLargeErrorNotification
 } from './Notifications'
 
@@ -39,12 +30,16 @@ export const GRIN_WALLET_ACTIONS = {
   FINALIZE_TRANSACTION: 'FINALIZE_TRANSACTION'
 }
 
+const grinConfig = remote.getGlobal('GRIN_CONFIG')
 const axiosData = {
-  // TODO: dynamically pull these in from the main proc
-  headers: { 'Authorization': 'Basic Z3JpbjppMExTU0FqWUhmWE5RMlVIeDlkbg==' }
+  headers: {
+    'Authorization': grinConfig.apiSecret
+  }
 }
+// TODO: handle the case when apiSecret is missing
 const axiosInstance = axios.create(axiosData)
 
+// TODO: clean up the interface now that usage is understood
 const state = {
   summary: null,
   outputs: [],
@@ -52,6 +47,7 @@ const state = {
   nodeHeight: null
 }
 
+// TODO: clean up the interface now that usage is understood
 const getters = {
   wallet: (state) => state,
   spendable: (state) => {
@@ -72,13 +68,9 @@ const mutations = {
     state.summary = new models.WalletSummary(data)
   },
   [GRIN_WALLET_MUTATIONS.SET_OUTPUTS] (state, data) {
-    // TODO: convert bytes into hex here - remove from OutputTile
-    // const commitmentBytes = this.commitment
-    // return Array.prototype.map.call(commitmentBytes, (byte) => {
-    //   return ('0' + (byte & 0xFF).toString(16)).slice(-2)
-    // }).join('')
     const buildOutputs = (outputs) => _.map(outputs, (output) => {
       const outputObj = new models.Output(output[0])
+      // TODO: convert bytes into hex; utils/grin
       const outputSig = output[1]
       return [outputObj, outputSig]
     })
@@ -153,6 +145,7 @@ const throwNetworkError = () => {
 }
 
 const actions = {
+  // GETS
   [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
     return axiosInstance.get(`${GRIN_OWNER_URL}/node_height`)
       .then((payload) => {
@@ -204,11 +197,7 @@ const actions = {
       .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
-  //
-  //
-  // POSTS!
-  //
-  //
+  // POSTS
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
     return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
       .then(payload => payload.data)

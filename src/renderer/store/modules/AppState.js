@@ -1,19 +1,15 @@
-// import _ from 'lodash'
 import axios from 'axios'
-// import assert from 'assert'
-// import ls from 'local-storage'
+import {
+  NOTIFICATION_MUTATIONS,
+  createLargeErrorNotification
+} from './Notifications'
 
-const axiosInstance = axios.create({})
-
-export const APP_STATE_LOCAL_STORAGE = {
-  // CURRENT_TX_ID: 'CURRENT_TX_ID'
-}
+const axiosInstance = axios.create()
 
 export const APP_STATE_MUTATIONS = {
   SET_UPLOADED_TX: 'SET_UPLOADED_TX',
   SET_APP_IS_EXPANDED: 'SET_APP_IS_EXPANDED',
-  SET_APP_IP_ADDRESS: 'SET_APP_IP_ADDRESS',
-  SET_SETTINGS: 'SET_SETTINGS'
+  SET_APP_IP_ADDRESS: 'SET_APP_IP_ADDRESS'
 }
 
 export const APP_STATE_ACTIONS = {
@@ -21,7 +17,6 @@ export const APP_STATE_ACTIONS = {
 }
 
 const state = {
-  settings: null,
   ipAddress: null,
   appIsExpanded: false,
   uploadedTransaction: null
@@ -29,16 +24,12 @@ const state = {
 
 const getters = {
   appState: (state) => state,
-  settings: (state) => state.settings,
   appIsExpanded: (state) => state.appIsExpanded,
   ipAddress: (state) => state.ipAddress,
   uploadedTransaction: (state) => state.uploadedTransaction
 }
 
 const mutations = {
-  [APP_STATE_MUTATIONS.SET_SETTINGS] (state, data) {
-    state.settings = data
-  },
   // TODO: Port scan to check if the user is reachable
   [APP_STATE_MUTATIONS.SET_APP_IP_ADDRESS] (state, data) {
     state.ipAddress = data
@@ -62,7 +53,16 @@ const actions = {
         return payload
       })
       .catch((error) => {
-        error.type = APP_STATE_ACTIONS.GET_APP_IP_ADDRESS
+        let notification = createLargeErrorNotification({
+          title: 'Error getting IP address',
+          message: `
+            <p>
+              There was an error getting your external IP address
+              from <code>https://api.ipify.org</code>.
+            </p>
+          `
+        })
+        commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
         throw error
       })
   }

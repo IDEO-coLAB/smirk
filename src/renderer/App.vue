@@ -14,20 +14,8 @@
 </template>
 
 <script>
-  // import { ipcRenderer } from 'electron'
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-  // import { expandWindow } from './utils/app-layout'
-  import {
-    APP_STATE_ACTIONS
-    // APP_STATE_MUTATIONS
-  } from './store/modules/AppState'
-  // TODO: Move notifications like this into the store actions!!
-  // import {
-  //   NOTIFICATION_TYPES,
-  //   NOTIFICATION_MUTATIONS
-  //   // createNetworkErrorNotification
-  // } from './store/modules/Notifications'
 
   import { registerIPCRendererListeners } from './utils/ipc-renderer'
   import { refreshAppState } from './utils/app-state'
@@ -44,11 +32,15 @@
       Notifications
     },
     mounted () {
-      // register handlers on the IPCRenderer so that the client
-      // can receive messages from the main process
+      // First thing is that we need to register handlers
+      // on the IPCRenderer so that the client can receive
+      // messages from the main process when we call refreshAppState()
       registerIPCRendererListeners(this.$store, this.$router)
 
-      // TODO: this is hacky; improve the network ping when have more time
+      // initialize all app data
+      refreshAppState(this.$store)
+
+      // TODO: hacky; improve the network ping when have more time
       let cachedNodeHeight = null
       setInterval(() => {
         this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT)
@@ -60,15 +52,8 @@
               // if node height changes, refresh the app state
               refreshAppState(this.$store)
             }
-            //
-            // if (this.$store.getters.notification.type === NOTIFICATION_TYPES.NETWORK) {
-            //   this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, null)
-            // }
           })
       }, 2000)
-
-      // TODO: move into the refresh function
-      this.$store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
     },
     computed: {
       appIsExpanded () {

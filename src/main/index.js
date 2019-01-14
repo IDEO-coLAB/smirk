@@ -11,9 +11,23 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-const PATHS = {
-  DOWNLOAD: app.getPath('downloads'),
-  GRIN: `${app.getPath('home')}/.grin/floo`
+const GRIN_PATH = `${app.getPath('home')}/.grin/floo`
+const DOWNLOAD_PATH = app.getPath('downloads')
+
+// This needs to be set otherwise no API access is granted
+// TODO: Ensure that if this is missing, the client handles gracefully
+const secretBuf = fs.readFileSync(`${GRIN_PATH}/.api_secret`)
+const grinApiSecretStr = secretBuf.toString()
+const grinAuthSecretBuf = Buffer.from(`grin:${grinApiSecretStr}`)
+const GRIN_AUTH_SECRET_B64 = grinAuthSecretBuf.toString('base64')
+
+// set grin config as global
+global.GRIN_CONFIG = {
+  path: {
+    download: DOWNLOAD_PATH,
+    grin: GRIN_PATH
+  },
+  apiSecret: `Basic ${GRIN_AUTH_SECRET_B64}`
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -31,7 +45,7 @@ const WINDOW_URL = process.env.NODE_ENV === 'development'
 const createWindow = async () => {
   // Initial window options
   mainWindow = new BrowserWindow({
-    title: 'Smirk',
+    title: 'smirk ;)',
     x: 50,
     y: 50,
     height: 120,
@@ -46,12 +60,13 @@ const createWindow = async () => {
 
   var mainMenu = Menu.buildFromTemplate([
     {
-      label: 'Smirk',
+      label: 'smirk ;)',
       submenu: [
         {
-          label: 'Settings',
+          label: 'Config',
           // TODO: Abstract out main + render constants
-          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/settings' })
+          // TODO: Also pull file paths for render and main into util
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/config' })
         },
         {
           label: 'Outputs',
@@ -65,7 +80,7 @@ const createWindow = async () => {
           type: 'separator'
         },
         {
-          label: 'Quit',
+          label: 'Quit smirk',
           click: () => app.quit()
         }
       ]
@@ -129,7 +144,7 @@ ipcMain.on('RESIZE_WINDOW', (event, data) => {
 })
 
 ipcMain.on('DOWNLOAD_FILE', (event, args) => {
-  fs.writeFile(`${PATHS.DOWNLOAD}/${args.filename}`, args.filedata, (error) => {
+  fs.writeFile(`${DOWNLOAD_PATH}/${args.filename}`, args.filedata, (error) => {
     if (error) {
       event.sender.send('FILE_DOWNLOAD_ERROR')
       return
@@ -138,18 +153,9 @@ ipcMain.on('DOWNLOAD_FILE', (event, args) => {
   })
 })
 
-ipcMain.on('GET_APP_CONFIG_FROM_MAIN', (event, args) => {
-  mainWindow.webContents.send('MAIN_APP_CONFIG_READY', {
-    paths: {
-      download: PATHS.DOWNLOAD,
-      grin: PATHS.GRIN
-    }
-  })
-})
-
-// const buffer = fs.readFileSync(PATHS.GRIN + '/.api_secret')
-// console.log('the secret is....')
-// console.log('Basic ' + buffer.toString('base64'))
+// ipcMain.on('GET_APP_CONFIG_FROM_MAIN', (event, args) => {
+//   mainWindow.webContents.send('MAIN_APP_CONFIG_READY', grinConfig)
+// })
 
 /**
  * Auto Updater

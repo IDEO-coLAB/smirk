@@ -11,29 +11,33 @@
       </span>
 
 			<div class="header-content">
-				Smirk Settings
+				Config
 			</div>
     </div>
 
 		<div class="body without-footer">
-      <h5>File Download Path</h5>
-      <code>{{settings.paths.download}}</code>
+      <section class="section">
+        <h5>File Download Path</h5>
+        <code>{{ config.path.download }}</code>
+      </section>
 
-      <h5>Grin library Path</h5>
-      <code>{{settings.paths.grin}}</code>
-
+      <section class="section">
+        <h5>Grin library Path</h5>
+        <code>{{ config.path.grin }}</code>
+      </section>
 		</div>
 
   </main>
 </template>
 
 <script>
+  import { remote } from 'electron'
   export default {
-    name: 'settings-page',
+    name: 'config-page',
     components: {},
     computed: {
-      settings () {
-        return this.$store.getters.settings
+      config () {
+        return remote.getGlobal('GRIN_CONFIG')
       }
     }
   }

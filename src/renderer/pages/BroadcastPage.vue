@@ -51,11 +51,11 @@
 
 <script>
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
-  import {
-    NOTIFICATION_MUTATIONS,
-    // createSmallSuccessNotification,
-    createLargeErrorNotification
-  } from '../store/modules/Notifications'
+  // import {
+  //   NOTIFICATION_MUTATIONS,
+  //   // createSmallSuccessNotification,
+  //   createLargeErrorNotification
+  // } from '../store/modules/Notifications'
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
 
@@ -73,15 +73,9 @@
       finalizeTransaction () {
         this.$store.dispatch(GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION, this.uploadedTransaction)
           .then((payload) => {
-
+            // things were broadcasted successfully
           })
-          .catch((error) => {
-            const notification = createLargeErrorNotification({
-              title: 'Transaction signing error',
-              message: error.response.data
-            })
-            // Set the notification on the app
-            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+          .catch(() => {
             // Remove the invalid uploaded tx
             this.$store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
           })
