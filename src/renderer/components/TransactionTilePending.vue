@@ -109,7 +109,6 @@
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
             // TODO: Best way to resync the app state
           })
-          // TODO: uniform error handler for the app
           .catch((error) => {
             const notification = createLargeErrorNotification({
               title: 'Error during cancellation',

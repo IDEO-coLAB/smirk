@@ -46,6 +46,7 @@
       }
     },
     computed: {
+      // TODO: move this into a filter
       commitmentHex () {
         const commitmentBytes = this.commitment
         return Array.prototype.map.call(commitmentBytes, (byte) => {

@@ -85,5 +85,6 @@
 </script>
 
 <style lang="sass">
+  // is this necessary?
   @import '~@/styles/app.sass'
 </style>

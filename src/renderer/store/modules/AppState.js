@@ -46,7 +46,7 @@ const mutations = {
 
 const actions = {
   [APP_STATE_ACTIONS.GET_APP_IP_ADDRESS] ({ commit }) {
-    // return axiosInstance.get(`http://ifconfig.co/port/8080`)
+    // Find an option closer to `http://ifconfig.co/port/8080`? We want port availability...
     return axiosInstance.get(`https://api.ipify.org?format=json`)
       .then((payload) => {
         commit(APP_STATE_MUTATIONS.SET_APP_IP_ADDRESS, payload.data.ip)

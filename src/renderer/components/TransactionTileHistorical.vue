@@ -46,14 +46,6 @@
       transactionWasReceived () {
         return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
       }
-      // date () {
-      //   // TODO: turn this into a short date string format filter
-      //   const dateFmt = 'MMM D'
-      //   const dateStr = !this.transaction.confirmation_ts
-      //     ? this.transaction.creation_ts
-      //     : this.transaction.confirmation_ts
-      //   return moment(dateStr).format(dateFmt)
-      // }
     }
   }
 </script>

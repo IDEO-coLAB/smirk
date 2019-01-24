@@ -45,7 +45,7 @@ const WINDOW_URL = process.env.NODE_ENV === 'development'
 const createWindow = async () => {
   // Initial window options
   mainWindow = new BrowserWindow({
-    title: 'smirk ;)',
+    title: 'Grin Wallet ツ',
     x: 50,
     y: 50,
     height: 120,
@@ -60,7 +60,7 @@ const createWindow = async () => {
 
   var mainMenu = Menu.buildFromTemplate([
     {
-      label: 'smirk ;)',
+      label: 'Grin Wallet ツ',
       submenu: [
         {
           label: 'Config',
@@ -138,7 +138,7 @@ app.on('before-quit', () => {
   willQuitApp = true
 })
 
-// TODO: Pull events constants into own file to dedupe
+// TODO: Pull events constants into own file to de-dupe
 ipcMain.on('RESIZE_WINDOW', (event, data) => {
   mainWindow.setSize(data.width, data.height, true)
 })
@@ -152,10 +152,6 @@ ipcMain.on('DOWNLOAD_FILE', (event, args) => {
     event.sender.send('FILE_DOWNLOAD_SUCCESS')
   })
 })
-
-// ipcMain.on('GET_APP_CONFIG_FROM_MAIN', (event, args) => {
-//   mainWindow.webContents.send('MAIN_APP_CONFIG_READY', grinConfig)
-// })
 
 /**
  * Auto Updater
