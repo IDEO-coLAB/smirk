@@ -1,7 +1,7 @@
-# smirk ツ
-> A user-friendly Grin wallet
+# Grin Wallet ツ
+> A user-friendly Grin client
 
-#### Important: smirk is dependent on Grin and is not yet ready for production (though it is close!). This warning will be removed when the production app is bundled and shipped.
+#### Important: this wallet is dependent on Grin and is not yet ready for production (though it is close!). This warning will be removed when the production app is bundled and shipped.
 
 ----
 
