@@ -80,7 +80,7 @@ const createWindow = async () => {
           type: 'separator'
         },
         {
-          label: 'Quit smirk',
+          label: 'Quit',
           click: () => app.quit()
         }
       ]

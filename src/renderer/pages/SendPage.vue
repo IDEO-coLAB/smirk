@@ -237,10 +237,10 @@
   import {
     NOTIFICATION_MUTATIONS,
     createSmallSuccessNotification
-    // createLargeErrorNotification
   } from '../store/modules/Notifications'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
   import { prettyNumToGrinBaseNum } from '../utils/grin'
+  import { refreshAppState } from '../utils/app-state'
 
   const SEND_STEPS = {
     INPUT_DATA: 'INPUT_DATA',
@@ -253,7 +253,7 @@
       key: 'HTTP',
       grinApiMethod: 'http',
       title: 'Send directly to a wallet',
-      detail: 'Connect to a recipient directly and send Grin instantly.'
+      detail: 'Connect directly to a recipient and send Grin instantly.'
     },
     FILE: {
       key: 'FILE',
@@ -314,7 +314,7 @@
             // Handle HTTP and FILE
             switch (this.sendMethod) {
               case SEND_METHODS.FILE:
-                // Alert the user
+                // Notify the user
                 const fileNotification = createSmallSuccessNotification({
                   title: 'Transaction file created'
                 })
@@ -330,7 +330,7 @@
                 this.downloadTransaction()
                 break
               case SEND_METHODS.HTTP:
-                // Alert the user
+                // Notify the user
                 const httpNotification = createSmallSuccessNotification({
                   title: 'Transaction sent'
                 })
@@ -342,6 +342,9 @@
               default:
                 console.warn('unknown sendMethod on transaction:', this.sendMethod)
             }
+
+            // Update the app state
+            refreshAppState(this.$store)
           })
       }
     }

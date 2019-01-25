@@ -127,7 +127,7 @@ const handleOwnerListenerNetworkError = ({ commit, store }) => {
 
 const handleGrinApiError = ({ commit }, title) => {
   return (error) => {
-    // Network errors are handled downstream
+    // Network errors are handled last
     if (error.message === 'Network Error') {
       throw error
     }
@@ -140,10 +140,6 @@ const handleGrinApiError = ({ commit }, title) => {
   }
 }
 
-const throwNetworkError = () => {
-  throw new Error('Network Error')
-}
-
 const actions = {
   // GETS
   [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
@@ -152,7 +148,7 @@ const actions = {
         const height = payload.data[0]
         const nodeIsOnline = payload.data[1]
         if (!nodeIsOnline) {
-          throwNetworkError()
+          throw new Error('Network Error')
         }
         commit(GRIN_WALLET_MUTATIONS.SET_NODE_HEIGHT, height)
         return height
@@ -183,7 +179,7 @@ const actions = {
       .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
-  [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }, id) {
+  [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }) {
     return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
       .then((payload) => {
         const data = payload.data[1]

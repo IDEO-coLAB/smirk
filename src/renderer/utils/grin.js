@@ -6,13 +6,6 @@ export const prettyNumToGrinBaseNum = (value) => {
   return parseFloat(value) * 1e9
 }
 
-// This is a filter now
-// export const grinBaseNumToPrettyNum = (value) => {
-//   // TODO: improve error handling
-//   if (_.isNil(value) || !_.isNumber(value)) return null
-//   return parseInt(value) / 1e9
-// }
-
 // TODO: convert bytes into hex here - remove from OutputTile
 // const commitmentBytes = this.commitment
 // return Array.prototype.map.call(commitmentBytes, (byte) => {

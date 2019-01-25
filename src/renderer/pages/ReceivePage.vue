@@ -149,10 +149,13 @@
   import FullscreenFileUpload from '../components/FullscreenFileUpload'
   import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
-  // import {
-  //   NOTIFICATION_MUTATIONS,
-  //   createLargeErrorNotification
-  // } from '../store/modules/Notifications'
+  import { refreshAppState } from '../utils/app-state'
+  import {
+    NOTIFICATION_TYPES,
+    NOTIFICATION_MUTATIONS,
+    createLargeErrorNotification,
+    createSmallSuccessNotification
+  } from '../store/modules/Notifications'
 
   const RECEIVE_STEPS = {
     SELECT_METHOD: 'SELECT_METHOD',
@@ -238,11 +241,29 @@
             // set the signed tx file in memory
             this.signedTransactionFile = payload
 
+            // Notify the user
+            const notification = createSmallSuccessNotification({
+              title: 'Transaction file received'
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+
             // Advance the step
             this.setStep(this.RECEIVE_STEPS.RECEIVE_COMPLETE)
 
             // Auto-download the signed file
             this.downloadTransaction()
+
+            // Update the app state
+            refreshAppState(this.$store)
+          })
+          .catch((error) => {
+            // Notify the user
+            const notification = createLargeErrorNotification({
+              title: 'Error receiving transaction file',
+              type: NOTIFICATION_TYPES.GRIN_API,
+              message: `${error.response.data}`
+            })
+            this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
           })
       }
     }

@@ -45,14 +45,13 @@
       <button
         @click="setState(STATES.PASSIVE)"
         class="button is-small">
-          <!-- <span class="icon is-small">
-            <i class="fas fa-check"></i>
-          </span> -->
-          <span>Nevermind</span>
-        </button>
+        Nevermind
+      </button>
       <button
         @click="cancel"
-        class="button is-small is-danger">Confirm Cancellation</button>
+        class="button is-small is-danger">
+        Confirm Cancellation
+      </button>
     </div>
 
   </div>
@@ -68,6 +67,7 @@
     createLargeErrorNotification
   } from '../store/modules/Notifications'
   import { GRIN_WALLET_ACTIONS } from '../store/modules/GrinWallet'
+  import { refreshAppState } from '../utils/app-state'
 
   const STATES = {
     PASSIVE: 'PASSIVE',
@@ -98,18 +98,24 @@
         this.currentState = state
       },
       cancel (event) {
+        // stop event propagation
         event.stopPropagation()
+
         this.$store.dispatch(GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION, this.transaction.id)
           .then((payload) => {
+            // Notify the user
             const notification = createLargeSuccessNotification({
               title: 'Transaction cancelled',
               type: NOTIFICATION_TYPES.GRIN_API,
-              message: `Transaction ${this.transaction.id} successfully cancelled. It will take 10 blocks for this to be reflected in your spendable balance.`
+              message: `Transaction ${this.transaction.id} was successfully cancelled. It may take several blocks for this to be reflected in your spendable balance.`
             })
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
-            // TODO: Best way to resync the app state
+
+            // Refresh the app
+            refreshAppState(this.$store)
           })
           .catch((error) => {
+            // Notify the user
             const notification = createLargeErrorNotification({
               title: 'Error during cancellation',
               type: NOTIFICATION_TYPES.GRIN_API,

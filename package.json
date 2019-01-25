@@ -2,7 +2,7 @@
   "name": "smirk",
   "version": "0.0.0",
   "author": "Gavin McDermott <gavinmcdermott@gmail.com>",
-  "description": "a user-friendly Grin wallet client",
+  "description": "A user-friendly Grin wallet",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {

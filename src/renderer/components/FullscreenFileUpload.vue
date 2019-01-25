@@ -86,5 +86,5 @@
 
 <style lang="sass">
   // is this necessary?
-  @import '~@/styles/app.sass'
+  // @import '~@/styles/app.sass'
 </style>

@@ -54,15 +54,15 @@
       <div class="tags">
         <p>
           <span class="tag is-success">{{ spendable | grinBaseNumToPrettyNum }} Grin</span>
-          <span class="is-bold">Spendable</span>
+          <span class="is-bold">Spendable Now</span>
         <br>
           <span class="tag is-warning">{{ locked | grinBaseNumToPrettyNum }} Grin</span>
           <span class="is-bold">Awaiting Confirmation</span>
         </p>
       </div>
-      <hr>
 
       <div v-if="pendingReceivedTransactions.length">
+        <hr>
         <h3>Incoming Transactions</h3>
         <div v-for="tx in pendingReceivedTransactions">
           <TransactionTilePending

@@ -16,7 +16,6 @@
 <script>
   import Notifications from './components/Notifications'
   import { GRIN_WALLET_ACTIONS } from './store/modules/GrinWallet'
-
   import { registerIPCRendererListeners } from './utils/ipc-renderer'
   import { refreshAppState } from './utils/app-state'
 
@@ -40,7 +39,7 @@
       // initialize all app data
       refreshAppState(this.$store)
 
-      // TODO: hacky; improve the network ping when have more time
+      // TODO: this is hacky; improve the network ping when you have more time
       let cachedNodeHeight = null
       setInterval(() => {
         this.$store.dispatch(GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT)

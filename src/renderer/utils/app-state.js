@@ -8,6 +8,7 @@ const getStateFromGrin = ($store) => {
   $store.dispatch(APP_STATE_ACTIONS.GET_APP_IP_ADDRESS)
 }
 
+// TODO: pull the constants used in MAIN and RENDERER into a shared file
 const getStateFromMainProcess = ($store) => {
   ipcRenderer.send('GET_APP_CONFIG_FROM_MAIN')
 }
