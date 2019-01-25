@@ -14,9 +14,6 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts'
   font-style: normal
 
 
-
-
-
 // visual layering
 //////////////////////////////////////////
 $visual-idx-top: 100
@@ -88,27 +85,15 @@ $dropdown-item-active-background-color: $grey-lighter
 $dropdown-divider-background-color: $grey-dark
 
 
-
-
-
-
-
-
-
-
-
-
-
+// Tables
+//////////////////////////////////////////
 $table-cell-padding: 0.5em 0.25em
-
-
 $table-background-color: $grey-light
 
 
-
-
+// Sections
+//////////////////////////////////////////
 $section-padding: .5rem .5rem
-
 
 
 // Bulma Import
@@ -134,6 +119,16 @@ body, html
   overflow: hidden
   height: 100%
   width: 100%
+
+
+// Tables
+//////////////////////////////////////////
+// TODO: clean up spacing and margins
+// in tables for overflowing cells (if continuing to use Bulma)
+tr
+  td
+    overflow-x: scroll
+    max-width: 9rem
 
 
 // App Sizing
@@ -190,33 +185,13 @@ body, html
   padding: 0.5em
 
 
-
-
-
-
-
-
-
+// Sections
+//////////////////////////////////////////
 .section
   border-radius: $radius
   margin-bottom: .5rem
   padding-left: 0rem
   padding-right: 0rem
-
-
-
-
-// TODO: clean up spacing and margins
-// in tables for overflowing cells (if continuing to use Bulma)
-tr
-  td
-    overflow-x: scroll
-    max-width: 9rem
-
-
-
-
-
 
 
 // Dashboard
@@ -241,20 +216,8 @@ tr
   width: calc(100% * .382)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Progress Bars
+//////////////////////////////////////////
 .progress-bars
   width: 100%
   height: 26px
@@ -285,26 +248,6 @@ tr
 
 .progress-bar.is-error
   background-color: $red
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -350,24 +293,14 @@ tr
   border: none
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+// Transactions
+//////////////////////////////////////////
 .transaction
   background-color: $grey
   border-radius: $radius
   padding: 1rem
   // padding: .5rem 1rem 1rem 1rem
-  margin-bottom: 1rem
+  margin-bottom: 2rem
 
 .transaction-header,
 .transaction-body
@@ -375,29 +308,8 @@ tr
   font-family: monospace
   margin-bottom: .5rem
 
-// .transaction-header
-
 .transaction-footer
   position: relative
-  // margin-bottom: .75rem
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Dropdown
@@ -420,24 +332,6 @@ hr.dropdown-divider
   margin: .25rem 1rem
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Buttons
 //////////////////////////////////////////
 .button
@@ -458,19 +352,12 @@ hr.dropdown-divider
   color: white
   font-weight: $weight-semibold
 
-
 .button.is-header
   height: calc(#{$app-height-minimized} / 2)
   width: 400px
   border-radius: 0px
   font-size: $size-4
   justify-content: flex-start
-
-
-
-
-
-
 
 .button.is-dashboard
   width: 100%
@@ -485,28 +372,6 @@ hr.dropdown-divider
   border-color: $grey
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Notifications
 //////////////////////////////////////////
 .notifications
@@ -516,18 +381,6 @@ hr.dropdown-divider
   width: 100%
   background-color: hsla(0, 2%, 44%, 0.71)
   z-index: $visual-idx-top
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Custom Utils
@@ -549,108 +402,9 @@ hr.dropdown-divider
   justify-content: left
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// OLD
 //////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// TODO: CLEAN UP THE STRAGGLERS!
+//////////////////////////////////////////
 .select:not(.is-multiple):not(.is-loading)::after
   border-color: $green
   right: 1.125em
@@ -659,24 +413,8 @@ hr.dropdown-divider
 .select:not(.is-multiple):not(.is-loading):hover::after
   border-color: $green
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .label
   color: $grey-light
-
 
 .input[disabled],
 .select select[disabled],
@@ -687,13 +425,6 @@ hr.dropdown-divider
   box-shadow: none
   color: $white
   font-style: italic
-
-
-
-
-
-
-
 
 .is-checkradio[type=checkbox] + label,
 .is-checkradio[type=radio] + label

@@ -39,7 +39,7 @@
       v-if="appIsExpanded">
 
       <!-- Chart for balance -->
-      <h3>Balance breakdown</h3>
+      <h3>Balance Breakdown</h3>
       <div class="progress-bars">
         <span
           class="progress-bar is-success"
@@ -60,22 +60,24 @@
           <span class="is-bold">Awaiting Confirmation</span>
         </p>
       </div>
+      <hr>
 
       <div v-if="pendingReceivedTransactions.length">
-        <h3>Pending incoming transactions</h3>
+        <h3>Incoming Transactions</h3>
         <div v-for="tx in pendingReceivedTransactions">
           <TransactionTilePending
             :transaction="tx" />
         </div>
+        <hr>
       </div>
 
       <div v-if="pendingSentTransactions.length">
-        <hr>
-        <h3>Pending outgoing transactions</h3>
+        <h3>Outgoing Transactions</h3>
         <div v-for="tx in pendingSentTransactions">
           <TransactionTilePending
             :transaction="tx" />
         </div>
+        <hr>
       </div>
 
     </div>
