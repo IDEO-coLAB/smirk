@@ -58,30 +58,20 @@
       <!-- Handle the IP use case -->
       <div v-if="receiveMethod===RECEIVE_METHODS.HTTP">
         <div class="body without-footer">
-          <h3>Receive directly</h3>
-          <p>Follow the directions below to receive transactions directly from another wallet.</p>
+          <p>Follow the directions below to connect to, and directly receive from another Grin wallet.</p>
 
           <section class="section">
-            <h4>
-              <span class="icon has-text-danger">
-                <i class="fas fa-caret-square-right"></i>
-              </span>
-              &nbsp;Share your IP address
-            </h4>
+            <h4>1) Share your IP address</h4>
             <p>
-              You need to share your IP address with the sender so they can connect to your wallet. Your current IP address is <code>{{ipAddress}}</code>
+              Start by sharing your IP address with the sender. Your current IP address is: <br>
+              <code>{{ipAddress}}</code>
             </p>
           </section>
 
           <section class="section">
-            <h4>
-              <span class="icon has-text-danger">
-                <i class="fas fa-caret-square-right"></i>
-              </span>
-              &nbsp;Listen for transactions
-            </h4>
+            <h4>2) Listen for transactions</h4>
             <p>
-              You also need to enable your wallet to listen for incoming transactions. Start the wallet listener using the following command: <br> <code>$ grin wallet listen</code>
+              Then use the following command to listen for incoming transactions: <br> <code>$ grin wallet listen</code>
             </p>
           </section>
         </div>
@@ -90,13 +80,12 @@
       <!-- Handle FILE use case -->
       <div v-if="receiveMethod===RECEIVE_METHODS.FILE">
         <div class="body" >
-          <h3>Transact by file</h3>
-          <p v-if="!uploadedTransaction">Drop a transaction file into the upload area.</p>
+          <p v-if="!uploadedTransaction">Drop a transaction file into the area below.</p>
           <p v-else>
             <span class="icon has-text-success">
               <i class="fas fa-file-signature"></i>
             </span>
-            Sign the transaction before returning it to the sender.
+            Sign the transaction, then return to sender.
           </p>
 
           <section class="section">
@@ -120,7 +109,7 @@
             class="column button is-success is-footer is-fullwidth"
             v-bind:disabled="!uploadedTransaction"
             @click="receiveTransaction">
-            Sign Transaction
+            Sign
           </button>
         </div>
       </div>
@@ -129,9 +118,8 @@
 
     <!-- Handle the RECEIVE_COMPLETE step -->
     <div v-if="currentStep===RECEIVE_STEPS.RECEIVE_COMPLETE">
-      <div class="body without-footer">
-        <h3>Transaction signed</h3>
-        <p>You'll find the signed transaction file in your <code>~/Downloads/</code> folder. You can also copy the JSON below and return it to the sender over secure chat or email.</p>
+      <div class="body">
+        <p>A signed transaction was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
         <p class="json">{{uploadedTransaction}}</p>
         <button
           class="button is-success is-fullwidth"
@@ -139,6 +127,14 @@
           Download Again
         </button>
       </div>
+
+      <div class="footer columns is-gapless is-mobile">
+        <router-link tag="button" to="/dashboard" class="column button is-footer is-fullwidth">
+          Finish
+        </router-link>
+      </div>
+
+
     </div>
 
   </div>
@@ -173,7 +169,7 @@
       key: 'FILE',
       grinMethod: 'file',
       title: 'Receive a transaction file',
-      detail: 'Receive Grin using a transaction file that you already received.'
+      detail: 'Receive Grin using a transaction file.'
     }
   }
 
@@ -220,6 +216,7 @@
       setMethod (method) {
         this.currentStep = this.RECEIVE_STEPS.SELECT_METHOD
         this.receiveMethod = method
+        this.removeTransaction()
       },
       setStep (step) {
         this.currentStep = step
@@ -228,6 +225,7 @@
         this.$store.commit(APP_STATE_MUTATIONS.SET_UPLOADED_TX, null)
       },
       downloadTransaction () {
+        // TODO: Ensure an ID
         // TODO: should we use a dynamic/different name for the file?
         // TODO: check for uploaded tx?
         ipcRenderer.send('DOWNLOAD_FILE', {
@@ -264,6 +262,9 @@
               message: `${error.response.data}`
             })
             this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
+
+            // Clear the transaction from the app
+            this.removeTransaction()
           })
       }
     }
