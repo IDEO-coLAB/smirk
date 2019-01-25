@@ -79,6 +79,7 @@
 
       <!-- Handle FILE use case -->
       <div v-if="receiveMethod===RECEIVE_METHODS.FILE">
+
         <div class="body" >
           <p v-if="!uploadedTransaction">Drop a transaction file into the area below.</p>
           <p v-else>
@@ -119,8 +120,8 @@
     <!-- Handle the RECEIVE_COMPLETE step -->
     <div v-if="currentStep===RECEIVE_STEPS.RECEIVE_COMPLETE">
       <div class="body">
-        <p>A signed transaction was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
-        <p class="json">{{uploadedTransaction}}</p>
+        <p>The signed transaction was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
+        <p class="json">{{signedTxJSON}}</p>
         <button
           class="button is-success is-fullwidth"
           @click="downloadTransaction">
@@ -190,7 +191,7 @@
         currentStep: RECEIVE_STEPS.SELECT_METHOD,
         RECEIVE_METHODS,
         receiveMethod: RECEIVE_METHODS.HTTP,
-        signedTransactionFile: null
+        signedTxJSON: null
       }
     },
     computed: {
@@ -228,15 +229,15 @@
         // TODO: should we use a dynamic/different name for the file?
         // TODO: check for uploaded tx?
         ipcRenderer.send('DOWNLOAD_FILE', {
-          filename: `tx_receive_${this.signedTransactionFile.id}`,
-          filedata: JSON.stringify(this.signedTransactionFile)
+          filename: `tx_receive_${this.signedTxJSON.id}`,
+          filedata: JSON.stringify(this.signedTxJSON)
         })
       },
       receiveTransaction () {
         this.$store.dispatch(GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION, this.uploadedTransaction)
           .then((payload) => {
             // set the signed tx file in memory
-            this.signedTransactionFile = payload
+            this.signedTxJSON = payload
 
             // Notify the user
             const notification = createSmallSuccessNotification({

@@ -42,9 +42,9 @@
         }
 
         // If it has two participants and the second participant
-        // has signed, then we need to broadcast the transaction
+        // has signed, then we need to finalize the transaction
         if (hasTwoParticipants && recipientHasSigned) {
-          return this.$router.push({ path: '/broadcast' })
+          return this.$router.push({ path: '/finalize' })
         }
         this.$router.push({ path: '/receive' })
       },

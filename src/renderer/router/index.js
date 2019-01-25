@@ -4,7 +4,7 @@ import Router from 'vue-router'
 
 import DashboardPage from '../pages/DashboardPage'
 import ReceivePage from '../pages/ReceivePage'
-import BroadcastPage from '../pages/BroadcastPage'
+import FinalizePage from '../pages/FinalizePage'
 import SendPage from '../pages/SendPage'
 import TransactionsPage from '../pages/TransactionsPage'
 import OutputsPage from '../pages/OutputsPage'
@@ -18,7 +18,7 @@ Vue.use(Router)
 const PATHS = {
   SEND: '/send',
   RECEIVE: '/receive',
-  BROADCAST: '/broadcast',
+  FINALIZE: '/finalize',
   DASHBOARD: '/dashboard',
   TRANSACTIONS: '/transactions',
   OUTPUTS: '/outputs',
@@ -32,7 +32,7 @@ const handleAppSizing = ($store, path) => {
   switch (path) {
     case PATHS.SEND:
     case PATHS.RECEIVE:
-    case PATHS.BROADCAST:
+    case PATHS.FINALIZE:
     case PATHS.TRANSACTIONS:
     case PATHS.OUTPUTS:
     case PATHS.CONFIG:
@@ -84,9 +84,9 @@ export default new Router({
       }
     },
     {
-      path: PATHS.BROADCAST,
-      name: 'broadcast-page',
-      component: BroadcastPage,
+      path: PATHS.FINALIZE,
+      name: 'finalize-page',
+      component: FinalizePage,
       beforeEnter: (to, from, next) => {
         const $store = this.a.app.$store
         handleAppSizing($store, to.path)

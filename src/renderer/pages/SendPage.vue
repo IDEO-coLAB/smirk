@@ -216,8 +216,8 @@
         v-if="sendMethod===SEND_METHODS.FILE"
         class="body">
         <!-- TODO: specific path messaging -->
-        <p>A transaction file was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
-        <p class="json">{{ transactionFileJSON }}</p>
+        <p>The transaction file was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
+        <p class="json">{{ signedTxJSON }}</p>
         <button
           class="button is-success is-fullwidth"
           @click="downloadTransaction">
@@ -279,7 +279,7 @@
         SEND_METHODS: SEND_METHODS,
         sendMethod: SEND_METHODS.HTTP,
         transactionTemplate: new models.TransactionTemplate(),
-        transactionFileJSON: null
+        signedTxJSON: null
       }
     },
     methods: {
@@ -296,8 +296,8 @@
       downloadTransaction () {
         // TODO: should we use a dynamic/different name for the file?
         ipcRenderer.send('DOWNLOAD_FILE', {
-          filename: `tx_send_${this.transactionFileJSON.id}`,
-          filedata: JSON.stringify(this.transactionFileJSON)
+          filename: `tx_send_${this.signedTxJSON.id}`,
+          filedata: JSON.stringify(this.signedTxJSON)
         })
       },
       sendTransaction () {
@@ -319,8 +319,8 @@
             // Handle HTTP and FILE
             switch (this.sendMethod) {
               case SEND_METHODS.FILE:
-                // Set the local variable so a user can copy and past manually
-                this.transactionFileJSON = payload
+                // Set the local variable so a user can copy and paste manually
+                this.signedTxJSON = payload
 
                 // Route to the completion page
                 this.setStep(this.SEND_STEPS.SEND_COMPLETE)
