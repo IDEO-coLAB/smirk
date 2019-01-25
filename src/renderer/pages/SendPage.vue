@@ -214,16 +214,21 @@
       <!-- Completion for FILE Send -->
       <div
         v-if="sendMethod===SEND_METHODS.FILE"
-        class="body without-footer">
-        <h3>Transaction file downloaded</h3>
+        class="body">
         <!-- TODO: specific path messaging -->
-        <p>You'll find the transaction file in your <code>~/Downloads/</code> folder. You can also copy the JSON below and send it to a recipient over secure chat or email.</p>
+        <p>A transaction file was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
         <p class="json">{{ transactionFileJSON }}</p>
         <button
           class="button is-success is-fullwidth"
           @click="downloadTransaction">
           Download Again
         </button>
+      </div>
+
+      <div class="footer columns is-gapless is-mobile">
+        <router-link tag="button" to="/dashboard" class="column button is-footer is-fullwidth">
+          Finish
+        </router-link>
       </div>
 
       <!-- We do not require explicit confirm screen for HTTP (comments below) -->
@@ -314,12 +319,6 @@
             // Handle HTTP and FILE
             switch (this.sendMethod) {
               case SEND_METHODS.FILE:
-                // Notify the user
-                const fileNotification = createSmallSuccessNotification({
-                  title: 'Transaction file created'
-                })
-                this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, fileNotification)
-
                 // Set the local variable so a user can copy and past manually
                 this.transactionFileJSON = payload
 
@@ -328,16 +327,23 @@
 
                 // Auto-download the content to the filesystem
                 this.downloadTransaction()
+
+                // Notify the user
+                const fileNotification = createSmallSuccessNotification({
+                  title: 'Transaction file created'
+                })
+                this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, fileNotification)
                 break
               case SEND_METHODS.HTTP:
+                // there is no file/JSON for a person to work with
+                // so we can route them back to the dashboard
+                this.$router.push({ path: '/dashboard' })
+
                 // Notify the user
                 const httpNotification = createSmallSuccessNotification({
                   title: 'Transaction sent'
                 })
                 this.$store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, httpNotification)
-                // there is no file/JSON for a person to work with
-                // so we can route them back to the dashboard
-                this.$router.push({ path: '/dashboard' })
                 break
               default:
                 console.warn('unknown sendMethod on transaction:', this.sendMethod)

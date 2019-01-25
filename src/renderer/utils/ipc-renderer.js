@@ -12,7 +12,7 @@ export const registerIPCRendererListeners = ($store, $router) => {
     // TODO: dynamic download path
     const notification = createSmallSuccessNotification({
       type: NOTIFICATION_TYPES.ELECTRON_PROC,
-      title: 'Download successful'
+      title: 'File downloaded'
     })
     $store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
   })
@@ -20,7 +20,7 @@ export const registerIPCRendererListeners = ($store, $router) => {
   ipcRenderer.on('FILE_DOWNLOAD_ERROR', (event, data) => {
     const notification = createSmallErrorNotification({
       type: NOTIFICATION_TYPES.ELECTRON_PROC,
-      title: 'Download error'
+      title: 'File download error'
     })
     $store.commit(NOTIFICATION_MUTATIONS.SET_NOTIFICATION, notification)
   })

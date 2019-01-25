@@ -8,7 +8,6 @@
       'is-minimized' : !appIsExpanded
     }">
     <Notifications />
-    {{ notification }}
     <router-view></router-view>
   </div>
 </template>

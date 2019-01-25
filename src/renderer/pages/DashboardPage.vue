@@ -68,16 +68,15 @@
           <TransactionTilePending
             :transaction="tx" />
         </div>
-        <hr>
       </div>
 
       <div v-if="pendingSentTransactions.length">
+        <hr>
         <h3>Outgoing Transactions</h3>
         <div v-for="tx in pendingSentTransactions">
           <TransactionTilePending
             :transaction="tx" />
         </div>
-        <hr>
       </div>
 
     </div>
