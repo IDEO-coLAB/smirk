@@ -1,8 +1,6 @@
 <template>
   <div class="transaction">
 
-    <!-- <div class="transaction-header">{{ transaction.creation_ts | dateFormatLong }}</div> -->
-
     <div class="transaction-body">
       <table class="table is-fullwidth">
         <tbody>
@@ -55,7 +53,6 @@
     </div>
 
   </div>
-
 </template>
 
 <script>
