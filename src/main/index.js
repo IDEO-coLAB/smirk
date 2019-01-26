@@ -11,24 +11,53 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-const GRIN_PATH = `${app.getPath('home')}/.grin/floo`
+// TODO: Make floonet / usernet dynamically handled
+const GRIN_PATH = `${app.getPath('home')}/.grin`
+const GRIN_FLOO_PATH = `${GRIN_PATH}/floo`
+const GRIN_MAIN_PATH = `${GRIN_PATH}/main`
 const DOWNLOAD_PATH = app.getPath('downloads')
 
-// This needs to be set otherwise no API access is granted
 // TODO: Ensure that if this is missing, the client handles gracefully
-const secretBuf = fs.readFileSync(`${GRIN_PATH}/.api_secret`)
-const grinApiSecretStr = secretBuf.toString()
-const grinAuthSecretBuf = Buffer.from(`grin:${grinApiSecretStr}`)
-const GRIN_AUTH_SECRET_B64 = grinAuthSecretBuf.toString('base64')
+const getApiSecret = (forMainnet) => {
+  const filePath = forMainnet
+    ? `${GRIN_MAIN_PATH}/.api_secret`
+    : `${GRIN_FLOO_PATH}/.api_secret`
+  const secretBuf = fs.readFileSync(filePath)
+  const apiSecretStr = secretBuf.toString()
+  const authSecretBuf = Buffer.from(`grin:${apiSecretStr}`)
+  const authSecretBase64 = authSecretBuf.toString('base64')
+
+  return `Basic ${authSecretBase64}`
+}
+
+const MAIN_API_SECRET = getApiSecret(true)
+const FLOO_API_SECRET = getApiSecret()
 
 // set grin config as global
-global.GRIN_CONFIG = {
-  path: {
-    download: DOWNLOAD_PATH,
-    grin: GRIN_PATH
+global.GLOBAL_GRIN_CONFIG = {
+  paths: {
+    downloads: DOWNLOAD_PATH,
+    mainnet: GRIN_MAIN_PATH,
+    floonet: GRIN_FLOO_PATH
   },
-  apiSecret: `Basic ${GRIN_AUTH_SECRET_B64}`
+  secrets: {
+    mainnet: MAIN_API_SECRET,
+    floonet: FLOO_API_SECRET
+  },
+  node: {
+    isFloonet: true
+  }
 }
+
+const updateGrinConfig = (config = {}) => {
+  global.GLOBAL_GRIN_CONFIG = Object.assign(global.GLOBAL_GRIN_CONFIG, config)
+}
+
+// TODO: Pull events constants into own file to de-dupe
+ipcMain.on('UPDATE_GLOBAL_GRIN_CONFIG', (event, config) => {
+  updateGrinConfig(config)
+  event.sender.send('GLOBAL_GRIN_CONFIG_UPDATED', global.GLOBAL_GRIN_CONFIG)
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -63,10 +92,10 @@ const createWindow = async () => {
       label: 'Grin Wallet ツ',
       submenu: [
         {
-          label: 'Config',
+          label: 'Settings',
           // TODO: Abstract out main + render constants
           // TODO: Also pull file paths for render and main into util
-          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/config' })
+          click: () => mainWindow.webContents.send('MAIN_MENU_NAV_TRIGGERED', { path: '/settings' })
         },
         {
           label: 'Outputs',

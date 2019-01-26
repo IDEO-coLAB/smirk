@@ -16,24 +16,15 @@
     </div>
 
 		<div class="body without-footer">
-      <h3>Unspent outputs</h3>
-      <p>some text that is helpful</p>
+      <h4>Current unspent outputs</h4>
+      <br>
       <OutputTile
         v-for="data, idx in unspent"
         :key="`unspent_${idx}`"
         :output="data[0]"
         :commitment="data[1]"/>
 
-      <hr>
-      <h3>Spent outputs</h3>
-      <p>some text that is helpful</p>
-      <OutputTile
-        v-for="data, idx in spent"
-        :key="`spent_${idx}`"
-        :output="data[0]"
-        :commitment="data[1]"/>
-
-      <!-- TODO: dynamic load and fetching -->
+      <!-- TODO: dynamic load and fetching / pagination -->
       <!-- <button class="button is-fullwidth">
         Load Next 10
       </button> -->
@@ -59,12 +50,6 @@
         return this.$store.getters.outputs.filter((outputData) => {
           const output = outputData[0]
           return output.status === 'Unspent'
-        })
-      },
-      spent () {
-        return this.$store.getters.outputs.filter((outputData) => {
-          const output = outputData[0]
-          return output.status === 'Spent'
         })
       }
     }

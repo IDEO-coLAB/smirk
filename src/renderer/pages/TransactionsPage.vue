@@ -16,9 +16,9 @@
     </div>
 
 		<div class="body without-footer">
-      <h3>Your transaction history</h3>
-
-      <!-- TODO: dynamically load more  -->
+      <h4>Grin transaction history</h4>
+      <br>
+      <!-- TODO: dynamically load more / paginate  -->
       <TransactionTileHistorical
         v-for="tx, idx in transactions"
         :key="idx"

@@ -5,6 +5,7 @@ import {
   createSmallSuccessNotification,
   createSmallErrorNotification
 } from '../store/modules/Notifications'
+import { APP_STATE_MUTATIONS } from '../store/modules/AppState'
 
 // TODO: Pull events constants into own file to dedupe main and renderer
 export const registerIPCRendererListeners = ($store, $router) => {
@@ -27,5 +28,9 @@ export const registerIPCRendererListeners = ($store, $router) => {
 
   ipcRenderer.on('MAIN_MENU_NAV_TRIGGERED', (event, data) => {
     $router.push({ path: data.path })
+  })
+
+  ipcRenderer.on('GLOBAL_GRIN_CONFIG_UPDATED', (event, data) => {
+    $store.commit(APP_STATE_MUTATIONS.SET_GRIN_CONFIG, data)
   })
 }

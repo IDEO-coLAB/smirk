@@ -1,8 +1,6 @@
 <template>
   <div class="transaction">
 
-    <!-- <div class="transaction-header">Transaction {{ transaction.id }}</div> -->
-
     <div class="transaction-body is-marginless">
       <table class="table is-fullwidth">
         <tbody>
@@ -11,12 +9,16 @@
             <td>{{ transaction.id }}</td>
           </tr>
           <tr>
-            <td>Confirmed</td>
-            <td>{{ transaction.confirmation_ts | dateFormatLong }}</td>
+            <td v-if="transactionWasCancelled">Cancelled</td>
+            <td v-else>Confirmed</td>
+
+            <td v-if="transactionWasCancelled">True</td>
+            <td v-else>{{ transaction.confirmation_ts | dateFormatLong }}</td>
           </tr>
           <tr>
             <td v-if="transactionWasReceived">Received</td>
             <td v-else>Sent</td>
+
             <td v-if="transactionWasReceived">G {{ transaction.amount_credited - transaction.amount_debited | grinBaseNumToPrettyNum }}</td>
             <td v-else>G {{ transaction.amount_debited - transaction.amount_credited | grinBaseNumToPrettyNum }}</td>
           </tr>
@@ -29,10 +31,10 @@
     </div>
 
   </div>
-
 </template>
 
 <script>
+  import _ from 'lodash'
   export default {
     name: 'transaction-tile-historical',
     props: {
@@ -42,9 +44,11 @@
       }
     },
     computed: {
-      // NOTE: Also need to know if is confirmed yet...
       transactionWasReceived () {
-        return this.transaction.tx_type === 'TxReceived' || this.transaction.tx_type === 'TxReceivedCancelled'
+        return _.includes(this.transaction.tx_type, 'Received')
+      },
+      transactionWasCancelled () {
+        return _.includes(this.transaction.tx_type, 'Cancelled')
       }
     }
   }

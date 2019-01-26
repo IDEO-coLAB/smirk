@@ -1,6 +1,6 @@
 import axios from 'axios'
 import _ from 'lodash'
-import { remote } from 'electron'
+// import { remote } from 'electron'
 import models from '../../models'
 import { expandWindow } from '../../utils/app-layout'
 import {
@@ -29,15 +29,6 @@ export const GRIN_WALLET_ACTIONS = {
   CANCEL_TRANSACTION: 'CANCEL_TRANSACTION',
   FINALIZE_TRANSACTION: 'FINALIZE_TRANSACTION'
 }
-
-const grinConfig = remote.getGlobal('GRIN_CONFIG')
-// TODO: handle the case when grinConfig || apiSecret is missing
-const axiosData = {
-  headers: {
-    'Authorization': grinConfig.apiSecret
-  }
-}
-const axiosInstance = axios.create(axiosData)
 
 // TODO: clean up the interface now that usage is understood
 const state = {
@@ -140,10 +131,39 @@ const handleGrinApiError = ({ commit }, title) => {
   }
 }
 
+// const grinConfig = remote.getGlobal('GLOBAL_GRIN_CONFIG')
+// // TODO: handle the case when grinConfig || apiSecret is missing
+// const axiosData = {
+//   headers: {
+//     // 'Authorization': grinConfig.api.secrets.floonet
+//     'Authorization': grinConfig.secrets.floonet
+//   }
+// }
+// const FOO_FETCH_OLD = axios.create(axiosData)
+
+// TODO: handle the case when the secret is missing
+const getAxiosInstance = (store) => {
+  if (_.isNil(store.getters.grinConfig)) {
+    return null
+  }
+
+  const isFloonet = store.getters.grinConfig.node.isFloonet
+  const auth = isFloonet
+    ? store.getters.grinConfig.secrets.floonet
+    : store.getters.grinConfig.secrets.mainnet
+
+  return axios.create({
+    headers: { 'Authorization': auth }
+  })
+}
+
 const actions = {
   // GETS
-  [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit }) {
-    return axiosInstance.get(`${GRIN_OWNER_URL}/node_height`)
+  [GRIN_WALLET_ACTIONS.GET_NODE_HEIGHT] ({ commit, store }) {
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.get(`${GRIN_OWNER_URL}/node_height`)
       .then((payload) => {
         const height = payload.data[0]
         const nodeIsOnline = payload.data[1]
@@ -158,7 +178,10 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.GET_SUMMARY] ({ commit }) {
-    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.get(`${GRIN_OWNER_URL}/retrieve_summary_info`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_SUMMARY, data)
@@ -169,7 +192,10 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.GET_TRANSACTIONS] ({ commit }) {
-    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.get(`${GRIN_OWNER_URL}/retrieve_txs`)
       .then((payload) => {
         const data = payload.data[1]
         commit(GRIN_WALLET_MUTATIONS.SET_TRANSACTIONS, data)
@@ -180,7 +206,10 @@ const actions = {
   },
 
   [GRIN_WALLET_ACTIONS.GET_OUTPUTS] ({ commit }) {
-    return axiosInstance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.get(`${GRIN_OWNER_URL}/retrieve_outputs?refresh=true&show_spent=true`)
       .then((payload) => {
         const data = payload.data[1]
         if (_.isEmpty(data)) {
@@ -195,26 +224,38 @@ const actions = {
 
   // POSTS
   [GRIN_WALLET_ACTIONS.ISSUE_SEND_TRANSACTION] ({ commit }, data) {
-    return axiosInstance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.post(`${GRIN_OWNER_URL}/issue_send_tx`, data)
       .then(payload => payload.data)
       .catch(handleGrinApiError({ commit }, 'Error sending transaction'))
       .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
 
   [GRIN_WALLET_ACTIONS.RECEIVE_TRANSACTION] ({ commit }, data) {
-    return axiosInstance.post(`${GRIN_FOREIGN_URL}/receive_tx`, data)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.post(`${GRIN_FOREIGN_URL}/receive_tx`, data)
       .then(payload => payload.data)
       .catch(handleGrinApiError({ commit }, 'Error receiving transaction'))
       .catch(handleForeignListenerNetworkError({ commit, store: this }))
   },
   [GRIN_WALLET_ACTIONS.FINALIZE_TRANSACTION] ({ commit }, data) {
-    return axiosInstance.post(`${GRIN_OWNER_URL}/finalize_tx`, data)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.post(`${GRIN_OWNER_URL}/finalize_tx`, data)
       .then(payload => payload.data)
       .catch(handleGrinApiError({ commit }, 'Error finalizing transaction'))
       .catch(handleOwnerListenerNetworkError({ commit, store: this }))
   },
   [GRIN_WALLET_ACTIONS.CANCEL_TRANSACTION] ({ commit }, data) {
-    return axiosInstance.post(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
+    const instance = getAxiosInstance(this)
+    if (!instance) return
+
+    return instance.post(`${GRIN_OWNER_URL}/cancel_tx?id=${data}`)
       .then(payload => payload.data)
       .catch(handleGrinApiError({ commit }, 'Error canceling transaction'))
       .catch(handleOwnerListenerNetworkError({ commit, store: this }))

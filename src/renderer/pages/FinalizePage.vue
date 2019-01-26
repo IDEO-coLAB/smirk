@@ -52,6 +52,7 @@
 
     <!-- Handle the finalized transaction -->
     <div v-if="currentStep===FINALIZE_STEPS.FINALIZE_COMPLETE">
+
       <div class="body">
         <p>The finalized transaction was downloaded to your <code>~/Downloads</code> folder; the raw JSON is below.</p>
         <p class="json">{{signedTxJSON}}</p>
@@ -69,49 +70,6 @@
       </div>
 
     </div>
-
-
-
-
-      <!-- <div class="body" >
-        <p v-if="!uploadedTransaction">Drop a transaction file into the area below.</p>
-        <p v-else>
-          <span class="icon has-text-success">
-            <i class="fas fa-file-signature"></i>
-          </span>
-          Sign the transaction, then return to sender.
-        </p>
-
-        <section class="section">
-          <FullscreenFileUpload
-            class-styles="upload"
-            v-if="!uploadedTransaction"/>
-          <div v-else class="json">
-            {{uploadedTransaction}}
-          </div>
-        </section>
-      </div>
-
-      <div class="footer columns is-gapless is-mobile">
-        <button
-          class="column button is-footer is-fullwidth"
-          v-bind:disabled="!uploadedTransaction"
-          @click="removeTransaction">
-          Cancel
-        </button>
-        <button
-          class="column button is-success is-footer is-fullwidth"
-          v-bind:disabled="!uploadedTransaction"
-          @click="receiveTransaction">
-          Sign
-        </button>
-      </div> -->
-
-
-
-
-
-
 
   </main>
 </template>

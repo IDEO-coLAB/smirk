@@ -10,10 +10,14 @@ const getStateFromGrin = ($store) => {
 
 // TODO: pull the constants used in MAIN and RENDERER into a shared file
 const getStateFromMainProcess = ($store) => {
-  ipcRenderer.send('GET_APP_CONFIG_FROM_MAIN')
+  ipcRenderer.send('GET_GLOBAL_GRIN_CONFIG')
+  $store.dispatch(APP_STATE_ACTIONS.GET_GLOBAL_GRIN_CONFIG)
 }
 
 export const refreshAppState = ($store) => {
-  getStateFromGrin($store)
+  // Always load data in from the main process first
+  // This pulls in the configs and secrets required for http requests
+  // TODO: improve
   getStateFromMainProcess($store)
+  getStateFromGrin($store)
 }
